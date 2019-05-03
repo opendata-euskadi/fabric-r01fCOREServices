@@ -9,7 +9,7 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-		<groupId>r01.r01f.notifier</groupId>
+		<groupId>r01.r01f.coreservices.notifier</groupId>
 		<artifactId>r01fNotifier</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
@@ -28,7 +28,7 @@
 		<!-- R01: Notifier                             -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.notifier</groupId>
+			<groupId>r01.r01f.coreservices.notifier</groupId>
 			<artifactId>r01fNotifierClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
