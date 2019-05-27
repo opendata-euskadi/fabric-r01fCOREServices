@@ -40,7 +40,8 @@
 	<modules>
 		<module>r01fNotifier</module>
 		<module>r01fScheduler</module>
-	</modules>
+        <module>r01fDistributedCache</module>
+  </modules>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
