@@ -267,7 +267,7 @@ public class GoogleAPI {
 		@Getter private final GoogleAPIClientEMailAddress _clientEmail;
 		@Getter private final GoogleAPIClientP12KeyPath _p12KeyPath;
 		@Getter private final EMail _endUserEmail;
-		@Getter private 	  Set<String> _scopes = GmailScopes.all(); 	// all scopes by default
+		@Getter private Set<String> _scopes = GmailScopes.all(); 	// all scopes by default
 	}
 	@Accessors(prefix="_")
 	@RequiredArgsConstructor
