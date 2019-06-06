@@ -9,8 +9,8 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
    <parent>
-    <groupId>r01.r01f.coreservices.cache</groupId>
-    <artifactId>r01fDistributedCache</artifactId>
+    <groupId>r01.r01f.coreservices.cache.common</groupId>
+    <artifactId>r01fDistributedCacheCommon</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 	
@@ -28,7 +28,7 @@
 		<!--  Cache Base  Classes                    -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.cache</groupId>
+			<groupId>r01.r01f.coreservices.cache.common</groupId>
 			<artifactId>r01fDistributedCacheBaseClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>

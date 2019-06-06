@@ -9,37 +9,36 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
   <parent>
-    <groupId>r01.r01f.coreservices.cache</groupId>
-    <artifactId>r01fDistributedCache</artifactId>
+    <groupId>r01.r01f.coreservices.cache.common</groupId>
+    <artifactId>r01fDistributedCacheCommon</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 	
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<name>r01fDistributedCacheHazelcastClasses</name>
-	<artifactId>r01fDistributedCacheHazelcastClasses</artifactId>
+	<name>r01fDistributedCacheBaseClasses</name>
+	<artifactId>r01fDistributedCacheBaseClasses</artifactId>
 	
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
-	<dependencies>  	
+	<dependencies>  
 		<!-- ///////////////////////////////////////// -->
 		<!--  Model  Classes                            -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.cache</groupId>
-			<artifactId>r01fDistributedCacheBaseClasses</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>r01.r01f.base</groupId>
+			<artifactId>r01fModelClasses</artifactId>
+			<version>${r01f.version}</version>
 		</dependency>
 		<!-- ///////////////////////////////////////// -->
-		<!--  Hazelcast Core                           -->
-		<!-- ///////////////////////////////////////// -->
+		<!--  Properties  Classes                        -->
+		<!-- ///////////////////////////////////////// -->	
 		<dependency>
-		    <groupId>com.hazelcast</groupId>
-		    <artifactId>hazelcast</artifactId>
-		    <version>3.12</version>
-		</dependency>	
-  		
+			<groupId>r01.r01f.properties</groupId>
+			<artifactId>r01fPropertiesClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>  		
 	</dependencies>
 </project>

@@ -9,36 +9,37 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
   <parent>
-    <groupId>r01.r01f.coreservices.cache</groupId>
-    <artifactId>r01fDistributedCache</artifactId>
+    <groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
+    <artifactId>r01fDistributedCacheHazelcast</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 	
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<name>r01fDistributedCacheBaseClasses</name>
-	<artifactId>r01fDistributedCacheBaseClasses</artifactId>
+	<name>r01fDistributedCacheGuiceHazelcastClasses</name>
+	<artifactId>r01fDistributedCacheGuiceHazelcastClasses</artifactId>
 	
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
-	<dependencies>  
+	<dependencies>  	
 		<!-- ///////////////////////////////////////// -->
-		<!--  Model  Classes                            -->
+		<!--  Distributed Cache Hazelcast  Classes                            -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.base</groupId>
-			<artifactId>r01fModelClasses</artifactId>
-			<version>${r01f.version}</version>
+			<groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
+			<artifactId>r01fDistributedCacheHazelcastClasses</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+	
+  		<!-- ///////////////////////////////////////// -->
+		<!--  Distributed Cache Guice  Classes                            -->
 		<!-- ///////////////////////////////////////// -->
-		<!--  Properties  Classes                        -->
-		<!-- ///////////////////////////////////////// -->	
 		<dependency>
-			<groupId>r01.r01f.properties</groupId>
-			<artifactId>r01fPropertiesClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>  		
+			<groupId>r01.r01f.coreservices.cache.common</groupId>
+			<artifactId>r01fDistributedCacheGuiceBaseClasses</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 </project>

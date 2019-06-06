@@ -9,37 +9,37 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
   <parent>
-    <groupId>r01.r01f.coreservices.cache</groupId>
-    <artifactId>r01fDistributedCache</artifactId>
+    <groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
+    <artifactId>r01fDistributedCacheHazelcast</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 	
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<name>r01fDistributedCacheGuiceHazelcastClasses</name>
-	<artifactId>r01fDistributedCacheGuiceHazelcastClasses</artifactId>
+	<name>r01fDistributedCacheHazelcastClasses</name>
+	<artifactId>r01fDistributedCacheHazelcastClasses</artifactId>
 	
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
 	<dependencies>  	
 		<!-- ///////////////////////////////////////// -->
-		<!--  Distributed Cache Hazelcast  Classes                            -->
+		<!--  Model  Classes                            -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.cache</groupId>
-			<artifactId>r01fDistributedCacheHazelcastClasses</artifactId>
+			<groupId>r01.r01f.coreservices.cache.common</groupId>
+			<artifactId>r01fDistributedCacheBaseClasses</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-	
-  		<!-- ///////////////////////////////////////// -->
-		<!--  Distributed Cache Guice  Classes                            -->
+		<!-- ///////////////////////////////////////// -->
+		<!--  Hazelcast Core                           -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.cache</groupId>
-			<artifactId>r01fDistributedCacheGuiceBaseClasses</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		    <groupId>com.hazelcast</groupId>
+		    <artifactId>hazelcast</artifactId>
+		    <version>3.12</version>
+		</dependency>	
+  		
 	</dependencies>
 </project>
