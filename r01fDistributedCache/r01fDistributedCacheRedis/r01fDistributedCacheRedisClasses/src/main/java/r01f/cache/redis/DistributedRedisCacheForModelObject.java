@@ -46,11 +46,10 @@ public class DistributedRedisCacheForModelObject<O extends OID,M extends ModelOb
 /////////////////////////////////////////////////////////////////////////////////////
 // 
 ////////////////////////////////////////////////////////////////////////////////////
-    private final  Memoized<RMapCache<O,M>> _internalMappedCache = new Memoized<RMapCache<O,M>>() {
-																		@SuppressWarnings("unchecked")
+    private final  Memoized<RMapCache<O,M>> _internalMappedCache = new Memoized<RMapCache<O,M>>() {																		
 																		@Override
-																		protected RMapCache<O, M> supply() {
-																			RMapCache<O,M> imap =  (RMapCache<O, M>) _redisInstance.getMap(_modelObjectType.getName());																	    
+																		protected RMapCache<O, M> supply() {																			
+																			RMapCache<O,M> imap =  _redisInstance.getMapCache(_modelObjectType.getName());																	    
 																	    	return imap;
 																		}
     														  };
