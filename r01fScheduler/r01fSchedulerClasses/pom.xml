@@ -9,7 +9,7 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-		<groupId>r01.r01f.scheduler</groupId>
+		<groupId>r01.r01f.coreservices.scheduler</groupId>
 		<artifactId>r01fScheduler</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
