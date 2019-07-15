@@ -176,24 +176,36 @@ public class SchedulerConfig
 									 		.asString());
 			}
 			
-			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".URL",rootXPath)).exist()) {
+			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.URL",
+													dataSource,rootXPath))
+					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.URL", dataSource),
-									 props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".URL",rootXPath))
-									 		.asString());
+									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.URL",
+											 							 dataSource,rootXPath))
+									 	  .asString());
 			}
-			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".user",rootXPath)).exist()) {
+			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.user",
+													dataSource,rootXPath))
+					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.user", dataSource),
-									 props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".user",rootXPath))
+									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.user",
+											 							 dataSource,rootXPath))
 									 		.asString());
 			}
-			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".password",rootXPath)).exist()) {
+			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.password",
+													dataSource,rootXPath))
+					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.password",dataSource),
-									 props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".password",rootXPath))
+									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.password",
+											 							 dataSource,rootXPath))
 									 		.asString());
 			}
-			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".jndiURL",rootXPath)).exist()) {
+			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.jndiURL",
+													dataSource,rootXPath))
+					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.jndiURL", dataSource),
-									 props.propertyAt(Strings.customized("{}org.quartz.dataSource."+dataSource+".jndiURL",rootXPath))
+									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.jndiURL",
+											 							 dataSource,rootXPath))
 									 		.asString());
 			}
 		
