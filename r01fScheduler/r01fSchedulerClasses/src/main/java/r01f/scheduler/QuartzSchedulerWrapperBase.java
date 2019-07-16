@@ -9,6 +9,7 @@ import java.util.Properties;
 
 import org.quartz.CronExpression;
 import org.quartz.CronScheduleBuilder;
+import org.quartz.InterruptableJob;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -134,7 +135,8 @@ public abstract class QuartzSchedulerWrapperBase
         
         // d.- Link the job and the trigger
         boolean outScheduled = _linkJobToTrigger(job,trigger);
-
+		// Ensure all quartz jobs are stopped
+		
         // return
         return outScheduled;
 	}
@@ -211,6 +213,24 @@ public abstract class QuartzSchedulerWrapperBase
 /////////////////////////////////////////////////////////////////////////////////////////
 //  
 /////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public void interruptAllRunningJobs() throws SchedulerException {
+        Collection<JobExecutionContext> jobs = _scheduler.getCurrentlyExecutingJobs();
+        if (CollectionUtils.isNullOrEmpty(jobs)) return;        
+        log.warn("interrupting {} running scheduler jobs: {}",jobs.size());
+        for (JobExecutionContext job : jobs) {
+        	if (job instanceof InterruptableJob) {
+        		_scheduler.interrupt(job.getJobDetail().getKey());
+        	} else {
+        		log.warn("Scheduler job of type {} does NOT implement {}: it cannot be interrupted!!!",
+        				 job.getClass(),
+        				 InterruptableJob.class);
+        	}
+        }
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//  
+/////////////////////////////////////////////////////////////////////////////////////////
 	@Override 
     public String schedulerDebugInfo() {
     	StringBuilder sw = new StringBuilder();
@@ -239,5 +259,5 @@ public abstract class QuartzSchedulerWrapperBase
         	sw.append(Throwables.getStackTraceAsString(schEx));
         }
         return sw.toString();
-    }
+    }	
 }
