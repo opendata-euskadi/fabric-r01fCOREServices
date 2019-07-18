@@ -258,9 +258,6 @@
 			<resource>
 				<directory>src/main/resources</directory>
 			</resource>
-			<resource>
-				<directory>src/main/aspect</directory>
-			</resource>
 		</resources>
 	</build>
 
