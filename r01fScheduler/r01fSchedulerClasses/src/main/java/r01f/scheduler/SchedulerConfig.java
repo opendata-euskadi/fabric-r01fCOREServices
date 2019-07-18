@@ -1,7 +1,7 @@
 package r01f.scheduler;
 
-import java.util.Map.Entry;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import lombok.Getter;
@@ -177,35 +177,35 @@ public class SchedulerConfig
 			}
 			
 			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.URL",
-													dataSource,rootXPath))
+													rootXPath,dataSource))
 					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.URL", dataSource),
 									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.URL",
-											 							 dataSource,rootXPath))
+											 							 rootXPath,dataSource))
 									 	  .asString());
 			}
 			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.user",
-													dataSource,rootXPath))
+													rootXPath,dataSource))
 					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.user", dataSource),
 									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.user",
-											 							 dataSource,rootXPath))
+											 							 rootXPath,dataSource))
 									 		.asString());
 			}
 			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.password",
-													dataSource,rootXPath))
+													rootXPath,dataSource))
 					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.password",dataSource),
 									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.password",
-											 							 dataSource,rootXPath))
+											 							 rootXPath,dataSource))
 									 		.asString());
 			}
 			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.jndiURL",
-													dataSource,rootXPath))
+													rootXPath,dataSource))
 					 .exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.jndiURL", dataSource),
 									 props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.jndiURL",
-											 							 dataSource,rootXPath))
+											 							 rootXPath,dataSource))
 									 		.asString());
 			}
 		
