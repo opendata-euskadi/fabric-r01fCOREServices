@@ -30,8 +30,11 @@ import r01f.cache.hazelcast.DistributedCacheServiceHazelcastImpl;
  * 		binder.install(new XMLPropertiesGuiceModule());
  * </pre>
  */
-public class DistributedCacheGuiceHazelcastModule
-    extends DistributedCacheGuiceModuleBase {	
+public class DistributedCacheHazelcastGuiceModule
+     extends DistributedCacheGuiceModuleBase {	
+/////////////////////////////////////////////////////////////////////////////////////////
+//	                                                                          
+/////////////////////////////////////////////////////////////////////////////////////////	
 	@Override
 	@Provides @Singleton // beware the service is a singleton
 	public DistributedCacheService provideDistributedCacheService() {
@@ -41,7 +44,7 @@ public class DistributedCacheGuiceHazelcastModule
 /////////////////////////////////////////////////////////////////////////////////////////
 // 	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
-	public DistributedCacheGuiceHazelcastModule(final DistributedCacheConfig cfg) {
+	public DistributedCacheHazelcastGuiceModule(final DistributedCacheConfig cfg) {
 		super(cfg);
 	}
 }
