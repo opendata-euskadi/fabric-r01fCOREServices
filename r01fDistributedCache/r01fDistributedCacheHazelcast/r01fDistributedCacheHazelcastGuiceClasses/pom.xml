@@ -17,8 +17,8 @@
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<name>r01fDistributedCacheGuiceHazelcastClasses</name>
-	<artifactId>r01fDistributedCacheGuiceHazelcastClasses</artifactId>
+	<name>r01fDistributedCacheHazelcastGuiceClasses</name>
+	<artifactId>r01fDistributedCacheHazelcastGuiceClasses</artifactId>
 	
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

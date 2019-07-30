@@ -24,7 +24,7 @@
 <!-- ====================================================================== -->
 	<modules>
 		<module>r01fDistributedCacheHazelcastClasses</module>    
-	    <module>r01fDistributedCacheGuiceHazelcastClasses</module>
+	    <module>r01fDistributedCacheHazelcastGuiceClasses</module>
 	</modules>
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
