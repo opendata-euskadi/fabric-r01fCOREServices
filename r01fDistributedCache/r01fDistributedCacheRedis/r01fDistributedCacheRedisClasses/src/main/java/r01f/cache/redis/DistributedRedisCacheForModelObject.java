@@ -48,7 +48,7 @@ public class DistributedRedisCacheForModelObject<O extends OID,M extends ModelOb
 ////////////////////////////////////////////////////////////////////////////////////
     private final  Memoized<RMapCache<O,M>> _internalMappedCache = new Memoized<RMapCache<O,M>>() {																		
 																		@Override
-																		protected RMapCache<O, M> supply() {																			
+																		public RMapCache<O, M> supply() {																			
 																			RMapCache<O,M> imap =  _redisInstance.getMapCache(_modelObjectType.getName());																	    
 																	    	return imap;
 																		}
@@ -112,7 +112,7 @@ public class DistributedRedisCacheForModelObject<O extends OID,M extends ModelOb
 		return this.getInternalMappedCache().putIfAbsent(key,value);
 	}
 	@Override
-	public void putAll(Map<? extends O,? extends M> map) {
+	public void putAll(final Map<? extends O,? extends M> map) {
 		this.getInternalMappedCache().putAll(map);
 	}
 	@Override
@@ -167,7 +167,7 @@ public class DistributedRedisCacheForModelObject<O extends OID,M extends ModelOb
 	  return this.getInternalMappedCache().remove(key);
 	}
 	@Override
-	public void removeAll(Set<? extends O> keys) {
+	public void removeAll(final Set<? extends O> keys) {
 		for (O id : keys ) {
 			this.remove(id);
 		}
