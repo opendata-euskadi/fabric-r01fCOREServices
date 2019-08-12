@@ -54,7 +54,7 @@ public class DistributedHazelcastCacheForModelObject<O extends OID,M extends Mod
 ////////////////////////////////////////////////////////////////////////////////////
     private final  Memoized<IMap<O,M>> _internalMappedCache = new Memoized<IMap<O,M>>() {
 																		@Override
-																		protected IMap<O, M> supply() {
+																		public IMap<O, M> supply() {
 																	    	 IMap<O,M> imap =  _hazelCastInstance.getMap(_modelObjectType.getName());
 																	    	 imap.addEntryListener(new EntryAddedListener<O,M>() {
 																	    		 							@Override
@@ -148,7 +148,7 @@ public class DistributedHazelcastCacheForModelObject<O extends OID,M extends Mod
 		return this.getInternalMappedCache().putIfAbsent(key,value);
 	}
 	@Override
-	public void putAll(Map<? extends O,? extends M> map) {
+	public void putAll(final Map<? extends O,? extends M> map) {
 		this.getInternalMappedCache().putAll(map);
 	}
 	@Override
@@ -203,7 +203,7 @@ public class DistributedHazelcastCacheForModelObject<O extends OID,M extends Mod
 	  return this.getInternalMappedCache().remove(key);
 	}
 	@Override
-	public void removeAll(Set<? extends O> keys) {
+	public void removeAll(final Set<? extends O> keys) {
 		for (O id : keys ) {
 			this.remove(id);
 		}

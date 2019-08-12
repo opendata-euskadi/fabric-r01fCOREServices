@@ -11,33 +11,24 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
 @Slf4j
 @Accessors(prefix="_")
-public class JavaMailSenderConfigForThirdPartyHttpService 
+public class JavaMailSenderConfigForThirdPartyHttpService
 	 extends JavaMailSenderConfigBase {
 /////////////////////////////////////////////////////////////////////////////////////////
-//	FIELDS  
+//	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Getter private final Url _thirdPartyProviderUrl;
 	@Getter private final HttpClientProxySettings _proxySettings;
-	@Getter private final boolean _supportsMimeMessage;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR & BUILDER
 /////////////////////////////////////////////////////////////////////////////////////////
 	public JavaMailSenderConfigForThirdPartyHttpService(final Url thirdPartyProviderUrl,
 														final HttpClientProxySettings proxySettigs,
-														final boolean supportsMimeMessage,
 														final boolean disabled) {
 		super(JavaMailSenderImpl.THIRD_PARTY_MAIL_HTTPSERVICE,
 			  disabled);
 		_thirdPartyProviderUrl = thirdPartyProviderUrl;
 		_proxySettings = proxySettigs;
-		_supportsMimeMessage = supportsMimeMessage;
 	}
-	public JavaMailSenderConfigForThirdPartyHttpService(final Url thirdPartyProviderUrl,
-			final HttpClientProxySettings proxySettigs,
-			final boolean disabled) {
-		this(thirdPartyProviderUrl, proxySettigs, true, disabled);
-	}
-	
 	public static JavaMailSenderConfigForThirdPartyHttpService createFrom(final XMLPropertiesForAppComponent xmlProps,
 												      		  			  final String propsRootNode) {
 		// check if a proxy is needed
@@ -52,14 +43,12 @@ public class JavaMailSenderConfigForThirdPartyHttpService
 		}
 		Url thirdPartyProviderUrl = thirdPartyMailServiceFromProperties(xmlProps,
 																		propsRootNode);
-		
+
 		return new JavaMailSenderConfigForThirdPartyHttpService(thirdPartyProviderUrl,
 																proxySettings,
-																supportsMimeMessage(xmlProps,
-																					propsRootNode),
 																false);		// not disabled
 	}
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTANTS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -70,8 +59,4 @@ public class JavaMailSenderConfigForThirdPartyHttpService
 		propsRootNode + THIRD_PARTY_MAIL_HTTPSERVICE_PROPS_XPATH,props.getAppCode()));
 		return url;
 	}
-	static boolean supportsMimeMessage(final XMLPropertiesForAppComponent props,final String propsRootNode) {
-		return props.propertyAt(propsRootNode + THIRD_PARTY_MAIL_HTTPSERVICE_PROPS_XPATH + "/@supportsMimeMessage").asBoolean(true);
-	}
-
 }

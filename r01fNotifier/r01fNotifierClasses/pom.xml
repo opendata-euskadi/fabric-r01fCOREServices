@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-			 
+
 	<modelVersion>4.0.0</modelVersion>
-	
+
 <!-- ====================================================================== -->
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
@@ -13,17 +13,26 @@
 		<artifactId>r01fNotifier</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
 	<name>r01fNotifierClasses</name>
 	<artifactId>r01fNotifierClasses</artifactId>
-	
+
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
 	<dependencies>
+  		<!-- ///////////////////////////////////////// -->
+		<!-- R01: CORE EMail                           -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<artifactId>r01fEMailClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
   		<!-- ///////////////////////////////////////// -->
 		<!-- R01: BusinessServices                     -->
 		<!-- ///////////////////////////////////////// -->
@@ -32,7 +41,7 @@
 			<artifactId>r01fBusinessServicesClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
+
   		<!-- ///////////////////////////////////////// -->
 		<!-- R01: HttpClient                           -->
 		<!-- ///////////////////////////////////////// -->
@@ -41,7 +50,7 @@
 			<artifactId>r01fHttpClientClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
+
   		<!-- ///////////////////////////////////////// -->
 		<!-- R01: Spring                               -->
 		<!-- ///////////////////////////////////////// -->
@@ -50,21 +59,7 @@
 			<artifactId>r01fSpringClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
-  		<!-- ///////////////////////////////////////// -->
-		<!-- Mail (needed by Spring's MailSender)      -->
-		<!-- ///////////////////////////////////////// -->
-		<dependency>
-		    <groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
-		    <version>1.5.0-b01</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-email</artifactId>
-		    <version>1.5</version>
-		</dependency>
-		
+
   		<!-- ///////////////////////////////////////// -->
 		<!-- GoogleAPIs                                -->
 		<!-- ///////////////////////////////////////// -->
@@ -78,7 +73,7 @@
 					<artifactId>*</artifactId>
 		    	</exclusion>
 		    </exclusions>
-		</dependency>	
+		</dependency>
 		<dependency>
 		    <groupId>com.google.apis</groupId>
 		    <artifactId>google-api-services-gmail</artifactId>
@@ -90,7 +85,7 @@
 		    	</exclusion>
 		    </exclusions>
 		</dependency>
-		
+
   		<!-- ///////////////////////////////////////// -->
 		<!-- Twilio                                    -->
 		<!-- ///////////////////////////////////////// -->
@@ -98,6 +93,15 @@
 		    <groupId>com.twilio.sdk</groupId>
 		    <artifactId>twilio-java-sdk</artifactId>
 		    <version>3.8.0</version>
+		</dependency>
+
+  		<!-- ///////////////////////////////////////// -->
+		<!-- R01F Cloud: SES                           -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.cloud.aws.ses</groupId>
+			<artifactId>r01fAWSSESClasses</artifactId>
+		    <version>${r01f.version}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -50,9 +50,10 @@ import r01f.types.contact.EMail;
 /**
  * Google API Helpper type
  */
-public class GoogleAPI {
+@NoArgsConstructor(access=AccessLevel.PRIVATE)
+public abstract class GoogleAPI {
 /////////////////////////////////////////////////////////////////////////////////////////
-//  
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static GoogleAPIHttpTransport createHttpTransport() {
 		return new GoogleAPIHttpTransport();
@@ -60,25 +61,25 @@ public class GoogleAPI {
 	@NoArgsConstructor(access=AccessLevel.PRIVATE)
 	public static class GoogleAPIHttpTransport {
 		@SuppressWarnings("static-method")
-		public HttpTransport noProxy() throws GeneralSecurityException, 
+		public HttpTransport noProxy() throws GeneralSecurityException,
 											  IOException {
 			HttpTransport httpTransport = new NetHttpTransport.Builder()
 															  .trustCertificates(GoogleUtils.getCertificateTrustStore())
 															  .build();
 			return httpTransport;
 		}
-		public HttpTransport usingProxy(final HttpClientProxySettings proxySettings) throws GeneralSecurityException, 
+		public HttpTransport usingProxy(final HttpClientProxySettings proxySettings) throws GeneralSecurityException,
 														 						    		IOException {
 			if (!proxySettings.isEnabled()) return this.noProxy();
-			
+
         	final String proxyHost = proxySettings.getProxyHost().asString();
         	final int proxyPort = proxySettings.getProxyPort();
         	final String proxyUser = proxySettings.getUser().asString();
-        	final char[] proxyPassword = proxySettings.getPassword().asString().toCharArray(); 
-        	
-			Proxy proxy = new Proxy(Proxy.Type.HTTP, 
+        	final char[] proxyPassword = proxySettings.getPassword().asString().toCharArray();
+
+			Proxy proxy = new Proxy(Proxy.Type.HTTP,
 									new InetSocketAddress(proxyHost,
-														  proxyPort)); 
+														  proxyPort));
 			HttpTransport httpTransport = new NetHttpTransport.Builder()
 															  .trustCertificates(GoogleUtils.getCertificateTrustStore())
 															  .setProxy(proxy)
@@ -86,7 +87,7 @@ public class GoogleAPI {
 	        Authenticator.setDefault(new Authenticator() {
 									        @Override
 									        protected PasswordAuthentication getPasswordAuthentication() {
-									        	// check that the pasword-requesting site is the proxy server									        	
+									        	// check that the pasword-requesting site is the proxy server
 									        	if (this.getRequestingHost().contains(proxyHost) && this.getRequestingPort() == proxyPort
 										         && this.getRequestorType().equals(RequestorType.PROXY)) {
 										        	return new PasswordAuthentication(proxyUser,
@@ -97,19 +98,19 @@ public class GoogleAPI {
 									 });
 			//System.setProperty("http.proxyHost",PROXY_HOST);
 			//System.setProperty("http.proxyPort",Integer.toString(PROXY_PORT));
-			
+
 			return httpTransport;
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
-//  
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static JsonFactory createJsonFactory() {
 		JsonFactory jsonFactory = new JacksonFactory();
 		return jsonFactory;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
-//  
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * see https://developers.google.com/accounts/docs/OAuth2ServiceAccount
@@ -137,9 +138,9 @@ public class GoogleAPI {
 		}
 		if (privateKeyIS == null) throw new IllegalStateException(Throwables.message("Could NOT load the P12 key file from {} using {} loader",
 																					 serviceAccountClientId.getP12KeyPath().getFilePathAsString(),
-																					 serviceAccountClientId.getP12KeyPath().getResourcesLoaderType()));	
+																					 serviceAccountClientId.getP12KeyPath().getResourcesLoaderType()));
 		serviceAccountPrivateKey = SecurityUtils.loadPrivateKeyFromKeyStore(SecurityUtils.getPkcs12KeyStore(),
-																			privateKeyIS, 
+																			privateKeyIS,
 																			"notasecret",
 																			"privatekey",
 																			"notasecret");
@@ -147,11 +148,11 @@ public class GoogleAPI {
 		GoogleCredential credential = new GoogleCredential.Builder()
 												    .setTransport(httpTransport)
 												    .setJsonFactory(jsonFactory)
-												    .setServiceAccountId(serviceAccountClientId.getClientEmail().asString())	
+												    .setServiceAccountId(serviceAccountClientId.getClientEmail().asString())
 												    .setServiceAccountPrivateKey(serviceAccountPrivateKey)
 												    .setServiceAccountScopes(serviceAccountClientId.getScopes())	// see https://developers.google.com/gmail/api/auth/scopes
 												    .setServiceAccountUser(serviceAccountClientId.getEndUserEmail().asString())
-												    .build();	
+												    .build();
 		credential.refreshToken();
 		return credential;
 	}
@@ -176,13 +177,13 @@ public class GoogleAPI {
 			clientSecretReader = new InputStreamReader(clientSecretIS);
 		} else {
 			clientSecretReader = new FileReader(nativeAppClientId.getJsonKeyPath().getFilePathAsString());
-		}	
-		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory, 
+		}
+		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(jsonFactory,
 												 					 clientSecretReader);
 
 		// Create the credential: Allow user to authorize via url.
-		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport, 
-																				   jsonFactory, 
+		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(httpTransport,
+																				   jsonFactory,
 																				   clientSecrets,
 																				   nativeAppClientId.getScopes())
 																		   .setAccessType("online")
@@ -192,7 +193,7 @@ public class GoogleAPI {
 		String url = flow.newAuthorizationUrl()
 						 .setRedirectUri(GoogleOAuthConstants.OOB_REDIRECT_URI)
 						 .build();
-		System.out.println("Please open the following URL in your browser then type " + 
+		System.out.println("Please open the following URL in your browser then type " +
 						   "the authorization code:\n" + url);
 
 		// Read code entered by user.
@@ -205,9 +206,9 @@ public class GoogleAPI {
 										   .execute();
 		GoogleCredential credential = new GoogleCredential()
 												.setFromTokenResponse(response);
-		
+
 		return credential;
-	}	
+	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  Google Services
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -234,7 +235,7 @@ public class GoogleAPI {
 //	the end user to accept the application accessing the data (three-legged OAuth)
 //	NOTE: 	once the application gets a user acceptance (a token) it can be stored for later use
 //   		and this way avoid asking the end-user again
-//  [Service Account] is to be used for [Server-to-Google API] with no user interaction	
+//  [Service Account] is to be used for [Server-to-Google API] with no user interaction
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static interface GoogleAPIClientData {
 		public AppCode getAppCode();
@@ -245,7 +246,7 @@ public class GoogleAPI {
 	 * A [Service Account]-type google [ClientID] (see https://developers.google.com/accounts/docs/OAuth2ServiceAccount)
 	 * Service Accounts are used for [Server-to-Server] applications (ie a web application and a google service with no user interaction)
 	 * A [Service Account] is an account associated with an application rather than an accoun associated with an individual end user
-	 * 
+	 *
 	 * In order to set-up a [Service Account] client ID: (see http://stackoverflow.com/questions/29327846/gmail-rest-api-400-bad-request-failed-precondition/29328258#29328258)
 	 *	 1.- Using a google apps user open the developer console
 	 *	 2.- Create a new project (ie MyProject)
@@ -260,7 +261,7 @@ public class GoogleAPI {
 	@MarshallType(as="googleAPIServiceAccountClientData")
 	@Accessors(prefix="_")
 	@RequiredArgsConstructor @AllArgsConstructor
-	public static class GoogleAPIServiceAccountClientData 
+	public static class GoogleAPIServiceAccountClientData
 			 implements GoogleAPIClientData {
 		@Getter private final AppCode _appCode;
 		@Getter private final GoogleAPIClientID _clientId;
@@ -271,15 +272,15 @@ public class GoogleAPI {
 	}
 	@Accessors(prefix="_")
 	@RequiredArgsConstructor
-	public static class GoogleAPINativeApplicationClientData 
+	public static class GoogleAPINativeApplicationClientData
 			 implements GoogleAPIClientData {
 		@Getter private final AppCode _appCode;
 		@Getter private final GoogleAPIClientID _clientId;
-		@Getter private final GoogleAPIClientJsonKeyPath _JsonKeyPath;	
+		@Getter private final GoogleAPIClientJsonKeyPath _JsonKeyPath;
 		@Getter private final Set<String> _scopes;
 	}
 	@MarshallType(as="googleAPIClientId")
-	public static class GoogleAPIClientID 
+	public static class GoogleAPIClientID
 				extends OIDBaseImmutable<String> {
 		private static final long serialVersionUID = 6988744585167182617L;
 		private GoogleAPIClientID(final String id) {
@@ -290,7 +291,7 @@ public class GoogleAPI {
 		}
 	}
 	@MarshallType(as="googleAPIClientEMail")
-	public static class GoogleAPIClientEMailAddress 
+	public static class GoogleAPIClientEMailAddress
 				extends EMail {
 		private static final long serialVersionUID = 5996665907146903030L;
 		private GoogleAPIClientEMailAddress(final String email) {
@@ -305,30 +306,30 @@ public class GoogleAPI {
 			    extends ResourceToBeLoaded {
 		private static final long serialVersionUID = 7795614064183544708L;
 		private GoogleAPIClientJsonKeyPath(final ResourcesLoaderType resourcesLoaderType,
-											 final String path) {
+										   final String path) {
 			super(resourcesLoaderType,
 				  Path.from(path));
 		}
 		private GoogleAPIClientJsonKeyPath(final ResourcesLoaderType resourcesLoaderType,
-											 final Path path) {
+										   final Path path) {
 			super(resourcesLoaderType,
 				  Path.from(path));
 		}
 		public static GoogleAPIClientJsonKeyPath loadedFromClassPath(final Path path) {
 			return new GoogleAPIClientJsonKeyPath(ResourcesLoaderType.CLASSPATH,
-													path);
+												  path);
 		}
 		public static GoogleAPIClientJsonKeyPath loadedFromFileSystem(final Path path) {
 			return new GoogleAPIClientJsonKeyPath(ResourcesLoaderType.FILESYSTEM,
-													path);
+												  path);
 		}
 		public static GoogleAPIClientJsonKeyPath loadedFromClassPath(final String path) {
 			return new GoogleAPIClientJsonKeyPath(ResourcesLoaderType.CLASSPATH,
-													path);
+												  path);
 		}
 		public static GoogleAPIClientJsonKeyPath loadedFromFileSystem(final String path) {
 			return new GoogleAPIClientJsonKeyPath(ResourcesLoaderType.FILESYSTEM,
-													path);
+												  path);
 		}
 	}
 	@MarshallType(as="googleAPIClientP12KeyPath")
@@ -336,7 +337,7 @@ public class GoogleAPI {
 			    extends ResourceToBeLoaded {
 		private static final long serialVersionUID = 7962856594968469607L;
 		public GoogleAPIClientP12KeyPath(final ResourcesLoaderType resourcesLoaderType,
-										   final String path) {
+										 final String path) {
 			super(resourcesLoaderType,
 				  Path.from(path));
 		}
@@ -347,11 +348,11 @@ public class GoogleAPI {
 		}
 		public static GoogleAPIClientP12KeyPath loadedFromClassPath(final Path path) {
 			return new GoogleAPIClientP12KeyPath(ResourcesLoaderType.CLASSPATH,
-												   path);
+												 path);
 		}
 		public static GoogleAPIClientP12KeyPath loadedFromFileSystem(final Path path) {
 			return new GoogleAPIClientP12KeyPath(ResourcesLoaderType.FILESYSTEM,
-												   path);
+												 path);
 		}
 		public static GoogleAPIClientP12KeyPath loadedFromClassPath(final String path) {
 			return new GoogleAPIClientP12KeyPath(ResourcesLoaderType.CLASSPATH,
@@ -359,7 +360,7 @@ public class GoogleAPI {
 		}
 		public static GoogleAPIClientP12KeyPath loadedFromFileSystem(final String path) {
 			return new GoogleAPIClientP12KeyPath(ResourcesLoaderType.FILESYSTEM,
-												   path);
+												 path);
 		}
 	}
 }
