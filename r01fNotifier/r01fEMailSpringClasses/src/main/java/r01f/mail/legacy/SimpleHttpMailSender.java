@@ -1,10 +1,4 @@
-/*
- * Created on Feb 22, 2007
- *
- * @author ie00165h - Alex Lara
- * (c) 2007 EJIE: Eusko Jaurlaritzako Informatika Elkartea
- */
-package r01f.mail.simple;
+package r01f.mail.legacy;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -61,7 +55,7 @@ public class SimpleHttpMailSender
     /**
      * Htpp proxy settings
      */
-    private final HttpClientProxySettings _proxySettings; 
+    private final HttpClientProxySettings _proxySettings;
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +84,7 @@ public class SimpleHttpMailSender
 /////////////////////////////////////////////////////////////////////////////////////////
 //  METHODS
 /////////////////////////////////////////////////////////////////////////////////////////
-    public void sendMessage(final EMail from,final Collection<EMail> to, 
+    public void sendMessage(final EMail from,final Collection<EMail> to,
     						final String subject,
                             final MimeType messageContentType,final String messageText) throws AddressException,
                                                                  	MessagingException {
@@ -99,14 +93,14 @@ public class SimpleHttpMailSender
     					 messageContentType,messageText,
     					 null);		// no attachments
     }
-    public void sendMessage(final EMail from,final Collection<EMail> to, 
+    public void sendMessage(final EMail from,final Collection<EMail> to,
     						final String subject,
                             final MimeType messageContentType,final String messageText,
                             final Path[] attachedFilesPaths) throws AddressException,
                                                                  	MessagingException {
 
 		this.sendMessage(from,to,null,null,
-						 subject, 
+						 subject,
 						 messageContentType,messageText,
 						 attachedFilesPaths);
     }
@@ -133,12 +127,12 @@ public class SimpleHttpMailSender
         																		   .withName("from");
         HttpRequestFormParameterForText toParam = HttpRequestFormParameterForText.of(CollectionUtils.toStringSeparatedWith(to,';'))
         																		 .withName("to");
-        HttpRequestFormParameterForText toCCParam = CollectionUtils.hasData(toCC) 
-        													? HttpRequestFormParameterForText.of(CollectionUtils.toStringSeparatedWith(toCC,';')) 
+        HttpRequestFormParameterForText toCCParam = CollectionUtils.hasData(toCC)
+        													? HttpRequestFormParameterForText.of(CollectionUtils.toStringSeparatedWith(toCC,';'))
         																					 .withName("toCC")
         													: null;
-        HttpRequestFormParameterForText toCCOParam = CollectionUtils.hasData(toCCO) 
-        													? HttpRequestFormParameterForText.of(CollectionUtils.toStringSeparatedWith(toCCO,';')) 
+        HttpRequestFormParameterForText toCCOParam = CollectionUtils.hasData(toCCO)
+        													? HttpRequestFormParameterForText.of(CollectionUtils.toStringSeparatedWith(toCCO,';'))
         																					 .withName("toCCO")
         													: null;
         HttpRequestFormParameterForText subjParam = HttpRequestFormParameterForText.of(subject)
@@ -147,7 +141,7 @@ public class SimpleHttpMailSender
         																		   .withName("messageContentType");
         HttpRequestFormParameterForText textParam = HttpRequestFormParameterForText.of(messageText)
         																		   .withName("messageText");
-        
+
         List<HttpRequestFormParameter> params = Lists.newArrayList();
         params.add(fromParam);
         params.add(toParam);
@@ -166,7 +160,7 @@ public class SimpleHttpMailSender
 																								return HttpRequestPayloadForFileParameter.wrap(attachmentFilePath.asAbsoluteString())
 																																		 .withFileName(attachmentFilePath.getFileName());
 																							}
-        																	
+
         																		   })
         																.toList();
         	HttpRequestFormParameterForMultiPartBinaryData multiPartBinaryData = HttpRequestFormParameterForMultiPartBinaryData.of(fileParams)
@@ -174,10 +168,10 @@ public class SimpleHttpMailSender
         	params.add(multiPartBinaryData);
         	params.add(HttpRequestFormParameterForText.of(fileParams.size())
         											  .withName("numFiles"));
-        	
+
         	// http post multipart
         	try {
-				String postResponse = HttpClient.forUrl(_smtpHost.asUrl())										 
+				String postResponse = HttpClient.forUrl(_smtpHost.asUrl())
 										  .POSTMultiPart()
 										  		.withPOSTFormParameters(params)
 										  		.loadAsString()

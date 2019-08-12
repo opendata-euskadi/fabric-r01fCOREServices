@@ -5,16 +5,16 @@ import javax.mail.MessagingException;
 import org.junit.Test;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import r01f.cloud.google.GoogleAPI.GoogleAPIClientEMailAddress;
+import r01f.cloud.google.GoogleAPI.GoogleAPIClientID;
+import r01f.cloud.google.GoogleAPI.GoogleAPIClientP12KeyPath;
+import r01f.cloud.google.GoogleAPI.GoogleAPIServiceAccountClientData;
 import r01f.guids.CommonOIDs.AppCode;
-import r01f.mail.GoogleAPI.GoogleAPIClientEMailAddress;
-import r01f.mail.GoogleAPI.GoogleAPIClientID;
-import r01f.mail.GoogleAPI.GoogleAPIClientP12KeyPath;
-import r01f.mail.GoogleAPI.GoogleAPIServiceAccountClientData;
+import r01f.mail.model.EMailMessage;
+import r01f.mail.model.EMailMessageAttachment;
+import r01f.mail.model.EMailMessageBuilder;
+import r01f.mail.model.EMailRFC822Address;
 import r01f.mime.MimeType;
-import r01f.notifier.email.model.EMailMessage;
-import r01f.notifier.email.model.EMailMessageAttachment;
-import r01f.notifier.email.model.EMailMessageBuilder;
-import r01f.notifier.email.model.EMailRFC822Address;
 import r01f.types.contact.EMail;
 import r01f.types.url.Host;
 

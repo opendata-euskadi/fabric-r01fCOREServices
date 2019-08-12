@@ -1,4 +1,4 @@
-package r01f.notifier.email;
+package r01f.mail;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -23,10 +23,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import r01f.mail.model.EMailMessage;
+import r01f.mail.model.EMailMessageAttachment;
+import r01f.mail.model.EMailRFC822Address;
 import r01f.mime.MimeType;
-import r01f.notifier.email.model.EMailMessage;
-import r01f.notifier.email.model.EMailMessageAttachment;
-import r01f.notifier.email.model.EMailRFC822Address;
 import r01f.util.types.StringEncodeUtils;
 import r01f.util.types.Strings;
 import r01f.util.types.collections.CollectionUtils;

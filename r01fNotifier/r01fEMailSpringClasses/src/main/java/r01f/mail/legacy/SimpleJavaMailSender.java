@@ -1,10 +1,4 @@
-/*
- * Created on Feb 22, 2007
- *
- * @author ie00165h - Alex Lara
- * (c) 2007 EJIE: Eusko Jaurlaritzako Informatika Elkartea
- */
-package r01f.mail.simple;
+package r01f.mail.legacy;
 
 import java.io.File;
 import java.util.Collection;
@@ -45,7 +39,7 @@ import r01f.util.types.collections.CollectionUtils;
  *      					   null);		// no attachments
  * </pre>
  */
-public class SimpleJavaMailSender 
+public class SimpleJavaMailSender
 	 extends SimpleMailSenderBase {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
@@ -88,7 +82,7 @@ public class SimpleJavaMailSender
 /////////////////////////////////////////////////////////////////////////////////////////
 //  METHODS
 /////////////////////////////////////////////////////////////////////////////////////////
-    public void sendMessage(final EMail from,final Collection<EMail> to, 
+    public void sendMessage(final EMail from,final Collection<EMail> to,
     						final String subject,
                             final MimeType messageContentType,final String messageText) throws AddressException,
                                                                  							   MessagingException {
@@ -97,14 +91,14 @@ public class SimpleJavaMailSender
     					 messageContentType,messageText,
     					 null);		// no attachments
     }
-    public void sendMessage(final EMail from,final Collection<EMail> to, 
+    public void sendMessage(final EMail from,final Collection<EMail> to,
     						final String subject,
                             final MimeType messageContentType,final String messageText,
                             final Path[] attachedFilesPaths) throws AddressException,
                                                                  	MessagingException {
 
 		this.sendMessage(from,to,null,null,
-						 subject, 
+						 subject,
 						 messageContentType,messageText,
 						 attachedFilesPaths);
     }
@@ -125,7 +119,7 @@ public class SimpleJavaMailSender
         // Checks
         if (_smtpHost == null) throw new MessagingException("The SMTP host cannot be null");
         if (CollectionUtils.isNullOrEmpty(to)) throw new MessagingException("Cannot send a mail message to an unknown destination email address");
-        
+
         // ----> Open SMTP session
         Properties props = new Properties();
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -137,18 +131,18 @@ public class SimpleJavaMailSender
         props.put("mail.smtp.host",_smtpHost.toString());
         if ( _timeout > -1 ) props.put("mail.smtp.connectiontimeout", "" + _timeout);
         props.put("mail.debug",String.valueOf(_debug));
-        
+
         Session sesion = Session.getInstance(props,null);
         sesion.setDebug(false);
 
         // ----> Message header
         Message message = new MimeMessage(sesion);
-        
+
         // FROM
         InternetAddress from_addr = new InternetAddress(from.asString());
         message.setFrom(from_addr);
-        
-        // TO 
+
+        // TO
         InternetAddress[] addrsTo = SimpleJavaMailSender.eMailCollectionToInternetAddress(to);
         if (CollectionUtils.hasData(addrsTo)) message.addRecipients(Message.RecipientType.TO,addrsTo);
 
@@ -193,7 +187,7 @@ public class SimpleJavaMailSender
 																						}
         														   			  })
         														   .toList();
-        	
+
             for (MimeBodyPart mimeBodyPart : mimeBodyParts) {
                 mp.addBodyPart(mimeBodyPart);
             }
