@@ -25,15 +25,6 @@
 <!-- ====================================================================== -->
 	<dependencies>
   		<!-- ///////////////////////////////////////// -->
-		<!-- R01: CORE EMail                           -->
-		<!-- ///////////////////////////////////////// -->
-		<dependency>
-			<groupId>r01.r01f.coreservices.notifier</groupId>
-			<artifactId>r01fEMailClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-
-  		<!-- ///////////////////////////////////////// -->
 		<!-- R01: MailSpring                           -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
@@ -43,12 +34,12 @@
 		</dependency>
 
   		<!-- ///////////////////////////////////////// -->
-		<!-- Twilio                                    -->
+		<!-- R01: Twilio                               -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-		    <groupId>com.twilio.sdk</groupId>
-		    <artifactId>twilio-java-sdk</artifactId>
-		    <version>3.8.0</version>
+			<groupId>r01.r01f.cloud.twilio</groupId>
+			<artifactId>r01fTwilioClasses</artifactId>
+			<version>${r01f.version}</version>
 		</dependency>
 
 	</dependencies>
