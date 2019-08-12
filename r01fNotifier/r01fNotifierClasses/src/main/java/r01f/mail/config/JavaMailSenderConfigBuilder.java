@@ -13,7 +13,7 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
 public abstract class JavaMailSenderConfigBuilder
            implements IsBuilder {
 /////////////////////////////////////////////////////////////////////////////////////////
-//	  
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static JavaMailSenderConfigBase createFrom(final XMLPropertiesForAppComponent xmlProps) {
 		return JavaMailSenderConfigBuilder.createFrom(xmlProps,
@@ -24,18 +24,18 @@ public abstract class JavaMailSenderConfigBuilder
 												      				final String propsRootNode) {
 		String thePropsRootNode = Strings.isNullOrEmpty(propsRootNode) ? "mail" : propsRootNode;
 		C outConfig = null;
-		
+
 		// java mail sender impl
 		log.debug(" propsRootNode {}",
 				 thePropsRootNode);
 		JavaMailSenderImpl impl = xmlProps.propertyAt(thePropsRootNode + "/javaMailSenderImpls/@active")
-									    .asEnumElementIgnoringCase(JavaMailSenderImpl.class);
+									      .asEnumElementIgnoringCase(JavaMailSenderImpl.class);
 		log.debug("JavaMailSenderConfigBuilder impl based on {} ",
 				   impl.getClass());
-		
+
 		// ==== MICROSOFT EXCHANGE
-		if (impl == JavaMailSenderImpl.MICROSOFT_EXCHANGE) {
-			JavaMailSenderConfigForMSExchange msExchangeCfg = JavaMailSenderConfigForMSExchange.createFrom(xmlProps,
+		if (impl == JavaMailSenderImpl.SMTP) {
+			JavaMailSenderConfigForSMTP msExchangeCfg = JavaMailSenderConfigForSMTP.createFrom(xmlProps,
 																										   thePropsRootNode);
 			outConfig = (C)msExchangeCfg;
 		}

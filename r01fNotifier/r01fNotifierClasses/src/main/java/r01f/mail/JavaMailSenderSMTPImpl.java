@@ -2,13 +2,20 @@ package r01f.mail;
 
 import java.util.Properties;
 
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import r01f.service.ServiceCanBeDisabled;
+import r01f.types.url.Host;
+import r01f.util.types.Strings;
 
-     class SpringJavaMailSenderImplDecorator 
-   extends JavaMailSenderImpl
-implements ServiceCanBeDisabled {
+
+/**
+ * Uses Microsoft Exchange SMTP service to send mail
+ */
+public class JavaMailSenderSMTPImpl
+	 extends JavaMailSenderImpl
+  implements ServiceCanBeDisabled {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTANTS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -37,17 +44,37 @@ implements ServiceCanBeDisabled {
 		_disabled = true;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
-//  
+//	BUILDER
+/////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Creates a {@link JavaMailSender} to send an email using a SMTP server
+	 * @param host
+	 * @param port
+	 * @return
+	 */
+	public static JavaMailSender create(final Host host) {
+		if (Strings.isNullOrEmpty(host.asString())) throw new IllegalArgumentException("Invalid SMTP HOST");
+		Properties javaMailProps = JavaMailSenderSMTPImpl.createJavaMailProperties();
+		javaMailProps.put("mail.smtp.host",host.asString());
+
+		JavaMailSenderImpl outMailSender = new JavaMailSenderSMTPImpl();
+		outMailSender.setHost(host.asString());
+		outMailSender.setJavaMailProperties(javaMailProps);
+
+		return outMailSender;
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	protected static Properties createJavaMailProperties() {
 		Properties props = new Properties();
-		
+
 		// Set a fixed timeout of 60s for all operations - the default timeout is "infinite"
 		// see http://www.javacodegeeks.com/2014/06/javamail-can-be-evil-and-force-you-to-restart-your-app-server.html
 		props.put("mail.smtp.connectiontimeout",MAIL_SOCKET_TIMEOUT);
 		props.put("mail.smtp.timeout", MAIL_SOCKET_TIMEOUT);
 		props.put("mail.smtp.writetimeout",MAIL_SOCKET_TIMEOUT);
-		
+
 		return props;
 	}
 }

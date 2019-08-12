@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import r01f.mail.config.JavaMailSenderConfig;
 import r01f.mail.config.JavaMailSenderConfigForGoogleAPI;
 import r01f.mail.config.JavaMailSenderConfigForGoogleSMTP;
-import r01f.mail.config.JavaMailSenderConfigForMSExchange;
+import r01f.mail.config.JavaMailSenderConfigForSMTP;
 import r01f.mail.config.JavaMailSenderConfigForThirdPartyHttpService;
 import r01f.mail.config.JavaMailSenderImpl;
 
@@ -73,18 +73,18 @@ public class JavaMailSenderProvider
 		JavaMailSender outJavaMailSender = null;
 		// instance the javaMailSender depending on the configured impl
 		JavaMailSenderImpl impl = _config.getImpl();
-		
-		// ==== MICROSOFT EXCHANGE
-		if (impl == JavaMailSenderImpl.MICROSOFT_EXCHANGE) {
-			JavaMailSenderConfigForMSExchange msExchangeCfg = _config.as(JavaMailSenderConfigForMSExchange.class);
-			outJavaMailSender = MicrosoftExchangeSMTPMailSender.create(msExchangeCfg.getMailServerHost());
+
+		// ==== SMTP (ie: MICROSOFT EXCHANGE)
+		if (impl == JavaMailSenderImpl.SMTP) {
+			JavaMailSenderConfigForSMTP msExchangeCfg = _config.as(JavaMailSenderConfigForSMTP.class);
+			outJavaMailSender = JavaMailSenderSMTPImpl.create(msExchangeCfg.getMailServerHost());
 		}
 
 		// ==== GOOGLE GMAIL API
 		else if (impl == JavaMailSenderImpl.GOOGLE_API) {
 			JavaMailSenderConfigForGoogleAPI gApiCfg = _config.as(JavaMailSenderConfigForGoogleAPI.class);
-			JavaMailSenderGmailImpl gmailJavaMailSender = GMailAPIMailSender.create(gApiCfg.getServiceAccountClientData(),	// service account data
-														   							gApiCfg.getProxySettings());			// proxy settings
+			JavaMailSenderGmailImpl gmailJavaMailSender = JavaMailSenderGmailImpl.create(gApiCfg.getServiceAccountClientData(),	// service account data
+														   								 gApiCfg.getProxySettings());			// proxy settings
 			if (gApiCfg.isDisabled()) gmailJavaMailSender.setDisabled();
 			outJavaMailSender = gmailJavaMailSender;
 		}
@@ -92,14 +92,13 @@ public class JavaMailSenderProvider
 		// ==== GOOGLE GMAIL SMTP
 		else if (impl == JavaMailSenderImpl.GOOGLE_SMTP) {
 			JavaMailSenderConfigForGoogleSMTP gSMTPCfg = _config.as(JavaMailSenderConfigForGoogleSMTP.class);
-			outJavaMailSender = GMailSMTPMailSender.create(gSMTPCfg.getUserAndPassword().getUser(),
-														   gSMTPCfg.getUserAndPassword().getPassword());
+			outJavaMailSender = JavaMailSenderGMailSMTPImpl.create(gSMTPCfg.getUserAndPassword().getUser(),
+														   		   gSMTPCfg.getUserAndPassword().getPassword());
 		// ==== THIRD_PARTY_MAIL_HTTPSERVICE
 		} else if (impl == JavaMailSenderImpl.THIRD_PARTY_MAIL_HTTPSERVICE) {
 			JavaMailSenderConfigForThirdPartyHttpService thirdPartyHttpCfg = _config.as(JavaMailSenderConfigForThirdPartyHttpService.class);
-			outJavaMailSender =  ThridPartyHTTPMailSender.create(thirdPartyHttpCfg.getThirdPartyProviderUrl(),
-																 thirdPartyHttpCfg.getProxySettings(),
-																 thirdPartyHttpCfg.isSupportsMimeMessage());
+			outJavaMailSender =  JavaMailSenderThridPartyHTTPImpl.create(thirdPartyHttpCfg.getThirdPartyProviderUrl(),
+																 		 thirdPartyHttpCfg.getProxySettings());
 
 		} else {
 			throw new IllegalStateException("JavaMailSender implementation was NOT configured");
