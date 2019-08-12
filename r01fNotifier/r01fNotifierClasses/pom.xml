@@ -94,5 +94,14 @@
 		    <artifactId>twilio-java-sdk</artifactId>
 		    <version>3.8.0</version>
 		</dependency>
+
+  		<!-- ///////////////////////////////////////// -->
+		<!-- R01F Cloud: SES                           -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.cloud.aws.ses</groupId>
+			<artifactId>r01fAWSSESClasses</artifactId>
+		    <version>${r01f.version}</version>
+		</dependency>
 	</dependencies>
 </project>

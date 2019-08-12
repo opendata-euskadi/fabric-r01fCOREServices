@@ -25,17 +25,17 @@ public class JavaMailSenderConfigForSMTP
 	}
 	public static JavaMailSenderConfigForSMTP createFrom(final XMLPropertiesForAppComponent xmlProps,
 												      		   final String propsRootNode) {
-		Host exchangeHost = JavaMailSenderConfigForSMTP.microsoftExchangeHostFromProperties(xmlProps,
-																					   			  propsRootNode);
-		return new JavaMailSenderConfigForSMTP(exchangeHost,
+		Host host = JavaMailSenderConfigForSMTP.smtpHostFromProperties(xmlProps,
+																	   propsRootNode);
+		return new JavaMailSenderConfigForSMTP(host,
 													 false);	// not disabled
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTANTS
 /////////////////////////////////////////////////////////////////////////////////////////
 	private static final String SMTP_PROPS_XPATH = "/javaMailSenderImpls/javaMailSenderImpl[@id='smtp']";
-	static Host microsoftExchangeHostFromProperties(final XMLPropertiesForAppComponent props,
-											 		final String propsRootNode) {
+	static Host smtpHostFromProperties(final XMLPropertiesForAppComponent props,
+									   final String propsRootNode) {
 		Host host = props.propertyAt(propsRootNode + SMTP_PROPS_XPATH + "/host")
 					  	 .asHost();
 		if (host == null) throw new IllegalStateException(Throwables.message("Cannot configure SMTP: the properties file does NOT contains a the host at {} in {} properties file",

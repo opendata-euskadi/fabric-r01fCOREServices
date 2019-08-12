@@ -14,7 +14,7 @@ import r01f.mime.MimeType;
 import r01f.notifier.email.model.EMailMessage;
 import r01f.notifier.email.model.EMailMessageAttachment;
 import r01f.notifier.email.model.EMailMessageBuilder;
-import r01f.notifier.email.model.EMailMessageFrom;
+import r01f.notifier.email.model.EMailRFC822Address;
 import r01f.types.contact.EMail;
 import r01f.types.url.Host;
 
@@ -22,17 +22,20 @@ public class JavaMailSenderTest {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	SMTP
 /////////////////////////////////////////////////////////////////////////////////////////
-//	@Test
+	@Test
 	public void testSMTP() throws MessagingException {
 		JavaMailSender smtpJavaMailSender = JavaMailSenderSMTPImpl.create(Host.from("proxy2"));
 		JavaMailSenders.using(smtpJavaMailSender)
 					   .send(_createEMailMessage());
 	}
-//	@Test
+	@Test
 	public void testSMTPWithAttachments() throws MessagingException {
 		JavaMailSender smtpJavaMailSender = JavaMailSenderSMTPImpl.create(Host.from("proxy2"));
 		JavaMailSenders.using(smtpJavaMailSender)
-					   .send(_createEMailMessageWithAttachments());
+					   .send(_createEMailMessage(),
+							 new EMailMessageAttachment("test.txt",
+				  										"Test".getBytes(),
+				  										MimeType.TEXT_PLAIN));
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	GMAIL
@@ -43,11 +46,14 @@ public class JavaMailSenderTest {
 		JavaMailSenders.using(smtpJavaMailSender)
 					   .send(_createEMailMessage());
 	}
-//	@Test
+	@Test
 	public void testGMailWithAttachments() throws MessagingException {
 		JavaMailSender smtpJavaMailSender = JavaMailSenderGmailImpl.create(_createGoogleApiServiceAccountClientData());
 		JavaMailSenders.using(smtpJavaMailSender)
-					   .send(_createEMailMessageWithAttachments());
+					   .send(_createEMailMessage(),
+							 new EMailMessageAttachment("test.txt",
+				  										"Test".getBytes(),
+				  										MimeType.TEXT_PLAIN));
 	}
 	private GoogleAPIServiceAccountClientData _createGoogleApiServiceAccountClientData() {
 		return new GoogleAPIServiceAccountClientData(AppCode.forId("r01f"),
@@ -60,25 +66,12 @@ public class JavaMailSenderTest {
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	private EMailMessage _createEMailMessage() {
-		return EMailMessageBuilder.from(EMailMessageFrom.of(EMail.of("me@futuretelematics.net"),
+		return EMailMessageBuilder.from(EMailRFC822Address.of(EMail.of("me@futuretelematics.net"),
 																	 "FutureTelematics"))
-													    .to(EMail.of("a-lara@ejie.eus"))
+													    .to(EMailRFC822Address.of(EMail.of("a-lara@ejie.eus"),"Alex"))
 													    .noCC().noBCC()
 													    .withSubject("Test email")
 													    .withPlainTextBody("Test")
-													    .noAttachments()
-													    .build();
-	}
-	private EMailMessage _createEMailMessageWithAttachments() {
-		return EMailMessageBuilder.from(EMailMessageFrom.of(EMail.of("me@futuretelematics.net"),
-																	 "FutureTelematics"))
-													    .to(EMail.of("a-lara@ejie.eus"))
-													    .noCC().noBCC()
-													    .withSubject("Test email with attachments")
-													    .withPlainTextAndHTMLBody("Test with attachments","<h1>Test With Attachments</h1>")
-													    .withAttachments(new EMailMessageAttachment("test.txt",
-															  										"Test".getBytes(),
-															  										MimeType.TEXT_PLAIN))
 													    .build();
 	}
 }

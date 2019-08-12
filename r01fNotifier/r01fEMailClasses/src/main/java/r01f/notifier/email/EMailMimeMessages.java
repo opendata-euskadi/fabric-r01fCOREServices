@@ -8,15 +8,16 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.util.ByteArrayDataSource;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,18 +26,19 @@ import lombok.extern.slf4j.Slf4j;
 import r01f.mime.MimeType;
 import r01f.notifier.email.model.EMailMessage;
 import r01f.notifier.email.model.EMailMessageAttachment;
+import r01f.notifier.email.model.EMailRFC822Address;
 import r01f.util.types.StringEncodeUtils;
 import r01f.util.types.Strings;
 import r01f.util.types.collections.CollectionUtils;
 
 @Slf4j
 @Accessors(prefix="_")
-public abstract class EMailMessageBuilder {
+public abstract class EMailMimeMessages {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	MIME
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static EMailMimeMessageBuilderCharsetStep createMimeMessageFor(final EMailMessage mailMsg) throws MessagingException {
-		return new EMailMessageBuilder() { /* nothing */ }
+		return new EMailMimeMessages() { /* nothing */ }
 						.new EMailMimeMessageBuilderCharsetStep(mailMsg);
 	}
 	@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
@@ -56,17 +58,33 @@ public abstract class EMailMessageBuilder {
 		private final EMailMessage _mailMessage;
 		private final Charset _charset;
 
-		public EMailMimeMessageBuilderBuildStep usingSession(final Session session) {
-			return new EMailMimeMessageBuilderBuildStep(_mailMessage,
-														_charset,
-														session);
+		public EMailMimeMessageBuilderAttachmentsStep usingSession(final Session session) {
+			return new EMailMimeMessageBuilderAttachmentsStep(_mailMessage,
+															  _charset,
+															  session);
 		}
-		public EMailMimeMessageBuilderBuildStep usingDefaultSession() {
+		public EMailMimeMessageBuilderAttachmentsStep usingDefaultSession() {
 			return this.usingDefaultSessionFrom(new Properties());
 		}
-		public EMailMimeMessageBuilderBuildStep usingDefaultSessionFrom(final Properties properties) {
+		public EMailMimeMessageBuilderAttachmentsStep usingDefaultSessionFrom(final Properties properties) {
 			Session session = Session.getDefaultInstance(properties);
 			return this.usingSession(session);
+		}
+	}
+	@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
+	public class EMailMimeMessageBuilderAttachmentsStep {
+		private final EMailMessage _mailMessage;
+		private final Charset _charset;
+		private final Session _session;
+
+		public EMailMimeMessageBuilderBuildStep noAttachments() throws MessagingException {
+			return this.withAttachments(null);
+		}
+		public EMailMimeMessageBuilderBuildStep withAttachments(final Collection<EMailMessageAttachment> attachments) throws MessagingException {
+			return new EMailMimeMessageBuilderBuildStep(_mailMessage,
+									  					_charset,
+									  					_session,
+									  					attachments);
 		}
 	}
 	@RequiredArgsConstructor(access=AccessLevel.PRIVATE)
@@ -74,9 +92,10 @@ public abstract class EMailMessageBuilder {
 		private final EMailMessage _mailMessage;
 		private final Charset _charset;
 		private final Session _session;
+		final Collection<EMailMessageAttachment> _attachments;
 
 		public MimeMessage build() throws MessagingException {
-			return _createMimeMessage(_mailMessage,
+			return _createMimeMessage(_mailMessage,_attachments,
 									  _charset,
 									  _session);
 		}
@@ -84,7 +103,7 @@ public abstract class EMailMessageBuilder {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	private static MimeMessage _createMimeMessage(final EMailMessage mailMsg,
+	private static MimeMessage _createMimeMessage(final EMailMessage mailMsg,final Collection<EMailMessageAttachment> attachments,
 												  final Charset charset,
 												  final Session session) throws MessagingException {
 		// Create the html and text mime body part
@@ -92,7 +111,7 @@ public abstract class EMailMessageBuilder {
         															   charset);
 
         // Create a mime body part for the attachment
-        Collection<MimeBodyPart> attachmentsMimeBodyParts = _createAttachmentsMimeBodyPart(mailMsg.getAttachments());
+        Collection<MimeBodyPart> attachmentsMimeBodyParts = _createAttachmentsMimeBodyPart(attachments);
 
         // Create a multipart/mixed parent container.
         MimeMultipart mimeMultiPart = new MimeMultipart("mixed");
@@ -108,13 +127,16 @@ public abstract class EMailMessageBuilder {
         message.setSubject(StringEncodeUtils.encode(Strings.removeNewlinesOrCarriageRetuns(mailMsg.getSubject()),
         										    charset)
         									.toString());
-        message.setFrom(new InternetAddress(mailMsg.getFrom().asString()));
+        message.setFrom(mailMsg.getFrom().asRFC822InternetAddressUsing(charset));
         message.setRecipients(javax.mail.Message.RecipientType.TO,
-        					  InternetAddress.parse(CollectionUtils.toStringCommaSeparated(mailMsg.getTo())));
+        					  EMailRFC822Address.multipleAsRFC822InternetAddress(mailMsg.getTo(),
+        							   											 charset));
         message.setRecipients(javax.mail.Message.RecipientType.CC,
-        					  InternetAddress.parse(CollectionUtils.toStringCommaSeparated(mailMsg.getCc())));
+        					  EMailRFC822Address.multipleAsRFC822InternetAddress(mailMsg.getCc(),
+        							   											 charset));
         message.setRecipients(javax.mail.Message.RecipientType.BCC,
-        					  InternetAddress.parse(CollectionUtils.toStringCommaSeparated(mailMsg.getBcc())));
+        					  EMailRFC822Address.multipleAsRFC822InternetAddress(mailMsg.getBcc(),
+        							   											 charset));
         message.setContent(mimeMultiPart);
 
         return message;
@@ -182,5 +204,27 @@ public abstract class EMailMessageBuilder {
 							 			})
 							 .filter(Predicates.notNull())
 							 .toList();
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+	public static EMailMessage emailMessageFrom(final MimeMessage mimeMessage) throws MessagingException {
+		EMailRFC822Address from = CollectionUtils.hasData(mimeMessage.getFrom())
+									? EMailRFC822Address.fromRFC822Address(mimeMessage.getFrom()[0])
+									: null;
+		Collection<EMailRFC822Address> to = CollectionUtils.hasData(mimeMessage.getRecipients(RecipientType.TO))
+												? EMailRFC822Address.multipleFromRFC822Address(Lists.newArrayList(mimeMessage.getRecipients(RecipientType.TO)))
+												: null;
+		Collection<EMailRFC822Address> cc = CollectionUtils.hasData(mimeMessage.getRecipients(RecipientType.CC))
+												? EMailRFC822Address.multipleFromRFC822Address(Lists.newArrayList(mimeMessage.getRecipients(RecipientType.CC)))
+												: null;
+		Collection<EMailRFC822Address> bcc = CollectionUtils.hasData(mimeMessage.getRecipients(RecipientType.BCC))
+												? EMailRFC822Address.multipleFromRFC822Address(Lists.newArrayList(mimeMessage.getRecipients(RecipientType.BCC)))
+												: null;
+		String subject = mimeMessage.getSubject();
+
+		return new EMailMessage(from,to,cc,bcc,
+								subject,
+								null,null);
 	}
 }

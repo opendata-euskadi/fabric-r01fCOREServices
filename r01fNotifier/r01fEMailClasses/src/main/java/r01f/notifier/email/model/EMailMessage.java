@@ -6,90 +6,75 @@ import com.google.common.collect.Lists;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
-import r01f.types.contact.EMail;
-import r01f.util.types.collections.CollectionUtils;
 
 @Accessors(prefix="_")
 public class EMailMessage {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
-    @Getter private final EMailMessageFrom _from;
-	@Getter private final Collection<EMail> _to;
-    @Getter private final Collection<EMail> _cc;
-    @Getter private final Collection<EMail> _bcc;
+    @Getter private final EMailRFC822Address _from;
+	@Getter private final Collection<EMailRFC822Address> _to;
+    @Getter private final Collection<EMailRFC822Address> _cc;
+    @Getter private final Collection<EMailRFC822Address> _bcc;
 
     @Getter private final String _subject;
 
     @Getter private final String _plainTextBody;
     @Getter private final String _htmlBody;
-
-    @Getter private final Collection<EMailMessageAttachment> _attachments;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
-    public EMailMessage(final EMailMessageFrom from,final EMail to,
-    				    final String subject,final String plainTextBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final EMailRFC822Address to,
+    				    final String subject,final String plainTextBody) {
     	this(from,Lists.newArrayList(to),
     		 null,null,
-    		 subject,plainTextBody,null,	// plain text body (no html)
-    		 attachments);
+    		 subject,plainTextBody,null);	// plain text body (no html)
     }
-    public EMailMessage(final EMailMessageFrom from,final Collection<EMail> to,
-    				   	final String subject,final String plainTextBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,
+    				   	final String subject,final String plainTextBody) {
     	this(from,to,
     		 null,null,
-    		 subject,plainTextBody,null,	// plain text body (no html)
-    		 attachments);
+    		 subject,plainTextBody,null);	// plain text body (no html)
     }
-    public EMailMessage(final EMailMessageFrom from,final Collection<EMail> to,final Collection<EMail> cc,
-    				   	final String subject,final String plainTextBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,final Collection<EMailRFC822Address> cc,
+    				   	final String subject,final String plainTextBody) {
     	this(from,to,
     		 cc,null,
-    		 subject,plainTextBody,null,	// plain text body (no html)
-    		 attachments);
+    		 subject,plainTextBody,null);	// plain text body (no html)
     }
-    public EMailMessage(final EMailMessageFrom from,final Collection<EMail> to,final Collection<EMail> cc,final Collection<EMail> bcc,
-    				   	final String subject,final String plainTextBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,final Collection<EMailRFC822Address> cc,final Collection<EMailRFC822Address> bcc,
+    				   	final String subject,final String plainTextBody) {
     	this(from,to,
     		 cc,bcc,
-    		 subject,plainTextBody,null,	// plain text body (no html)
-    		 attachments);
+    		 subject,plainTextBody,null);	// plain text body (no html)
     }
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR (setting html)
 /////////////////////////////////////////////////////////////////////////////////////////
-    public EMailMessage(final EMailMessageFrom from,final EMail to,
-    				   	final String subject,final String plainTextBody,final String htmlBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final EMailRFC822Address to,
+    				   	final String subject,
+    				   	final String plainTextBody,final String htmlBody) {
     	this(from,Lists.newArrayList(to),
     		 null,null,
-    		 subject,plainTextBody,htmlBody,
-    		 attachments);
+    		 subject,plainTextBody,htmlBody);
     }
-    public EMailMessage(final EMailMessageFrom from,final Collection<EMail> to,
-    				   	final String subject,final String plainTextBody,final String htmlBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,
+    				   	final String subject,
+    				   	final String plainTextBody,final String htmlBody) {
     	this(from,to,
     		 null,null,
-    		 subject,plainTextBody,htmlBody,
-    		 attachments);
+    		 subject,plainTextBody,htmlBody);
     }
-    public EMailMessage(final EMailMessageFrom from,final Collection<EMail> to,final Collection<EMail> cc,
-    				   	final String subject,final String plainTextBody,final String htmlBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,final Collection<EMailRFC822Address> cc,
+    				   	final String subject,
+    				   	final String plainTextBody,final String htmlBody) {
     	this(from,to,
     		 cc,null,
-    		 subject,plainTextBody,htmlBody,
-    		 attachments);
+    		 subject,plainTextBody,htmlBody);
     }
-    public EMailMessage(final EMailMessageFrom from,final Collection<EMail> to,final Collection<EMail> cc,final Collection<EMail> bcc,
-    				   	final String subject,final String plainTextBody,final String htmlBody,
-    				   	final Collection<EMailMessageAttachment> attachments) {
+    public EMailMessage(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,final Collection<EMailRFC822Address> cc,final Collection<EMailRFC822Address> bcc,
+    				   	final String subject,
+    				   	final String plainTextBody,final String htmlBody) {
     	_from = from;
         _to = to;
         _cc = cc;
@@ -98,13 +83,5 @@ public class EMailMessage {
         _subject = subject;
         _plainTextBody = plainTextBody;
         _htmlBody = htmlBody;
-
-        _attachments = attachments;
-    }
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-    public boolean hasAttachments() {
-    	return CollectionUtils.hasData(_attachments);
     }
 }

@@ -35,9 +35,9 @@ public abstract class JavaMailSenderConfigBuilder
 
 		// ==== MICROSOFT EXCHANGE
 		if (impl == JavaMailSenderImpl.SMTP) {
-			JavaMailSenderConfigForSMTP msExchangeCfg = JavaMailSenderConfigForSMTP.createFrom(xmlProps,
-																										   thePropsRootNode);
-			outConfig = (C)msExchangeCfg;
+			JavaMailSenderConfigForSMTP smtpCfg = JavaMailSenderConfigForSMTP.createFrom(xmlProps,
+																						 thePropsRootNode);
+			outConfig = (C)smtpCfg;
 		}
 
 		// ==== GOOGLE GMAIL API

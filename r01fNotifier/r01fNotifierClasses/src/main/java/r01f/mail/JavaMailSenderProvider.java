@@ -76,8 +76,8 @@ public class JavaMailSenderProvider
 
 		// ==== SMTP (ie: MICROSOFT EXCHANGE)
 		if (impl == JavaMailSenderImpl.SMTP) {
-			JavaMailSenderConfigForSMTP msExchangeCfg = _config.as(JavaMailSenderConfigForSMTP.class);
-			outJavaMailSender = JavaMailSenderSMTPImpl.create(msExchangeCfg.getMailServerHost());
+			JavaMailSenderConfigForSMTP smtpCfg = _config.as(JavaMailSenderConfigForSMTP.class);
+			outJavaMailSender = JavaMailSenderSMTPImpl.create(smtpCfg.getMailServerHost());
 		}
 
 		// ==== GOOGLE GMAIL API

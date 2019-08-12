@@ -1,86 +1,74 @@
 package r01f.mail;
 
-import java.io.InputStream;
-
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.MailException;
+import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 
-import r01f.service.ServiceCanBeDisabled;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import r01f.cloud.aws.ses.AWSSESClient;
+import r01f.cloud.aws.ses.AWSSESClientConfig;
+import r01f.notifier.email.EMailMimeMessages;
+import r01f.notifier.email.model.EMailMessage;
+import software.amazon.awssdk.services.ses.model.SendEmailResponse;
+import software.amazon.awssdk.services.ses.model.SendRawEmailResponse;
+import software.amazon.awssdk.services.ses.model.SesResponse;
 
+@Slf4j
+@RequiredArgsConstructor
 public class JavaMailSenderAWSSESImpl
-  implements JavaMailSender,
-  			 ServiceCanBeDisabled {
+     extends JavaMailSenderBase {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
-	private boolean _disabled;
+	private final AWSSESClientConfig _config;
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//	ServiceCanBeDisabled
-/////////////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public boolean isEnabled() {
-		return !_disabled;
-	}
-	@Override
-	public boolean isDisabled() {
-		return _disabled;
-	}
-	@Override
-	public void setEnabled() {
-		_disabled = false;
-	}
-	@Override
-	public void setDisabled() {
-		_disabled = true;
-	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public void send(final SimpleMailMessage simpleMessage) throws MailException {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
 	public void send(final SimpleMailMessage... simpleMessages) throws MailException {
-		for (SimpleMailMessage s : simpleMessages ) {
-			this.send(s);
+		try {
+			AWSSESClient sesCli = new AWSSESClient(_config);
+
+			for (SimpleMailMessage simpleMessage : simpleMessages) {
+				// Conver to EMailMessage & send
+				EMailMessage emailMsg = JavaMailSenders.eMailMessageFrom(simpleMessage);
+				SesResponse res = sesCli.sendEMail(emailMsg);
+
+				// log
+				SendEmailResponse emailRes = (SendEmailResponse)res;
+				log.info("{} > email sent with id={}",
+						 JavaMailSenderAWSSESImpl.class.getSimpleName(),
+						 emailRes.messageId());
+			}
+		} catch (MessagingException msgEx) {
+			throw new MailSendException(msgEx.getMessage(),
+										msgEx);
 		}
 	}
 	@Override
-	public void send(final MimeMessage mimeMessage) throws MailException {
-		// TODO Auto-generated method stub
+	protected void doSend(final MimeMessage[] mimeMessages,
+						  final Object[] originalMessages) throws MailException {
+		try {
+			AWSSESClient sesCli = new AWSSESClient(_config);
 
-	}
-	@Override
-	public void send(final MimeMessage... mimeMessages) throws MailException {
-		// TODO Auto-generated method stub
+			for (MimeMessage mimeMessage : mimeMessages) {
+				EMailMessage emailMsg = EMailMimeMessages.emailMessageFrom(mimeMessage);
+				SesResponse res = sesCli.sendEMail(emailMsg);
 
-	}
-	@Override
-	public void send(final MimeMessagePreparator mimeMessagePreparator) throws MailException {
-		// TODO Auto-generated method stub
-
-	}
-	@Override
-	public void send(final MimeMessagePreparator... mimeMessagePreparators) throws MailException {
-		// TODO Auto-generated method stub
-
-	}
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-/////////////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public MimeMessage createMimeMessage() {
-		return null;
-	}
-	@Override
-	public MimeMessage createMimeMessage(final InputStream contentStream) throws MailException {
-		return null;
+				// log
+				SendRawEmailResponse emailRes = (SendRawEmailResponse)res;
+				log.info("{} > email sent with id={}",
+						 JavaMailSenderAWSSESImpl.class.getSimpleName(),
+						 emailRes.messageId());
+			}
+		} catch (MessagingException msgEx) {
+			throw new MailSendException(msgEx.getMessage(),
+										msgEx);
+		}
 	}
 }
