@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import r01f.util.types.collections.CollectionUtils;
 
 @Accessors(prefix="_")
 public class EMailMessage {
@@ -13,9 +14,7 @@ public class EMailMessage {
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
     @Getter private final EMailRFC822Address _from;
-	@Getter private final Collection<EMailRFC822Address> _to;
-    @Getter private final Collection<EMailRFC822Address> _cc;
-    @Getter private final Collection<EMailRFC822Address> _bcc;
+	@Getter private final EMailDestinations _destinations;
 
     @Getter private final String _subject;
 
@@ -76,12 +75,29 @@ public class EMailMessage {
     				   	final String subject,
     				   	final String plainTextBody,final String htmlBody) {
     	_from = from;
-        _to = to;
-        _cc = cc;
-        _bcc = bcc;
+    	if (CollectionUtils.hasData(to) || CollectionUtils.hasData(cc) || CollectionUtils.hasData(bcc)) {
+    		_destinations = new EMailDestinations(to,cc,bcc);
+    	} else {
+    		_destinations = null;
+    	}
 
         _subject = subject;
         _plainTextBody = plainTextBody;
         _htmlBody = htmlBody;
+    }
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+    public Collection<EMailRFC822Address> getTo() {
+    	return _destinations != null ? _destinations.getTo()
+    								 : null;
+    }
+    public Collection<EMailRFC822Address> getCc() {
+    	return _destinations != null ? _destinations.getCc()
+    								 : null;
+    }
+    public Collection<EMailRFC822Address> getBcc() {
+    	return _destinations != null ? _destinations.getBcc()
+    								 : null;
     }
 }
