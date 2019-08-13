@@ -10,7 +10,7 @@
       <artifactId>r01fDistributedCache</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</parent>
-  	
+
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
@@ -18,12 +18,12 @@
 	<name>r01fDistributedCacheRedis</name>
 	<artifactId>r01fDistributedCacheRedis</artifactId>
 	<packaging>pom</packaging>				<!-- it's a parent project -->
-	
+
 <!-- ====================================================================== -->
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-		<module>r01fDistributedCacheRedisClasses</module>    	   
+		<module>r01fDistributedCacheRedisClasses</module>
 	</modules>
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

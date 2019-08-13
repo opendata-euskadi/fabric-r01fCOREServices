@@ -9,8 +9,8 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-		<groupId>r01.r01f.coreservices.notifier</groupId>
-		<artifactId>r01fNotifier</artifactId>
+		<groupId>r01.r01f.coreservices.email</groupId>
+		<artifactId>r01fEMail</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
@@ -28,7 +28,7 @@
 		<!-- R01: EMail                                -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<groupId>r01.r01f.coreservices.email</groupId>
 			<artifactId>r01fEMailClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
@@ -55,7 +55,7 @@
 		<!-- R01F Cloud: Google                        -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.cloud.google</groupId>
+			<groupId>r01.r01f.coreservices.cloud.google</groupId>
 			<artifactId>r01fGoogleClasses</artifactId>
 		    <version>${r01f.version}</version>
 		</dependency>
@@ -64,7 +64,7 @@
 		<!-- R01F Cloud: SES                           -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.cloud.aws.ses</groupId>
+			<groupId>r01.r01f.coreservices.cloud.aws.ses</groupId>
 			<artifactId>r01fAWSSESClasses</artifactId>
 		    <version>${r01f.version}</version>
 		</dependency>

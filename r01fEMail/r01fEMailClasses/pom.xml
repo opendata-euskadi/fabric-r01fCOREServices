@@ -9,8 +9,8 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-		<groupId>r01.r01f.coreservices.notifier</groupId>
-		<artifactId>r01fNotifier</artifactId>
+		<groupId>r01.r01f.coreservices.email</groupId>
+		<artifactId>r01fEMail</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 

@@ -28,7 +28,7 @@
 		<!-- R01: MailSpring                           -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<groupId>r01.r01f.coreservices.email</groupId>
 			<artifactId>r01fEMailSpringClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
@@ -37,7 +37,7 @@
 		<!-- R01: Twilio                               -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.cloud.twilio</groupId>
+			<groupId>r01.r01f.coreservices.cloud.twilio</groupId>
 			<artifactId>r01fTwilioClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>

@@ -29,15 +29,23 @@ public abstract class JavaMailSenderConfigBuilder
 		log.debug(" propsRootNode {}",
 				 thePropsRootNode);
 		JavaMailSenderImpl impl = xmlProps.propertyAt(thePropsRootNode + "/javaMailSenderImpls/@active")
-									      .asEnumElementIgnoringCase(JavaMailSenderImpl.class);
+									      .asEnumElementIgnoringCase(JavaMailSenderImpl.class,
+									    		  					 JavaMailSenderImpl.AWS_SES);
 		log.debug("JavaMailSenderConfigBuilder impl based on {} ",
-				   impl.getClass());
+				   impl);
 
-		// ==== MICROSOFT EXCHANGE
+		// ==== SMTP
 		if (impl == JavaMailSenderImpl.SMTP) {
 			JavaMailSenderConfigForSMTP smtpCfg = JavaMailSenderConfigForSMTP.createFrom(xmlProps,
 																						 thePropsRootNode);
 			outConfig = (C)smtpCfg;
+		}
+
+		// ==== AWS SES (simple email service)
+		if (impl == JavaMailSenderImpl.AWS_SES) {
+			JavaMailSenderConfigForAWSSES awsSESCfg = JavaMailSenderConfigForAWSSES.createFrom(xmlProps,
+																						 	   thePropsRootNode);
+			outConfig = (C)awsSESCfg;
 		}
 
 		// ==== GOOGLE GMAIL API

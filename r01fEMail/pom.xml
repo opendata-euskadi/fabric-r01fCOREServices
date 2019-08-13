@@ -15,19 +15,19 @@
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<groupId>r01.r01f.coreservices.cache</groupId>
-	<name>r01fDistributedCache</name>
-	<artifactId>r01fDistributedCache</artifactId>
+	<groupId>r01.r01f.coreservices.email</groupId>
+	<name>r01fEMail</name>
+	<artifactId>r01fEMail</artifactId>
 	<packaging>pom</packaging>				<!-- it's a parent project -->
 
 <!-- ====================================================================== -->
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-        <module>r01fDistributedCacheCommon</module>
-        <module>r01fDistributedCacheHazelcast</module>
-        <module>r01fDistributedCacheRedis</module>
+    <module>r01fEMailClasses</module>
+    <module>r01fEMailSpringClasses</module>
   </modules>
+
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->

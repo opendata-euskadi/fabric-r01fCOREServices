@@ -32,7 +32,7 @@
 			<artifactId>r01fSchedulerClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
+
 		<!-- ///////////////////////////////////////// -->
 		<!-- BusinessServices                          -->
 		<!-- ///////////////////////////////////////// -->
@@ -41,6 +41,6 @@
 			<artifactId>r01fBusinessServicesGuiceClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
+
 	</dependencies>
 </project>

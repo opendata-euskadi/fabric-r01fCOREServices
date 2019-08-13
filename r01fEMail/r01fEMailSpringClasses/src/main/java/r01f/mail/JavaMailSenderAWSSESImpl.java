@@ -6,12 +6,13 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.aws.ses.AWSSESClient;
 import r01f.cloud.aws.ses.AWSSESClientConfig;
-import r01f.mail.EMailMimeMessages;
+import r01f.mail.config.JavaMailSenderConfigForAWSSES;
 import r01f.mail.model.EMailMessage;
 import software.amazon.awssdk.services.ses.model.SendEmailResponse;
 import software.amazon.awssdk.services.ses.model.SendRawEmailResponse;
@@ -25,7 +26,21 @@ public class JavaMailSenderAWSSESImpl
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
 	private final AWSSESClientConfig _config;
+/////////////////////////////////////////////////////////////////////////////////////////
+//	BUILDER
+/////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Creates a {@link JavaMailSender} to send an email using a SMTP server
+	 * @param host
+	 * @param port
+	 * @return
+	 */
+	public static JavaMailSender create(final JavaMailSenderConfigForAWSSES config) {
+		if (config == null) throw new IllegalArgumentException("Invalid AWS SES config");
 
+		JavaMailSender outMailSender = new JavaMailSenderAWSSESImpl(config.getAwsSESClientConfig());
+		return outMailSender;
+	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -42,8 +42,14 @@ public class EMailRFC822Address
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR / BUILDER
 /////////////////////////////////////////////////////////////////////////////////////////
+    public static EMailRFC822Address of(final EMail email) {
+    	return new EMailRFC822Address(email,null);
+    }
     public static EMailRFC822Address of(final EMail email,final String name) {
     	return new EMailRFC822Address(email,name);
+    }
+    public static EMailRFC822Address of(final String email) {
+    	return new EMailRFC822Address(EMail.of(email),null);
     }
     public static EMailRFC822Address of(final String email,final String name) {
     	return new EMailRFC822Address(EMail.of(email),name);
@@ -103,7 +109,7 @@ public class EMailRFC822Address
     public static String asRFC822Address(final EMailRFC822Address addr) {
         // rfc822 format
         return String.format("\"%s\" <%s>",
-        					 addr.getName(),addr.getEmail());
+        					 addr.getName() != null ? addr.getName() : addr.getEmail(),addr.getEmail());
     }
     public static String multipleAsRFC822Address(final Collection<EMailRFC822Address> addrs) {
     	return CollectionUtils.toStringCommaSeparated(addrs);

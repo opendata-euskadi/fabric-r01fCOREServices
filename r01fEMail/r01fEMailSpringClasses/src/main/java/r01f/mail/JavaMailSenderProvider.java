@@ -7,6 +7,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.mail.config.JavaMailSenderConfig;
+import r01f.mail.config.JavaMailSenderConfigForAWSSES;
 import r01f.mail.config.JavaMailSenderConfigForGoogleAPI;
 import r01f.mail.config.JavaMailSenderConfigForGoogleSMTP;
 import r01f.mail.config.JavaMailSenderConfigForSMTP;
@@ -78,6 +79,12 @@ public class JavaMailSenderProvider
 		if (impl == JavaMailSenderImpl.SMTP) {
 			JavaMailSenderConfigForSMTP smtpCfg = _config.as(JavaMailSenderConfigForSMTP.class);
 			outJavaMailSender = JavaMailSenderSMTPImpl.create(smtpCfg.getMailServerHost());
+		}
+
+		// ==== AWS SES (amazon simple email service)
+		if (impl == JavaMailSenderImpl.AWS_SES) {
+			JavaMailSenderConfigForAWSSES sesCfg = _config.as(JavaMailSenderConfigForAWSSES.class);
+			outJavaMailSender = JavaMailSenderAWSSESImpl.create(sesCfg);
 		}
 
 		// ==== GOOGLE GMAIL API
