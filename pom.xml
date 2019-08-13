@@ -42,6 +42,7 @@
 		<module>r01fNotifier</module>
 		<module>r01fScheduler</module>
 		<module>r01fDistributedCache</module>
+		<module>r01fCloud</module>
 	</modules>
 
 <!-- ====================================================================== -->
