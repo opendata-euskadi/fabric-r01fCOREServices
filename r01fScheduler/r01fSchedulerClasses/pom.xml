@@ -32,7 +32,7 @@
 			<artifactId>r01fBaseClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
+
 		<!-- ///////////////////////////////////////// -->
 		<!-- Properties                                -->
 		<!-- ///////////////////////////////////////// -->
@@ -41,7 +41,7 @@
 			<artifactId>r01fPropertiesClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-		
+
 		<!-- ///////////////////////////////////////// -->
 		<!-- QUARTZ                                    -->
 		<!-- ///////////////////////////////////////// -->

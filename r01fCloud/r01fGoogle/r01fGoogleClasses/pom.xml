@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+		xmlns="http://maven.apache.org/POM/4.0.0"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <modelVersion>4.0.0</modelVersion>
+
+<!-- ====================================================================== -->
+<!-- PARENT                                                                 -->
+<!-- ====================================================================== -->
+	<parent>
+		<groupId>r01.r01f.coreservices.cloud.google</groupId>
+		<artifactId>r01fGoogle</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+<!-- ====================================================================== -->
+<!-- ARTIFACT                                                               -->
+<!-- ====================================================================== -->
+	<name>r01fGoogleClasses</name>
+	<artifactId>r01fGoogleClasses</artifactId>
+
+<!-- ====================================================================== -->
+<!-- DEPENDENCIES                                                           -->
+<!-- ====================================================================== -->
+	<dependencies>
+		<!-- ///////////////////////////////////////// -->
+		<!--  Base Classes                             -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.base</groupId>
+			<artifactId>r01fBaseClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>r01.r01f.resourceload</groupId>
+			<artifactId>r01fResourceLoadInterfaceClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
+  		<!-- ///////////////////////////////////////// -->
+		<!-- GoogleAPIs                                -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+		    <groupId>com.google.api-client</groupId>
+		    <artifactId>google-api-client</artifactId>
+		    <version>1.28.0</version>
+		    <exclusions>
+		    	<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>*</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.apis</groupId>
+		    <artifactId>google-api-services-gmail</artifactId>
+		    <version>v1-rev102-1.25.0</version>
+		    <exclusions>
+		    	<exclusion>
+					<groupId>com.google.guava</groupId>
+					<artifactId>*</artifactId>
+		    	</exclusion>
+		    </exclusions>
+		</dependency>
+	</dependencies>
+</project>

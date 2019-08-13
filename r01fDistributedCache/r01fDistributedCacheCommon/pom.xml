@@ -10,7 +10,7 @@
       <artifactId>r01fDistributedCache</artifactId>
       <version>0.0.1-SNAPSHOT</version>
   	</parent>
-  	
+
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
@@ -18,12 +18,12 @@
 	<name>r01fDistributedCacheCommon</name>
 	<artifactId>r01fDistributedCacheCommon</artifactId>
 	<packaging>pom</packaging>				<!-- it's a parent project -->
-	
+
 <!-- ====================================================================== -->
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-		<module>r01fDistributedCacheBaseClasses</module>    
+		<module>r01fDistributedCacheBaseClasses</module>
 	    <module>r01fDistributedCacheGuiceBaseClasses</module>
 	</modules>
 <!-- ====================================================================== -->
