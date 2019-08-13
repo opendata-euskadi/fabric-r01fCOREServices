@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.aws.ses.AWSSESClient;
 import r01f.cloud.aws.ses.AWSSESClientConfig;
 import r01f.mail.config.JavaMailSenderConfigForAWSSES;
+import r01f.mail.model.EMailDestinations;
 import r01f.mail.model.EMailMessage;
+import r01f.mail.model.EMailRFC822Address;
 import software.amazon.awssdk.services.ses.model.SendEmailResponse;
 import software.amazon.awssdk.services.ses.model.SendRawEmailResponse;
 import software.amazon.awssdk.services.ses.model.SesResponse;
@@ -72,8 +74,12 @@ public class JavaMailSenderAWSSESImpl
 			AWSSESClient sesCli = new AWSSESClient(_config);
 
 			for (MimeMessage mimeMessage : mimeMessages) {
-				EMailMessage emailMsg = EMailMimeMessages.emailMessageFrom(mimeMessage);
-				SesResponse res = sesCli.sendEMail(emailMsg);
+				// this is a bit weird: have to 'dis-assemble' the email mime message
+				// just to get some data about it like [from: to: cc: bcc:]
+				EMailRFC822Address from = EMailMimeMessages.emailMessageFromOf(mimeMessage);
+				EMailDestinations dest = EMailMimeMessages.emailMessageDestinationsOf(mimeMessage);
+				SesResponse res = sesCli.sendEMail(from,dest,
+												   mimeMessage);
 
 				// log
 				SendRawEmailResponse emailRes = (SendRawEmailResponse)res;
