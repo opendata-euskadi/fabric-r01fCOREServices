@@ -64,6 +64,15 @@ public class JavaMailSenderThridPartyHTTPImpl
 																				 proxySettings);
 		return outJavaMailSender;
 	}
+	/**
+	 * Creates a {@link JavaMailSender} to send an email using a http enabled Third Party Mail Sender
+	 * @param host
+	 * @param port
+	 * @return
+	 */
+	public static JavaMailSender create(final Url thirdPartyProviderUri) {
+		return create(thirdPartyProviderUri,null); 
+	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	SIMPLE
 /////////////////////////////////////////////////////////////////////////////////////////
