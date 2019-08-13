@@ -22,10 +22,11 @@
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
+		<module>r01fAWSClasses</module>
 		<module>r01fAWSS3</module>
-   		<module>r01fAWSSES</module>
-    <module>r01fAWSSNS</module>
-  </modules>
+		<module>r01fAWSSES</module>
+		<module>r01fAWSSNS</module>
+	</modules>
 
 <!-- ====================================================================== -->
 <!-- AWS SDK 2.0 BOM                                                        -->
