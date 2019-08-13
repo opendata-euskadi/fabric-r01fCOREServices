@@ -23,9 +23,9 @@
 <!-- ====================================================================== -->
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
-	<modules>
-    <module>r01fENotifierClasses</module>
-    <module>r01fENotifierGuiceClasses</module>
+  <modules>
+    <module>r01fNotifierClasses</module>
+    <module>r01fNotifierGuiceClasses</module>
   </modules>
 
 <!-- ====================================================================== -->
