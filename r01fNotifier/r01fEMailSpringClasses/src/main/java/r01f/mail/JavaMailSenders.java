@@ -14,10 +14,10 @@ import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import r01f.notifier.email.EMailMimeMessages;
-import r01f.notifier.email.model.EMailMessage;
-import r01f.notifier.email.model.EMailMessageAttachment;
-import r01f.notifier.email.model.EMailRFC822Address;
+import r01f.mail.EMailMimeMessages;
+import r01f.mail.model.EMailMessage;
+import r01f.mail.model.EMailMessageAttachment;
+import r01f.mail.model.EMailRFC822Address;
 import r01f.util.types.Strings;
 import r01f.util.types.collections.CollectionUtils;
 

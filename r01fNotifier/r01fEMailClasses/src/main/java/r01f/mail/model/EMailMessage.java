@@ -1,4 +1,4 @@
-package r01f.notifier.email.model;
+package r01f.mail.model;
 
 import java.util.Collection;
 

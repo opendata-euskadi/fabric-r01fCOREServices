@@ -27,6 +27,7 @@
     <module>r01fNotifierClasses</module>
     <module>r01fNotifierGuiceClasses</module>
     <module>r01fEMailClasses</module>
+    <module>r01fEMailSpringClasses</module>
   </modules>
   
 <!-- ====================================================================== -->

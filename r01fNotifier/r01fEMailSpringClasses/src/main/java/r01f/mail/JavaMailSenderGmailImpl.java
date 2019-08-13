@@ -25,8 +25,9 @@ import com.google.api.services.gmail.model.Message;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import r01f.cloud.google.GoogleAPI;
+import r01f.cloud.google.GoogleAPI.GoogleAPIServiceAccountClientData;
 import r01f.httpclient.HttpClientProxySettings;
-import r01f.mail.GoogleAPI.GoogleAPIServiceAccountClientData;
 
 /**
  * A Spring's {@link JavaMailSender} implementation using Google's GMAIL
