@@ -1,12 +1,16 @@
 package r01f.mail;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
+import javax.mail.BodyPart;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
@@ -23,6 +27,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import r01f.mail.model.EMailDestinations;
 import r01f.mail.model.EMailMessage;
 import r01f.mail.model.EMailMessageAttachment;
 import r01f.mail.model.EMailRFC822Address;
@@ -182,6 +187,7 @@ public abstract class EMailMimeMessages {
         }
 	}
 	private static Collection<MimeBodyPart> _createAttachmentsMimeBodyPart(final Collection<EMailMessageAttachment> attachments) throws MessagingException {
+		if (CollectionUtils.isNullOrEmpty(attachments)) return Lists.newArrayList();
 		return FluentIterable.from(attachments)
 							 .transform(new Function<EMailMessageAttachment,MimeBodyPart>() {
 									 			@Override
@@ -208,10 +214,13 @@ public abstract class EMailMimeMessages {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	public static EMailMessage emailMessageFrom(final MimeMessage mimeMessage) throws MessagingException {
+	public static EMailRFC822Address emailMessageFromOf(final MimeMessage mimeMessage) throws MessagingException {
 		EMailRFC822Address from = CollectionUtils.hasData(mimeMessage.getFrom())
 									? EMailRFC822Address.fromRFC822Address(mimeMessage.getFrom()[0])
 									: null;
+		return from;
+	}
+	public static EMailDestinations emailMessageDestinationsOf(final MimeMessage mimeMessage) throws MessagingException {
 		Collection<EMailRFC822Address> to = CollectionUtils.hasData(mimeMessage.getRecipients(RecipientType.TO))
 												? EMailRFC822Address.multipleFromRFC822Address(Lists.newArrayList(mimeMessage.getRecipients(RecipientType.TO)))
 												: null;
@@ -221,10 +230,66 @@ public abstract class EMailMimeMessages {
 		Collection<EMailRFC822Address> bcc = CollectionUtils.hasData(mimeMessage.getRecipients(RecipientType.BCC))
 												? EMailRFC822Address.multipleFromRFC822Address(Lists.newArrayList(mimeMessage.getRecipients(RecipientType.BCC)))
 												: null;
-		String subject = mimeMessage.getSubject();
+	    return CollectionUtils.hasData(to) || CollectionUtils.hasData(cc) || CollectionUtils.hasData(bcc)
+	    			? new EMailDestinations(to,cc,bcc)
+	    			: null;
+	}
+	public static String emailSubjectOf(final MimeMessage mimeMessage) throws MessagingException {
+		return mimeMessage.getSubject();
+	}
+	public static String[] emailBodyOf(final MimeMessage mimeMessage) throws MessagingException {
+		String bodyText = null;
+		String bodyHtml = null;
+		try {
+			Object msgCont = mimeMessage.getContent();
+			if (msgCont instanceof String) {
+				if (Strings.isContainedWrapper(mimeMessage.getContentType())
+						   .in(MimeType.TEXT_PLAIN.getName())) {
+					bodyText = (String)msgCont;
+				} else if (Strings.isContainedWrapper(mimeMessage.getContentType())
+						   		  .in(MimeType.HTML.getName(),
+						   			  MimeType.XHTML.getName())) {
+					bodyHtml = (String)msgCont;
+				}
+			}
+			else if (msgCont instanceof Multipart) {
+				Multipart mp = (Multipart)msgCont;
+				for (int i=0; i < mp.getCount(); i++) {
+					BodyPart bp = mp.getBodyPart(i);
+					if (bp.getContent() instanceof String) {
+						if (Strings.isContainedWrapper(bp.getContentType())
+								   .in(MimeType.TEXT_PLAIN.getName())) {
+							bodyText = (String)bp.getContent();
+						} else if (Strings.isContainedWrapper(bp.getContentType())
+								   		  .in(MimeType.HTML.getName(),
+								   			  MimeType.XHTML.getName())) {
+							bodyHtml = (String)bp.getContent();
+						}
+					}
+					else if (bp.getContent() instanceof MimeMultipart) {
+						MimeMultipart mmp = (MimeMultipart)bp.getContent();
+						for (int j=0; j < mmp.getCount(); j++) {
+							BodyPart mbp = mmp.getBodyPart(j);
+							if (mbp.getContent() instanceof InputStream) continue;	// it's an attachment
 
-		return new EMailMessage(from,to,cc,bcc,
-								subject,
-								null,null);
+							if (mbp.isMimeType(MimeType.TEXT_PLAIN.getName())) {
+								bodyText = (String)mbp.getContent();
+							} else if (mbp.isMimeType(MimeType.HTML.getName())
+									|| bp.isMimeType(MimeType.XHTML.getName())) {
+								bodyHtml = (String)mbp.getContent();
+							}
+						}
+					}
+				}
+			} else if (msgCont instanceof InputStream) {
+				// it's an attachment
+			}
+		} catch (IOException ioEx) {
+			log.error("Could NOT get a mime message content: {}",
+					  ioEx.getMessage(),ioEx);
+		}
+		return bodyText != null || bodyHtml != null
+					? new String[] { bodyText,bodyHtml }
+					: null;
 	}
 }
