@@ -22,9 +22,10 @@
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
+		<module>r01fAWSClasses</module>
 		<module>r01fAWSS3</module>
    		<module>r01fAWSSES</module>
-    <module>r01fAWSSNS</module>
+        <module>r01fAWSSNS</module>
   </modules>
 
 <!-- ====================================================================== -->
