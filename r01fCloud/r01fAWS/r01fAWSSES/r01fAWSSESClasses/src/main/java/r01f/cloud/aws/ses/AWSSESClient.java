@@ -14,10 +14,11 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.aws.AWSAccessKey;
 import r01f.cloud.aws.AWSAccessSecret;
-import r01f.mail.EMailMimeMessages;
-import r01f.mail.model.EMailMessage;
-import r01f.mail.model.EMailMessageAttachment;
-import r01f.mail.model.EMailRFC822Address;
+import r01f.core.services.mail.EMailMimeMessages;
+import r01f.core.services.mail.model.EMailDestinations;
+import r01f.core.services.mail.model.EMailMessage;
+import r01f.core.services.mail.model.EMailMessageAttachment;
+import r01f.core.services.mail.model.EMailRFC822Address;
 import r01f.util.types.collections.CollectionUtils;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -70,11 +71,6 @@ public class AWSSESClient {
 		return this.sendEMail(mailMsg,
 							  CollectionUtils.hasData(attachs) ? Lists.newArrayList(attachs) : null);
 	}
-	/**
-	 * Sends an email message
-	 * @param mailMsg
-	 * @return
-	 */
 	public SesResponse sendEMail(final EMailMessage mailMsg,
 								 final Collection<EMailMessageAttachment> attachs) throws MessagingException {
 		if (CollectionUtils.isNullOrEmpty(attachs)) {
@@ -85,6 +81,12 @@ public class AWSSESClient {
 			return _sendRawEMail(mailMsg,
 								 attachs);
 		}
+	}
+	public SesResponse sendEMail(final EMailRFC822Address from,final EMailDestinations destinations,
+								 final MimeMessage mimeMessage) throws MessagingException {
+		log.info("[AWS SES]: Sending raw email");
+		return _sendRawEMail(from,destinations,
+							 mimeMessage);
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	SIMPLE
@@ -139,17 +141,23 @@ public class AWSSESClient {
 											   .build();
 
         // Send the email.
+        return _sendRawEMail(mailMsg.getFrom(),mailMsg.getDestinations(),
+        			  		 mimeMessage);
+	}
+	private SesResponse _sendRawEMail(final EMailRFC822Address from,final EMailDestinations dest,
+									  final MimeMessage mimeMessage) throws MessagingException {
+        // Send the email.
         try {
 	        SdkBytes bytes = SdkBytes.fromInputStream(mimeMessage.getInputStream());
 	        RawMessage rawMessage = RawMessage.builder()
 	        								  .data(bytes)
 	        								  .build();
-	        Destination destinations = _eMailDestinationFrom(mailMsg.getTo(),
-	        												 mailMsg.getCc(),
-	        											     mailMsg.getBcc());
+	        Destination destinations = _eMailDestinationFrom(dest.getTo(),
+	        												 dest.getCc(),
+	        											     dest.getBcc());
 	        SendRawEmailRequest rawEmailRequest = SendRawEmailRequest.builder()
 	        														 .destinations(destinations.toAddresses())
-																	 .source(mailMsg.getFrom().asRFC822Address())
+																	 .source(from.asRFC822Address())
 	        														 .rawMessage(rawMessage)
 	        														 .build();
 

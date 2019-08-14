@@ -43,7 +43,11 @@
 		<module>r01fNotifier</module>
 		<module>r01fScheduler</module>
 		<module>r01fDistributedCache</module>
+<<<<<<< HEAD
 	</modules>
+=======
+  </modules>
+>>>>>>> refs/heads/master
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

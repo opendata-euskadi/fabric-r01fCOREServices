@@ -7,6 +7,7 @@ import r01f.cloud.aws.AWSAccessKey;
 import r01f.cloud.aws.AWSAccessSecret;
 import r01f.cloud.aws.AWSClientConfig;
 import r01f.cloud.aws.AWSClientConfigBuilder;
+import r01f.cloud.aws.AWSService;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 import software.amazon.awssdk.regions.Region;
 
@@ -40,7 +41,7 @@ public class AWSSNSClientConfig
 	public static final AWSSNSClientConfig fromXMLProperties(final XMLPropertiesForAppComponent props,
 															 final String propsRootNode) {
 		AWSClientConfig baseCfg = AWSClientConfigBuilder.fromXMLProperties(props,
-																    	   propsRootNode);
+																    	   propsRootNode,AWSService.SNS);
 		return new AWSSNSClientConfig(baseCfg);
 	}
 }
