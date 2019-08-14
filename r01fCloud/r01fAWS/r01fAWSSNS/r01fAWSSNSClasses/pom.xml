@@ -53,6 +53,16 @@
 			<artifactId>r01fBaseClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
+
+		<!-- ///////////////////////////////////////// -->
+		<!--  Notifier                                 -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<artifactId>r01fNotifierClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
 		<!-- ///////////////////////////////////////// -->
 		<!--  Amazon SNS                               -->
 		<!-- ///////////////////////////////////////// -->
@@ -60,5 +70,7 @@
 		    <groupId>software.amazon.awssdk</groupId>
 		    <artifactId>sns</artifactId>
 		</dependency>
+
+
 	</dependencies>
 </project>
