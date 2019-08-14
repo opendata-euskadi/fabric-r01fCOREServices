@@ -33,6 +33,15 @@
 			<version>${r01f.version}</version>
 		</dependency>
 
+		<!-- ///////////////////////////////////////// -->
+		<!-- R01F: Notifier                            -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<artifactId>r01fNotifierClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
   		<!-- ///////////////////////////////////////// -->
 		<!-- R01: Spring                               -->
 		<!-- ///////////////////////////////////////// -->

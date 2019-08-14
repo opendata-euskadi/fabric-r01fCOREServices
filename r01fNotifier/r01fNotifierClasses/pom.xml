@@ -24,23 +24,27 @@
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
 	<dependencies>
-  		<!-- ///////////////////////////////////////// -->
-		<!-- R01: MailSpring                           -->
+		<!-- ///////////////////////////////////////// -->
+		<!-- R01F: Base Classes                        -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.base</groupId>
+			<artifactId>r01fBaseClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>r01.r01f.properties</groupId>
+			<artifactId>r01fPropertiesInterfaceClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
+		<!-- ///////////////////////////////////////// -->
+		<!-- R01F: EMail                               -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.coreservices.email</groupId>
-			<artifactId>r01fEMailSpringClasses</artifactId>
+			<artifactId>r01fEMailClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-
-  		<!-- ///////////////////////////////////////// -->
-		<!-- R01: Twilio                               -->
-		<!-- ///////////////////////////////////////// -->
-		<dependency>
-			<groupId>r01.r01f.coreservices.cloud.twilio</groupId>
-			<artifactId>r01fTwilioClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-
 	</dependencies>
 </project>

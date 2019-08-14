@@ -15,8 +15,9 @@ public abstract class AWSClientConfigBuilder {
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static final AWSClientConfig fromXMLProperties(final XMLPropertiesForAppComponent props,
-														  final String propsRootNode) {
-		Region region = props.propertyAt(propsRootNode + "/aws/ses/region")
+														  final String propsRootNode,final AWSService awsService) {
+		////////// service independent properties
+		Region region = props.propertyAt(propsRootNode + "/aws/region")
 					  	 	 .asObjectFromString(new FactoryFrom<String,Region>() {
 														@Override
 														public Region from(final String reg) {
@@ -24,23 +25,7 @@ public abstract class AWSClientConfigBuilder {
 														}
 					  	 	 					 },
 					  	 			 			 Region.EU_WEST_1);
-		AWSAccessKey key = props.propertyAt(propsRootNode + "/aws/ses/accessKey")
-								  .asObjectFromString(new FactoryFrom<String,AWSAccessKey>() {
-															@Override
-															public AWSAccessKey from(final String key) {
-																return AWSAccessKey.forId(key);
-															}
-													  },
-										  			  AWSAccessKey.forId("--KEY NOT FOUND--"));
-		AWSAccessSecret secret = props.propertyAt(propsRootNode + "/aws/ses/accessSecret")
-									  .asObjectFromString(new FactoryFrom<String,AWSAccessSecret>() {
-																@Override
-																public AWSAccessSecret from(final String key) {
-																	return AWSAccessSecret.forId(key);
-																}
-														  },
-											  			  AWSAccessSecret.forId("--SECRET NOT FOUND--"));
-		Charset charset = props.propertyAt(propsRootNode + "/aws/ses/charset")
+		Charset charset = props.propertyAt(propsRootNode + "/aws/charset")
 									  .asObjectFromString(new FactoryFrom<String,Charset>() {
 																@Override
 																public Charset from(final String charset) {
@@ -48,7 +33,26 @@ public abstract class AWSClientConfigBuilder {
 																}
 														  },
 											  			  Charset.defaultCharset());
+		////////// service dependent properties
+		AWSAccessKey key = props.propertyAt(propsRootNode + "/aws/" + awsService.nameLowerCase() + "/accessKey")
+								  .asObjectFromString(new FactoryFrom<String,AWSAccessKey>() {
+															@Override
+															public AWSAccessKey from(final String key) {
+																return AWSAccessKey.forId(key);
+															}
+													  },
+										  			  AWSAccessKey.forId("--KEY NOT FOUND--"));
+		AWSAccessSecret secret = props.propertyAt(propsRootNode + "/aws/" + awsService.nameLowerCase() + "/accessSecret")
+									  .asObjectFromString(new FactoryFrom<String,AWSAccessSecret>() {
+																@Override
+																public AWSAccessSecret from(final String key) {
+																	return AWSAccessSecret.forId(key);
+																}
+														  },
+											  			  AWSAccessSecret.forId("--SECRET NOT FOUND--"));
 		if (key == null || secret == null) throw new IllegalStateException("AWS SES key/secret pair is mandatory!");
+
+		// return
 		return new AWSClientConfig(region,
 									  key,secret,
 									  charset);
