@@ -12,17 +12,18 @@ import r01f.cache.hazelcast.DistributedCacheServiceHazelcastImpl;
  * standalone way (ie testing) something like:
  *
  * <pre class='brush:java'>
-	     Injector GUICE_INJECTOR = Guice.createInjector(new XMLPropertiesGuiceModule(),
-				                                        new DistributedCacheBootstrapModule(arg1,arg2));
-
-		ServicesLifeCycleUtil.startServices(GUICE_INJECTOR); // Hazelcast doesnt need anything special to start, but YES to stop, so its important to bind a handler.
-		DistributedCacheService cacheService = GUICE_INJECTOR.getInstance(DistributedCacheService.class);
-		MockObject theMockObject = new MockObject();
-		cacheService.getCacheForModelObject(MockObject.class)
-						.put(theMockObject.getOid(), theMockObject);
-		MockObject mockObjectFromCache =  cacheService.getCacheForModelObject(MockObject.class)
-				                                        .get(oid);
-		ServicesLifeCycleUtil.stopServices(GUICE_INJECTOR);
+ * 		 DistributedCacheConfig cfg = DistributedCacheHazelcastConfig.createFrom(props);
+ *	     Injector GUICE_INJECTOR = Guice.createInjector(new DistributedCacheHazelcastGuiceModule(cfg);
+ *
+ *		ServicesLifeCycleUtil.startServices(GUICE_INJECTOR); // Hazelcast doesn't need anything special to start,
+ *															 // but it MUST be stopped: its important to bind a handler.
+ *		DistributedCacheService cacheService = GUICE_INJECTOR.getInstance(DistributedCacheService.class);
+ *		MockObject theMockObject = new MockObject();
+ *		cacheService.getCacheForModelObject(MockObject.class)
+ *						.put(theMockObject.getOid(), theMockObject);
+ *		MockObject mockObjectFromCache =  cacheService.getCacheForModelObject(MockObject.class)
+ *				                                      .get(oid);
+ *		ServicesLifeCycleUtil.stopServices(GUICE_INJECTOR);
  * </pre>
  *
  * It's VERY important to bind the XMLPropertiesGuiceModule: *
@@ -31,20 +32,19 @@ import r01f.cache.hazelcast.DistributedCacheServiceHazelcastImpl;
  * </pre>
  */
 public class DistributedCacheHazelcastGuiceModule
-     extends DistributedCacheGuiceModuleBase {	
-/////////////////////////////////////////////////////////////////////////////////////////
-//	                                                                          
-/////////////////////////////////////////////////////////////////////////////////////////	
-	@Override
-	@Provides @Singleton // beware the service is a singleton
-	public DistributedCacheService provideDistributedCacheService() {
-		DistributedCacheService outService = new DistributedCacheServiceHazelcastImpl(_config.as(DistributedCacheHazelcastConfig.class));
-		return outService;
-	}
+     extends DistributedCacheGuiceModuleBase {
 /////////////////////////////////////////////////////////////////////////////////////////
 // 	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	public DistributedCacheHazelcastGuiceModule(final DistributedCacheConfig cfg) {
 		super(cfg);
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	@Provides @Singleton // beware the service is a singleton
+	public DistributedCacheService provideDistributedCacheService() {
+		return new DistributedCacheServiceHazelcastImpl(_config.as(DistributedCacheHazelcastConfig.class));
 	}
 }

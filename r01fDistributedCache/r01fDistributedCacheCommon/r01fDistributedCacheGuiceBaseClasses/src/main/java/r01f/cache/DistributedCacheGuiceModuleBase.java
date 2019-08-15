@@ -4,7 +4,6 @@ import javax.inject.Singleton;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import com.google.inject.Provides;
 import com.google.inject.name.Names;
 
 import r01f.service.ServiceHandler;
@@ -35,7 +34,7 @@ import r01f.util.types.Strings;
  */
 
 public abstract class DistributedCacheGuiceModuleBase
-  implements Module {
+           implements Module {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -54,10 +53,8 @@ public abstract class DistributedCacheGuiceModuleBase
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	@Provides @Singleton // beware the service is a singleton
 	public abstract DistributedCacheService provideDistributedCacheService();
-	
-	
+
 	@Override
 	public void configure(final Binder binder) {
 		// Service handler used to control (start/stop) the Persistence Service (see ServletContextListenerBase)
@@ -67,9 +64,6 @@ public abstract class DistributedCacheGuiceModuleBase
         			  										_config.getAppCode(),_config.getAppComponent())))
         	  .to(DistributedCacheService.class)
         	  .in(Singleton.class);
-		/*log.debug("... binded {} to {} with name {}",
-				  ServiceHandler.class.getSimpleName(),DistributedCacheServiceHazelcastImpl.class,
-				  _config.getAppCode(),_config.getAppComponent());*/
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //

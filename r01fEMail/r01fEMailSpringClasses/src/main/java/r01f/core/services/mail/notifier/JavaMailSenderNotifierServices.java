@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.mail.model.EMailRFC822Address;
 import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierServicesForEMail;
+import r01f.core.services.notifier.NotifierServiceForEMail;
 import r01f.core.services.notifier.NotifierTaskOID;
 import r01f.patterns.Factory;
 import r01f.util.types.collections.CollectionUtils;
@@ -28,7 +28,7 @@ import r01f.util.types.collections.Lists;
 @Singleton
 @Accessors(prefix="_")
 public class JavaMailSenderNotifierServices
-  implements NotifierServicesForEMail {
+  implements NotifierServiceForEMail {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////

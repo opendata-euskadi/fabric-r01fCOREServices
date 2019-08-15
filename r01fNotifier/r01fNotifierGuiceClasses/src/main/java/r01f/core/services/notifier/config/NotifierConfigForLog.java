@@ -1,14 +1,13 @@
 package r01f.core.services.notifier.config;
 
 import lombok.experimental.Accessors;
-import r01f.core.services.notifier.config.NotifierEnums.NotifierImpl;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.guids.CommonOIDs.AppCode;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
 @Accessors(prefix="_")
-public abstract class NotifierConfigForLogBase
-     		  extends NotifierConfigBase {
+public class NotifierConfigForLog
+     extends NotifierConfigBase {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -16,16 +15,16 @@ public abstract class NotifierConfigForLogBase
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
-	protected NotifierConfigForLogBase(final AppCode appCode,
-								  	   final boolean enabled,
-								  	   final NotifierImpl impl) {
+	public NotifierConfigForLog(final AppCode appCode,
+								   final boolean enabled) {
 		super(appCode,
 			  NotifierType.LOG,
 			  enabled,
-			  impl);
+			  null,null);
 	}
-	protected NotifierConfigForLogBase(final XMLPropertiesForAppComponent props) {
+	public NotifierConfigForLog(final XMLPropertiesForAppComponent props) {
 		super(NotifierType.LOG,
-			  props);
+			  props,
+			  null);
 	}
 }

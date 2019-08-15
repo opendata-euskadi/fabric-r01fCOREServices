@@ -1,4 +1,4 @@
-package r01f.notifier;
+package r01f.core.services.notifier;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -15,17 +15,30 @@ import r01f.cloud.aws.sns.model.AWSSNSSmsMessageAttributesBuilder;
 import r01f.cloud.aws.sns.model.AWSSNSSmsSenderID;
 import r01f.cloud.aws.sns.model.AWSSNSSmsType;
 import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierServicesForSMS;
+import r01f.core.services.notifier.NotifierServiceForSMS;
 import r01f.core.services.notifier.NotifierTaskOID;
 import r01f.patterns.Factory;
 import r01f.types.contact.OwnedContactMean;
 import r01f.types.contact.Phone;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
+/**
+ * SMS notifier using AMAZON AWS SNS (simple notification services)
+ * Usage:
+ * <pre class='brush:java'>
+ * 		// create an AWS SNS client
+ *		AWSSNSClient snsCli = AWSSNSClientBuilder.region(Region.EU_WEST_1)
+ *									.using(AWSAccessKey.forId("__theKey__"),
+ *										   AWSAccessSecret.forId("__theSecret__"))
+ *									.build();
+ *		// [2] - Create the notifier
+ *		AWSSNSNotifierServices snsnotifier = new AWSSNSNotifierServices(snsCli);
+ * </pre>
+ */
 @Slf4j
 @Singleton
 public class AWSSNSNotifierServices
-  implements NotifierServicesForSMS {
+  implements NotifierServiceForSMS {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +66,8 @@ public class AWSSNSNotifierServices
 														 final Factory<String> messageToBeDeliveredFactory) {
 		Collection<NotifierResponse<Phone>> responses = Lists.newArrayListWithExpectedSize(to.size());
 
-		AWSSNSSmsSenderID senderId = AWSSNSSmsSenderID.forId(from.getOwner());
+		AWSSNSSmsSenderID senderId = AWSSNSSmsSenderID.forId(from.getOwner() != null ? from.getOwner()
+																					 : "R01");
 
 		// [1] - Create the message
 		String smsMsg = messageToBeDeliveredFactory.create();
