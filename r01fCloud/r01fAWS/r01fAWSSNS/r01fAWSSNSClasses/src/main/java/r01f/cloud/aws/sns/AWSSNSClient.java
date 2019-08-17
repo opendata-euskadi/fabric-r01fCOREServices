@@ -61,7 +61,7 @@ public class AWSSNSClient {
 								   final Map<String, MessageAttributeValue> smsAttributes) {
 		PublishRequest req = PublishRequest.builder()
 										   .message(message)
-										   .phoneNumber(phone.asString())
+										   .phoneNumber(phone.asStringEnsuringCountryCode("+34"))
 										   .messageAttributes(smsAttributes)
 										   .build();
 		PublishResponse res = _snsClient.publish(req);
