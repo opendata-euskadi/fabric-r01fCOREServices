@@ -41,13 +41,13 @@ public class NotifierConfigForSMS
 					public ContainsConfigData provideConfigUsing(final NotifierImpl impl,
 																 final XMLPropertiesForAppComponent props) {
 						ContainsConfigData outCfg = null;
-						if (SMSNotifierImpl.LATINIA.is(impl)) {
-							outCfg = LatiniaServiceAPIData.createFrom(props,
-																	  "notifier/sms");
-						}
-						else if (SMSNotifierImpl.AWS.is(impl)) {
+						if (SMSNotifierImpl.AWS.is(impl)) {
 							outCfg = AWSSNSClientConfig.fromXMLProperties(props,
 																		  "notifier/sms");
+						}
+						else if (SMSNotifierImpl.LATINIA.is(impl)) {
+							outCfg = LatiniaServiceAPIData.createFrom(props,
+																	  "notifier/sms");
 						}
 						else {
 							throw new IllegalStateException(impl + " is NOT a supported SMS notifier");

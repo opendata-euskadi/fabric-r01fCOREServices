@@ -88,7 +88,16 @@ public class NotifierGuiceModule
 	@Provides @Singleton	// creates a single instance of the java mail sender
 	NotifierServiceForSMS _provideSMSNotifier(@ModelObjectsMarshaller final Marshaller marshaller) {
 		NotifierServiceForSMS outSrvc = null;
-		if (SMSNotifierImpl.LATINIA.is(_notifiersConfig.getForSMS().getImpl())) {
+		if (SMSNotifierImpl.AWS.is(_notifiersConfig.getForSMS().getImpl())) {
+			// [1] - Get the aws sns service config
+			AWSSNSClientConfig awsSNSCfg = _notifiersConfig.getForSMS().getConfigAs(AWSSNSClientConfig.class);
+			// [2] - Create a aws sns client
+			AWSSNSClient awsSNSCli = new AWSSNSClient(awsSNSCfg);
+
+			// [3] - Build the notifier service
+			outSrvc = new AWSSNSNotifierServices(awsSNSCli);
+		}
+		else if (SMSNotifierImpl.LATINIA.is(_notifiersConfig.getForSMS().getImpl())) {
 			// [1] - Get the latinia service config
 			LatiniaServiceAPIData apiData = _notifiersConfig.getForSMS().getConfigAs(LatiniaServiceAPIData.class);
 			// [2] - Create a Latinia Service
@@ -98,15 +107,6 @@ public class NotifierGuiceModule
 
 			// [3] - Build the notifier service
 			outSrvc = new LatiniaNotifierServices(latiniaService);
-		}
-		else if (SMSNotifierImpl.AWS.is(_notifiersConfig.getForSMS().getImpl())) {
-			// [1] - Get the aws sns service config
-			AWSSNSClientConfig awsSNSCfg = _notifiersConfig.getForSMS().getConfigAs(AWSSNSClientConfig.class);
-			// [2] - Create a aws sns client
-			AWSSNSClient awsSNSCli = new AWSSNSClient(awsSNSCfg);
-
-			// [3] - Build the notifier service
-			outSrvc = new AWSSNSNotifierServices(awsSNSCli);
 		}
 		else {
 			throw new IllegalStateException(_notifiersConfig.getForSMS().getImpl() + " is NOT a supported SMS notifier");
