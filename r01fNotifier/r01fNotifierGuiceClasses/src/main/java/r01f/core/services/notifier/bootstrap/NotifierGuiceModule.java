@@ -35,6 +35,7 @@ import r01f.services.latinia.LatiniaServiceAPIData;
 import r01f.services.latinia.LatiniaServiceProvider;
 import r01f.services.latinia.notifier.LatiniaNotifierServices;
 
+
 @RequiredArgsConstructor
 public class NotifierGuiceModule
   implements Module {
@@ -99,7 +100,7 @@ public class NotifierGuiceModule
 		}
 		else if (SMSNotifierImpl.LATINIA.is(_notifiersConfig.getForSMS().getImpl())) {
 			// [1] - Get the latinia service config
-			LatiniaServiceAPIData apiData = _notifiersConfig.getForSMS().getConfigAs(LatiniaServiceAPIData.class);
+		    LatiniaServiceAPIData apiData = _notifiersConfig.getForSMS().getConfigAs(LatiniaServiceAPIData.class);
 			// [2] - Create a Latinia Service
 			LatiniaServiceProvider latiniaServiceProvider = new LatiniaServiceProvider(apiData,
 																			   		   marshaller);
@@ -107,6 +108,7 @@ public class NotifierGuiceModule
 
 			// [3] - Build the notifier service
 			outSrvc = new LatiniaNotifierServices(latiniaService);
+			
 		}
 		else {
 			throw new IllegalStateException(_notifiersConfig.getForSMS().getImpl() + " is NOT a supported SMS notifier");
@@ -136,4 +138,6 @@ public class NotifierGuiceModule
 		}
 		return outSrvc;
 	}
+	
+	
 }

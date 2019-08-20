@@ -34,12 +34,12 @@ public abstract class JavaMailSenderConfigBuilder
 
 		public JavaMailSenderConfigBase from(final XMLPropertiesForAppComponent xmlProps) {
 			return this.from(xmlProps,
-						     "email");
+						     "mail");
 		}
 		@SuppressWarnings("unchecked")
 		public <C extends JavaMailSenderConfigBase> C from(final XMLPropertiesForAppComponent xmlProps,
 													       final String propsRootNode) {
-			String thePropsRootNode = Strings.isNullOrEmpty(propsRootNode) ? "email" : propsRootNode;
+			String thePropsRootNode = Strings.isNullOrEmpty(propsRootNode) ? "mail" : propsRootNode;
 			C outConfig = null;
 
 			// java mail sender impl

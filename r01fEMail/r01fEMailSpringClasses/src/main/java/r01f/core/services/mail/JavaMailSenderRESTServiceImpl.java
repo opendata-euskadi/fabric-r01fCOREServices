@@ -42,6 +42,7 @@ public class JavaMailSenderRESTServiceImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Getter private final Url _restServiceEndPointUrl;
 	@Getter private final HttpClientProxySettings _proxySettings;
+	@Getter private final boolean _supportsMimeMessage;
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,14 @@ public class JavaMailSenderRESTServiceImpl
 									     final HttpClientProxySettings proxySettings) {
 		_restServiceEndPointUrl = restServiceEndpointUrl;
 		_proxySettings = proxySettings;
+		_supportsMimeMessage = false;
+	}
+	public JavaMailSenderRESTServiceImpl(final Url restServiceEndpointUrl ,
+										 final HttpClientProxySettings proxySettings,
+										 final boolean supportsMimeMessage) {
+		_restServiceEndPointUrl = restServiceEndpointUrl;
+		_proxySettings = proxySettings;
+		_supportsMimeMessage = supportsMimeMessage;
 	}
 	public static JavaMailSender create(final Url restServiceEndPointUrl,
 										final HttpClientProxySettings proxySettings) {
@@ -143,7 +152,7 @@ public class JavaMailSenderRESTServiceImpl
 	}
 	private void _doSendMimeMessage(final MimeMessage mimeMessage) throws IOException,
 																		  MessagingException {
-		EMail[] to = FluentIterable.from(mimeMessage.getFrom())
+		EMail[] from = FluentIterable.from(mimeMessage.getFrom())
 								   .transform(new Function<Address,EMail>() {
 													@Override
 													public EMail apply(final Address addr) {
@@ -152,7 +161,7 @@ public class JavaMailSenderRESTServiceImpl
 								   			  })
 								   .toArray(EMail.class);
 
-	    EMail[] from = FluentIterable.from(mimeMessage.getRecipients(RecipientType.TO))
+	    EMail[] to = FluentIterable.from(mimeMessage.getRecipients(RecipientType.TO))
 								   .transform(new Function<Address,EMail>() {
 													@Override
 													public EMail apply(final Address addr) {
@@ -162,31 +171,39 @@ public class JavaMailSenderRESTServiceImpl
 								   .toArray(EMail.class);
 		String subject = mimeMessage.getSubject();
 
-		log.debug("[JavaMailSender (rest service)]: MIME MESSAGE SUPPORTED");
-		InputStream is = mimeMessage.getInputStream();
+		log.debug("[JavaMailSender (rest service)]: MIME MESSAGE SUPPORTED {}", _supportsMimeMessage);
 		try {
-			Url url = _restServiceEndPointUrl.joinWith(UrlQueryString.fromParams(UrlQueryStringParam.of("to",to[0]),
-																				UrlQueryStringParam.of("from",from[0]),
-																				UrlQueryStringParam.of("subject",subject)));
-			HttpResponse response = null;
-			if (_proxySettings != null) {
-				 response = HttpClient.forUrl(url)
-							      .POST()
-							           .withPayload(HttpRequestPayload.wrap(is))
-							       .getResponse()
-							       		.usingProxy(_proxySettings).withoutTimeOut().noAuth();
+		if (_supportsMimeMessage) {
+				InputStream is = mimeMessage.getInputStream();
+		
+				Url url = _restServiceEndPointUrl.joinWith(UrlQueryString.fromParams(UrlQueryStringParam.of("to",to[0]),
+																					UrlQueryStringParam.of("from",from[0]),
+																					UrlQueryStringParam.of("subject",subject)));
+				HttpResponse response = null;
+				if (_proxySettings != null) {
+					 response = HttpClient.forUrl(url)
+								      .POST()
+								           .withPayload(HttpRequestPayload.wrap(is))
+								       .getResponse()
+								       		.usingProxy(_proxySettings).withoutTimeOut().noAuth();
+				} else {
+					response = HttpClient.forUrl(_restServiceEndPointUrl)
+								      .POST()
+								           .withPayload(HttpRequestPayload.wrap(is))
+								       .getResponse()
+								       		.notUsingProxy().withoutTimeOut().noAuth();
+				}
+				if (!response.getCode().isIn(HttpResponseCode.OK)) {
+					log.error("[JavaMailSender (rest service)] > ERROR Response Code {}",
+							  response.getCode(),response.loadAsString() );
+					throw new JavaMailSenderRESTServiceImplException(Strings.customized("Remote Server Error at rest Mail Service {}",
+																						   response.loadAsString()));
+				}
 			} else {
-				response = HttpClient.forUrl(_restServiceEndPointUrl)
-							      .POST()
-							           .withPayload(HttpRequestPayload.wrap(is))
-							       .getResponse()
-							       		.notUsingProxy().withoutTimeOut().noAuth();
-			}
-			if (!response.getCode().isIn(HttpResponseCode.OK)) {
-				log.error("[JavaMailSender (rest service)] > ERROR Response Code {}",
-						  response.getCode(),response.loadAsString() );
-				throw new JavaMailSenderRESTServiceImplException(Strings.customized("Remote Server Error at rest Mail Service {}",
-																					   response.loadAsString()));
+				log.debug("[JavaMailSender (rest service)]: Mime Message Not Supported");
+				log.debug("[JavaMailSender (rest service)]:  From {}  to {} " , from[0],to);
+				_doSend(from[0], to, subject,
+						_getMimeMessageAsPlainText(mimeMessage));
 			}
 		} catch (MalformedURLException e) {
 			throw new JavaMailSenderRESTServiceImplException(e.getLocalizedMessage());
