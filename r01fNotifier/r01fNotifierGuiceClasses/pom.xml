@@ -64,8 +64,8 @@
 			<version>${r01f.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>r01.r01f.ejie</groupId>
-			<artifactId>r01fLatiniaClasses</artifactId>
+			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<artifactId>r01fLatiniaNotifierClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
 
