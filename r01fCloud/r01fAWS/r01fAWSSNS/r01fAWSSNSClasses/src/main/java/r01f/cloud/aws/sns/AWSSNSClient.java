@@ -14,6 +14,23 @@ import software.amazon.awssdk.services.sns.model.PublishRequest;
 import software.amazon.awssdk.services.sns.model.PublishResponse;
 
 
+/**
+ * Amazon AWS SNS (simple notification service) client
+ * <pre class='brush:java'>
+ * 		// create an AWS SNS client
+ *		AWSSNSClient snsCli = AWSSNSClientBuilder.region(Region.EU_WEST_1)
+ *									.using(AWSAccessKey.forId("__theKey__"),
+ *										   AWSAccessSecret.forId("__theSecret__"))
+ *									.build();
+ *		// [2] - Publish
+ *		PublishResponse res = snsCli.sendSMS(Phone.of("+34688671967"),
+ *											 "OMG!!",
+ *											 AWSSNSSmsMessageAttributesBuilder.forSender(AWSSNSSmsSenderID.forId("me"))
+ *											 								  .noMaxPrice()
+ *											 								  .usingSmsOfType(AWSSNSSmsType.PROMOTIONAL_NON_CRITICAL)
+ *											 								  .build());
+ * </pre>
+ */
 public class AWSSNSClient {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
@@ -44,7 +61,7 @@ public class AWSSNSClient {
 								   final Map<String, MessageAttributeValue> smsAttributes) {
 		PublishRequest req = PublishRequest.builder()
 										   .message(message)
-										   .phoneNumber(phone.asString())
+										   .phoneNumber(phone.asStringEnsuringCountryCode("+34"))
 										   .messageAttributes(smsAttributes)
 										   .build();
 		PublishResponse res = _snsClient.publish(req);

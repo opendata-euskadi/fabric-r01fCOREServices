@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-			 
+
 	<modelVersion>4.0.0</modelVersion>
-	
+
 <!-- ====================================================================== -->
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
@@ -13,13 +13,13 @@
 		<artifactId>r01fNotifier</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
 	<name>r01fNotifierGuiceClasses</name>
 	<artifactId>r01fNotifierGuiceClasses</artifactId>
-	
+
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
@@ -32,7 +32,7 @@
 			<artifactId>r01fNotifierClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-			
+
 		<!-- ///////////////////////////////////////// -->
 		<!-- R01: Guice                                -->
 		<!-- ///////////////////////////////////////// -->
@@ -41,5 +41,40 @@
 			<artifactId>r01fGuiceClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
+
+		<!-- ///////////////////////////////////////// -->
+		<!-- R01: Notifier impls                       -->
+		<!-- ///////////////////////////////////////// -->
+		<!-- EMail notifier (coment out aws ses if not used) -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.email</groupId>
+			<artifactId>r01fEMailSpringClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>r01.r01f.coreservices.cloud.aws.ses</groupId>
+			<artifactId>r01fAWSSESClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
+		<!-- SMS notifier (coment out the one not used) -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.cloud.aws.sns</groupId>
+			<artifactId>r01fAWSSNSClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>r01.r01f.ejie</groupId>
+			<artifactId>r01fLatiniaClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
+		<!-- Voice notifier -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.cloud.twilio</groupId>
+			<artifactId>r01fTwilioClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+
 	</dependencies>
 </project>

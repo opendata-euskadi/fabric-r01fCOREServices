@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.twilio.TwilioService;
 import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierServicesForVoicePhoneCall;
+import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
 import r01f.core.services.notifier.NotifierTaskOID;
 import r01f.patterns.Factory;
 import r01f.types.contact.OwnedContactMean;
@@ -24,7 +24,7 @@ import r01f.types.url.Url;
 @Slf4j
 @Singleton
 public class TwilioNotifierServices
-  implements NotifierServicesForVoicePhoneCall {
+  implements NotifierServiceForVoicePhoneCall {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////

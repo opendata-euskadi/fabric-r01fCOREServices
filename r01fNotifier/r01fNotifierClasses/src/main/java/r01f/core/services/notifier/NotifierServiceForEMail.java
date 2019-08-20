@@ -4,7 +4,7 @@ import javax.mail.internet.MimeMessage;
 
 import r01f.core.services.mail.model.EMailRFC822Address;
 
-public interface NotifierServicesForEMail
+public interface NotifierServiceForEMail
   	     extends NotifierService<EMailRFC822Address,EMailRFC822Address,		// from & to
 							 	 MimeMessage> {
 	// just a marker interface

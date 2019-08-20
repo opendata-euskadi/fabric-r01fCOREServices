@@ -4,10 +4,12 @@ import java.nio.charset.Charset;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import r01f.config.ContainsConfigData;
 import software.amazon.awssdk.regions.Region;
 
 @Accessors(prefix="_")
-public class AWSClientConfig {
+public class AWSClientConfig
+  implements ContainsConfigData {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////

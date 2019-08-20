@@ -7,11 +7,13 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.google.common.collect.Maps;
+import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IMap;
+import com.hazelcast.map.listener.EntryAddedListener;
 
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cache.DistributedCache;
@@ -20,6 +22,19 @@ import r01f.facets.HasOID;
 import r01f.guids.OID;
 import r01f.model.ModelObject;
 
+/**
+ * Distributed cache
+ * Create:
+ * <pre class='brush:java'>
+ *		Config hzConfig = new Config();
+ *		hzConfig.getNetworkConfig().setPort( 5900 )
+ *		        .setPortAutoIncrement(false);
+ *		DistributedCacheHazelcastConfig cacheCfg = DistributedCacheHazelcastConfig.createFrom(AppCode.forId("r01f"),AppComponent.forId("test"),
+ *																				  	 		  hzConfig);
+ *
+ *		DistributedCacheService cacheSrvc = new DistributedCacheServiceHazelcastImpl(cacheCfg);
+ * </pre>
+ */
 @Slf4j
 @Accessors(prefix="_")
 public class DistributedCacheServiceHazelcastImpl
@@ -28,9 +43,9 @@ public class DistributedCacheServiceHazelcastImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
-	@Getter @Setter Map<Class<? extends ModelObject>,DistributedCache<? extends OID,? extends ModelObject>> _caches = Maps.newLinkedHashMap();
-	private HazelcastInstance _hazelCastInstance;
-	@Getter @Setter DistributedCacheHazelcastConfig _cfg;
+	@Getter private final Map<Class<? extends ModelObject>,DistributedCache<? extends OID,? extends ModelObject>> _caches = Maps.newLinkedHashMap();
+	@Getter private final HazelcastInstance _hazelCastInstance;
+	@Getter private final DistributedCacheHazelcastConfig _cfg;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
@@ -38,6 +53,7 @@ public class DistributedCacheServiceHazelcastImpl
 	@Inject
 	public  DistributedCacheServiceHazelcastImpl(final DistributedCacheHazelcastConfig cfg) {
 		_cfg = cfg;
+		_hazelCastInstance = HazelcastManager.getOrCreateeHazelcastInstance(_cfg);
 	}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -46,40 +62,46 @@ public class DistributedCacheServiceHazelcastImpl
 	@Override	@SuppressWarnings("unchecked")
 	public <O extends OID,M extends ModelObject & HasOID<O>> DistributedCache<O,M> getOrCreateCacheFor(final Class<M> modelObjType) {
 		DistributedCache<? extends OID,? extends ModelObject> outCache = null;
-		_checkCacheStatus();
-		if (_caches.get(modelObjType) != null ) {
+		if (_caches.get(modelObjType) != null) {
 			outCache = _caches.get(modelObjType);
 		} else {
-			outCache = _createTypedCacheFor(modelObjType);
+	    	 IMap<O,M> imap = _hazelCastInstance.getMap(modelObjType.getName());
+	    	 imap.addEntryListener(new EntryAddedListener<O,M>() {
+	    		 							@Override
+										    public void entryAdded(final EntryEvent<O,M> event) {
+										        // this will deserialize the new value and throw exception if format doesn't match
+										    	// http://stackoverflow.com/questions/38912877/how-to-prevent-hazelcast-mapstore-to-put-into-imap-old-versions-of-objects
+										        event.getValue();
+										    }
+	    	 						},
+	    			 				true);	// true if EntryEvent should contain the value
+			outCache = new DistributedHazelcastCacheForModelObject<O,M>(modelObjType,
+																		imap);
 			_caches.put(modelObjType,outCache);
 		}
 		return (DistributedCache<O,M>)outCache;
-	}
-	private <O extends OID,M extends ModelObject & HasOID<O>> DistributedCache<O,M> _createTypedCacheFor(final Class<M> modelObjType) {
-		DistributedCache<O,M> outCache = new DistributedHazelcastCacheForModelObject<O,M>(modelObjType,
-				_getOrCreateHazelcastInstance());
-		return  outCache;
 	}
 	@Override
 	public <M extends ModelObject> boolean existsCacheFor(final Class<M> modelObjType) {
 		return _caches.get(modelObjType) != null;
 	}
-
-	private HazelcastInstance _getOrCreateHazelcastInstance() {
-		if (_hazelCastInstance==null) {
-			synchronized(this) {
-				if(_hazelCastInstance == null) {
-					_hazelCastInstance = HazelcastManager.getOrCreateeHazelcastInstance(_cfg);
-				}
-			}
-		}
-		return _hazelCastInstance;
+/////////////////////////////////////////////////////////////////////////////////////////
+//	ServiceHandler
+/////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public void start() {
+		// Do Nothing
 	}
-	private void _checkCacheStatus() {
-		if (_hazelCastInstance==null || !_hazelCastInstance.getLifecycleService().isRunning()) {
-			_hazelCastInstance = null;
+	@Override
+	public void stop() {
+		log.warn("######################################################################################");
+		log.warn("Stopping Hazelcast");
+		log.warn("######################################################################################");
+		if (_hazelCastInstance != null) {
 			_clearAll();
-			_getOrCreateHazelcastInstance();
+			synchronized(this) {
+				if (_hazelCastInstance != null) _hazelCastInstance.shutdown();
+			}
 		}
 	}
 	private void _clearAll() {
@@ -90,33 +112,7 @@ public class DistributedCacheServiceHazelcastImpl
 			}
 			_caches.clear();
 		} catch (Throwable t) {
-			//
-		}
-	}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//	ServiceHandler
-/////////////////////////////////////////////////////////////////////////////////////////
-	@Override
-	public void start() {
-		//Do Nothing
-//		_hazelCastInstance = HazelcastManager.getOrCreateeHazelcastInstance(_cfg);
-//		HazelcastManager.getOrCreateeHazelcastInstance(_cfg);
-		_getOrCreateHazelcastInstance();
-	}
-	@Override
-	public void stop() {
-		log.warn("######################################################################################");
-		log.warn("Stopping Hazelcast");
-		log.warn("######################################################################################");
-		if (_hazelCastInstance!=null) {
-			_clearAll();
-			synchronized(this) {
-				if(_hazelCastInstance != null) {
-					_hazelCastInstance.shutdown();
-					_hazelCastInstance = null;
-				}
-			}
+			// nothing
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
