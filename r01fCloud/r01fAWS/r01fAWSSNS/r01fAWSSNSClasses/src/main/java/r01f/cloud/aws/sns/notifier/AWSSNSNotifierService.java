@@ -37,7 +37,7 @@ import software.amazon.awssdk.services.sns.model.PublishResponse;
  */
 @Slf4j
 @Singleton
-public class AWSSNSNotifierServices
+public class AWSSNSNotifierService
   implements NotifierServiceForSMS {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
@@ -47,7 +47,7 @@ public class AWSSNSNotifierServices
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Inject
-	public AWSSNSNotifierServices(final AWSSNSClient awsSNSClient) {
+	public AWSSNSNotifierService(final AWSSNSClient awsSNSClient) {
 		_awsSNSClient = awsSNSClient;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ public class AWSSNSNotifierServices
 
 		// [2] - Send an email to every destination
 		log.info("[{}] > Sending SMS notifications to {} recipients",
-				 AWSSNSNotifierServices.class.getSimpleName(),
+				 AWSSNSNotifierService.class.getSimpleName(),
 				 to.size());
 		for (Phone phone : to) {
 			try {

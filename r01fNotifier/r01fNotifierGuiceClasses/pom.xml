@@ -41,40 +41,5 @@
 			<artifactId>r01fGuiceClasses</artifactId>
 			<version>${r01f.version}</version>
 		</dependency>
-
-		<!-- ///////////////////////////////////////// -->
-		<!-- R01: Notifier impls                       -->
-		<!-- ///////////////////////////////////////// -->
-		<!-- EMail notifier (coment out aws ses if not used) -->
-		<dependency>
-			<groupId>r01.r01f.coreservices.email</groupId>
-			<artifactId>r01fEMailSpringClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>r01.r01f.coreservices.cloud.aws.ses</groupId>
-			<artifactId>r01fAWSSESClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-
-		<!-- SMS notifier (coment out the one not used) -->
-		<dependency>
-			<groupId>r01.r01f.coreservices.cloud.aws.sns</groupId>
-			<artifactId>r01fAWSSNSClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>r01.r01f.coreservices.notifier</groupId>
-			<artifactId>r01fLatiniaNotifierClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-
-		<!-- Voice notifier -->
-		<dependency>
-			<groupId>r01.r01f.coreservices.cloud.twilio</groupId>
-			<artifactId>r01fTwilioClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>
-
 	</dependencies>
 </project>

@@ -27,7 +27,7 @@ import r01f.util.types.collections.Lists;
 @Slf4j
 @Singleton
 @Accessors(prefix="_")
-public class JavaMailSenderNotifierServices
+public class JavaMailSenderNotifierService
   implements NotifierServiceForEMail {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
@@ -37,7 +37,7 @@ public class JavaMailSenderNotifierServices
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Inject
-	public JavaMailSenderNotifierServices(final JavaMailSender mailSender) {
+	public JavaMailSenderNotifierService(final JavaMailSender mailSender) {
 		_springJavaMailSender = mailSender;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ public class JavaMailSenderNotifierServices
 
 			// [2] - Send an email to every destination
 			log.info("[{}] > Sending EMail notifications to {} recipients",
-					 JavaMailSenderNotifierServices.class.getSimpleName(),
+					 JavaMailSenderNotifierService.class.getSimpleName(),
 					 to.size());
 	        _springJavaMailSender.send(mimeMsg);
 

@@ -25,7 +25,6 @@
 <!-- ====================================================================== -->
   <modules>
     <module>r01fNotifierClasses</module>
-    <module>r01fLatiniaNotifierClasses</module>
     <module>r01fNotifierGuiceClasses</module>
   </modules>
 
