@@ -1,6 +1,7 @@
 package r01f.core.services.notifier.bootstrap;
 
-import org.springframework.mail.javamail.JavaMailSender;
+import java.util.Iterator;
+import java.util.ServiceLoader;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -8,16 +9,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 import lombok.RequiredArgsConstructor;
-import r01f.cloud.aws.sns.AWSSNSClient;
-import r01f.cloud.aws.sns.AWSSNSClientConfig;
-import r01f.cloud.aws.sns.notifier.AWSSNSNotifierServices;
-import r01f.cloud.twilio.TwilioConfig;
-import r01f.cloud.twilio.TwilioService;
-import r01f.cloud.twilio.TwilioServiceProvider;
-import r01f.cloud.twilio.notifier.TwilioNotifierServices;
-import r01f.core.services.mail.JavaMailSenderProvider;
-import r01f.core.services.mail.config.JavaMailSenderConfig;
-import r01f.core.services.mail.notifier.JavaMailSenderNotifierServices;
+import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.notifier.NotifierServiceForEMail;
 import r01f.core.services.notifier.NotifierServiceForSMS;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
@@ -25,17 +17,13 @@ import r01f.core.services.notifier.config.NotifierConfigForEMail;
 import r01f.core.services.notifier.config.NotifierConfigForLog;
 import r01f.core.services.notifier.config.NotifierConfigForSMS;
 import r01f.core.services.notifier.config.NotifierConfigForVoice;
-import r01f.core.services.notifier.config.NotifierEnums.SMSNotifierImpl;
-import r01f.core.services.notifier.config.NotifierEnums.VoiceNotifierImpl;
 import r01f.core.services.notifier.config.NotifiersConfigs;
-import r01f.model.annotations.ModelObjectsMarshaller;
-import r01f.objectstreamer.Marshaller;
-import r01f.services.latinia.LatiniaService;
-import r01f.services.latinia.LatiniaServiceAPIData;
-import r01f.services.latinia.LatiniaServiceProvider;
-import r01f.services.latinia.notifier.LatiniaNotifierServices;
+import r01f.core.services.notifier.spi.NotifierSPIProviderForEMail;
+import r01f.core.services.notifier.spi.NotifierSPIProviderForSMS;
+import r01f.core.services.notifier.spi.NotifierSPIProviderForVoice;
 
 
+@Slf4j
 @RequiredArgsConstructor
 public class NotifierGuiceModule
   implements Module {
@@ -53,7 +41,7 @@ public class NotifierGuiceModule
 			  .toInstance(_notifiersConfig.getForLog());
 
 		binder.bind(NotifierConfigForEMail.class)
-			  .toInstance(_notifiersConfig.getForEmail());
+			  .toInstance(_notifiersConfig.getForEMail());
 
 		binder.bind(NotifierConfigForSMS.class)
 			  .toInstance(_notifiersConfig.getForSMS());
@@ -71,15 +59,20 @@ public class NotifierGuiceModule
 	 */
 	@Provides @Singleton	// creates a single instance of the java mail sender
 	NotifierServiceForEMail _provideEMailNotifier() {
-		// [1] - Get the config
-		JavaMailSenderConfig springMailSenderCfg = _notifiersConfig.getForEmail()
-																   .getConfigAs(JavaMailSenderConfig.class);
-		// [2] - Build the spring mail sender
-		JavaMailSenderProvider springMailSenderProvider = new JavaMailSenderProvider(springMailSenderCfg);
-		JavaMailSender sprigMailSender = springMailSenderProvider.get();
+		if (_notifiersConfig.getForEMail() == null) throw new IllegalStateException("NO EMail notifier configured!");
 
-		// [3] - Build the notifier service
-		return new JavaMailSenderNotifierServices(sprigMailSender);
+		log.info("[Notifier]: SPI finding {} implementations",
+				  NotifierSPIProviderForEMail.class);
+		// BEWARE! there MUST exists a file named as the spi provider interface FQN at the META-INF folder
+		//		   of every implementation project
+		NotifierServiceForEMail outSrvc = null;
+		for (Iterator<NotifierSPIProviderForEMail> pIt = ServiceLoader.load(NotifierSPIProviderForEMail.class).iterator(); pIt.hasNext(); ) {
+			NotifierSPIProviderForEMail prov = pIt.next();
+
+			outSrvc = prov.provideEMailNotifier(_notifiersConfig.getForEMail());
+		}
+		if (outSrvc == null) throw new IllegalStateException("Could NOT find any SMS notifier implementation!");
+		return outSrvc;
 	}
 	/**
 	 * Provides a {@link NotifierServiceForSMS} implementation
@@ -87,32 +80,27 @@ public class NotifierGuiceModule
 	 * @return
 	 */
 	@Provides @Singleton	// creates a single instance of the java mail sender
-	NotifierServiceForSMS _provideSMSNotifier(@ModelObjectsMarshaller final Marshaller marshaller) {
+	NotifierServiceForSMS _provideSMSNotifier() {
+		if (_notifiersConfig.getForSMS() == null) throw new IllegalStateException("NO SMS notifier configured!");
+
+		log.info("[Notifier]: SPI finding {} implementations",
+				  NotifierSPIProviderForSMS.class);
+		// BEWARE! there MUST exists a file named as the spi provider interface FQN at the META-INF folder
+		//		   of every implementation project
 		NotifierServiceForSMS outSrvc = null;
-		if (SMSNotifierImpl.LATINIA.is(_notifiersConfig.getForSMS().getImpl())) {
-			// [1] - Get the latinia service config
-		    LatiniaServiceAPIData apiData = _notifiersConfig.getForSMS().getConfigAs(LatiniaServiceAPIData.class);
-			// [2] - Create a Latinia Service
-			LatiniaServiceProvider latiniaServiceProvider = new LatiniaServiceProvider(apiData,
-																			   		   marshaller);
-			LatiniaService latiniaService = latiniaServiceProvider.get();
+		for (Iterator<NotifierSPIProviderForSMS> pIt = ServiceLoader.load(NotifierSPIProviderForSMS.class).iterator(); pIt.hasNext(); ) {
+			NotifierSPIProviderForSMS prov = pIt.next();
 
-			// [3] - Build the notifier service
-			outSrvc = new LatiniaNotifierServices(latiniaService);
-			
+			if (_notifiersConfig.getForSMS().getImpl().is(prov.getImpl())) {
+				log.info("\t...found impl={} (ENABLED)",
+						 prov.getImpl());
+				outSrvc = prov.provideSMSNotifier(_notifiersConfig.getForSMS());
+			} else {
+				log.info("\t...found impl={} (NOT ENABLED)",
+						 prov.getImpl());
+			}
 		}
-		else if (SMSNotifierImpl.AWS.is(_notifiersConfig.getForSMS().getImpl())) {
-			// [1] - Get the aws sns service config
-			AWSSNSClientConfig awsSNSCfg = _notifiersConfig.getForSMS().getConfigAs(AWSSNSClientConfig.class);
-			// [2] - Create a aws sns client
-			AWSSNSClient awsSNSCli = new AWSSNSClient(awsSNSCfg);
-
-			// [3] - Build the notifier service
-			outSrvc = new AWSSNSNotifierServices(awsSNSCli);
-		}
-		else {
-			throw new IllegalStateException(_notifiersConfig.getForSMS().getImpl() + " is NOT a supported SMS notifier");
-		}
+		if (outSrvc == null) throw new IllegalStateException("Could NOT find any SMS notifier implementation!");
 		return outSrvc;
 	}
 	/**
@@ -122,22 +110,26 @@ public class NotifierGuiceModule
 	 */
 	@Provides @Singleton	// creates a single instance of the twilio service
 	NotifierServiceForVoicePhoneCall _provideVoiceNotifier() {
-		NotifierServiceForVoicePhoneCall outSrvc = null;
-		if (VoiceNotifierImpl.TWILIO.is(_notifiersConfig.getForVoice().getImpl())) {
-			// [1] - get the twilio config
-			TwilioConfig twCfg = _notifiersConfig.getForVoice().getConfigAs(TwilioConfig.class);
-			// [2] - Create the twilio service
-			TwilioServiceProvider twServiceProvider = new TwilioServiceProvider(twCfg);
-			TwilioService twService = twServiceProvider.get();
+		if (_notifiersConfig.getForVoice() == null) throw new IllegalStateException("NO Voice notifier configured!");
 
-			// [3] - Build the notifier service
-			outSrvc = new TwilioNotifierServices(twService);
+		log.info("[Notifier]: SPI finding {} implementations",
+				  NotifierSPIProviderForVoice.class);
+		// BEWARE! there MUST exists a file named as the spi provider interface FQN at the META-INF folder
+		//		   of every implementation project
+		NotifierServiceForVoicePhoneCall outSrvc = null;
+		for (Iterator<NotifierSPIProviderForVoice> pIt = ServiceLoader.load(NotifierSPIProviderForVoice.class).iterator(); pIt.hasNext(); ) {
+			NotifierSPIProviderForVoice prov = pIt.next();
+
+			if (_notifiersConfig.getForVoice().getImpl().is(prov.getImpl())) {
+				log.info("\t...found impl={} (ENABLED)",
+						 prov.getImpl());
+				outSrvc = prov.provideVoiceNotifier(_notifiersConfig.getForVoice());
+			} else {
+				log.info("\t...found impl={} (NOT ENABLED)",
+						 prov.getImpl());
+			}
 		}
-		else {
-			throw new IllegalStateException(_notifiersConfig.getForVoice().getImpl() + " is NOT a supported voice notifier");
-		}
+		if (outSrvc == null) throw new IllegalStateException("Could NOT find any Voice notifier implementation!");
 		return outSrvc;
 	}
-	
-	
 }

@@ -7,7 +7,7 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
 @Accessors(prefix="_")
 public class NotifierConfigForLog
-     extends NotifierConfigBase {
+     extends NotifierConfigForMediumBase {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -16,15 +16,24 @@ public class NotifierConfigForLog
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	public NotifierConfigForLog(final AppCode appCode,
-								   final boolean enabled) {
-		super(appCode,
-			  NotifierType.LOG,
+								final boolean enabled) {
+		super(NotifierType.LOG,
+			  appCode,
 			  enabled,
-			  null,null);
+			  null,null,	// no service impl dependent config
+			  null);		// no app-dependent config
 	}
 	public NotifierConfigForLog(final XMLPropertiesForAppComponent props) {
 		super(NotifierType.LOG,
 			  props,
-			  null);
+			  null,		// no service impl dependent config
+			  null);	// no app-dependent config
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public boolean isSelectedImpl() {
+		return true;
 	}
 }

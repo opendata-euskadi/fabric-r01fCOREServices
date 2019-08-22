@@ -23,7 +23,7 @@ import r01f.types.url.Url;
 
 @Slf4j
 @Singleton
-public class TwilioNotifierServices
+public class TwilioNotifierService
   implements NotifierServiceForVoicePhoneCall {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
@@ -33,7 +33,7 @@ public class TwilioNotifierServices
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Inject
-	public TwilioNotifierServices(final TwilioService twilioService) {
+	public TwilioNotifierService(final TwilioService twilioService) {
 		_twilioService = twilioService;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ public class TwilioNotifierServices
 
 		// [2] - Send an email to every destination
 		log.info("[{}] > Sending voice notifications to {} recipients",
-				 TwilioNotifierServices.class.getSimpleName(),
+				 TwilioNotifierService.class.getSimpleName(),
 				 to.size());
 		for (Phone phone : to) {
 			try {

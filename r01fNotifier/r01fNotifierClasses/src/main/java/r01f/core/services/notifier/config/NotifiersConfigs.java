@@ -12,7 +12,7 @@ public class NotifiersConfigs
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
-	@Getter private final NotifierConfigForEMail _forEmail;
+	@Getter private final NotifierConfigForEMail _forEMail;
 	@Getter private final NotifierConfigForSMS _forSMS;
 	@Getter private final NotifierConfigForVoice _forVoice;
 	@Getter private final NotifierConfigForLog _forLog;
