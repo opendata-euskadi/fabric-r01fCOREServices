@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import r01f.mime.MimeBodyPartDispositionType;
 import r01f.mime.MimeType;
 
 @Accessors(prefix="_")
@@ -17,16 +18,24 @@ public class EMailMessageAttachment
     @Getter private final String _name;
     @Getter private final byte[] _data;
     @Getter private final MimeType _contentType;
+    @Getter private final MimeBodyPartDispositionType _disposition;
 
 /////////////////////////////////////////////////////////////////////////////////////////
-//	CONSTRUCTOR
+//	CONSTRUCTORS
 /////////////////////////////////////////////////////////////////////////////////////////
     public EMailMessageAttachment(final String name,
     							  final byte[] data,
     							  final MimeType contentType) {
+        this(name, data, contentType, null);
+    }
+    public EMailMessageAttachment(final String name,
+    							  final byte[] data,
+    							  final MimeType contentType,
+    							  final MimeBodyPartDispositionType disposition) {
         _name = name;
         _data = data;
         _contentType = contentType;
+        _disposition = disposition;
     }
 /////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -34,5 +43,10 @@ public class EMailMessageAttachment
     public MimeType getContentTypeOrDefault(final MimeType defContentType) {
     	return _contentType != null ? _contentType
     								: defContentType != null ? defContentType : MimeType.OCTECT_STREAM;
+    }
+    
+    public MimeBodyPartDispositionType getDispositionTypeOrDefault(final MimeBodyPartDispositionType defDispositionType) {
+    	return _disposition != null ? _disposition
+    								: defDispositionType != null ? defDispositionType : MimeBodyPartDispositionType.DISPOSITION_ATTACHMENT;
     }
 }
