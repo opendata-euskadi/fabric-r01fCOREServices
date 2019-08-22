@@ -31,6 +31,7 @@ import r01f.core.services.mail.model.EMailDestinations;
 import r01f.core.services.mail.model.EMailMessage;
 import r01f.core.services.mail.model.EMailMessageAttachment;
 import r01f.core.services.mail.model.EMailRFC822Address;
+import r01f.mime.MimeBodyPartDispositionType;
 import r01f.mime.MimeType;
 import r01f.util.types.StringEncodeUtils;
 import r01f.util.types.Strings;
@@ -190,24 +191,25 @@ public abstract class EMailMimeMessages {
 		if (CollectionUtils.isNullOrEmpty(attachments)) return Lists.newArrayList();
 		return FluentIterable.from(attachments)
 							 .transform(new Function<EMailMessageAttachment,MimeBodyPart>() {
-									 			@Override
+												@Override
 												public MimeBodyPart apply(final EMailMessageAttachment attachment) {
-									 				try {
-												        MimeBodyPart attachmentPart = new MimeBodyPart();
-												        //DataSource fds = new FileDataSource(filePath.asAbsoluteString());
-												        DataSource fds = new ByteArrayDataSource(attachment.getData(),
-												        										 attachment.getContentTypeOrDefault(MimeType.OCTECT_STREAM).asString());
-												        attachmentPart.setDataHandler(new DataHandler(fds));
-												        attachmentPart.setFileName(attachment.getName());
-												        return attachmentPart;
-									 				} catch (MessagingException msgEx) {
-									 					log.error("Could NOT attach file with name={}: {}",
-									 							  attachment.getName(),
-									 							  msgEx.getMessage(),msgEx);
-									 				}
-									 				return null;
+													try {
+														MimeBodyPart attachmentPart = new MimeBodyPart();
+														//DataSource fds = new FileDataSource(filePath.asAbsoluteString());
+														DataSource fds = new ByteArrayDataSource(attachment.getData(),
+																								 attachment.getContentTypeOrDefault(MimeType.OCTECT_STREAM).asString());
+														attachmentPart.setDataHandler(new DataHandler(fds));
+														attachmentPart.setFileName(attachment.getName());
+														attachmentPart.setDisposition(attachment.getDispositionTypeOrDefault(MimeBodyPartDispositionType.DISPOSITION_ATTACHMENT).asString());
+														return attachmentPart;
+													} catch (MessagingException msgEx) {
+														log.error("Could NOT attach file with name={}: {}",
+																  attachment.getName(),
+																  msgEx.getMessage(),msgEx);
+													}
+													return null;
 												}
-							 			})
+										})
 							 .filter(Predicates.notNull())
 							 .toList();
 	}
