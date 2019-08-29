@@ -37,17 +37,30 @@ public class NotifierGuiceModule
 	@Override
 	public void configure(final Binder binder) {
 		// Bind configs
-		binder.bind(NotifierConfigForLog.class)
-			  .toInstance(_notifiersConfig.getForLog());
-
-		binder.bind(NotifierConfigForEMail.class)
-			  .toInstance(_notifiersConfig.getForEMail());
-
-		binder.bind(NotifierConfigForSMS.class)
-			  .toInstance(_notifiersConfig.getForSMS());
-
-		binder.bind(NotifierConfigForVoice.class)
-			  .toInstance(_notifiersConfig.getForVoice());
+		if (_notifiersConfig.getForLog() != null) {
+			binder.bind(NotifierConfigForLog.class)
+				  .toInstance(_notifiersConfig.getForLog());
+		} else {
+			log.warn("The notifier LOG config is null > any bind will be made");
+		}
+		if (_notifiersConfig.getForEMail() != null) {
+			binder.bind(NotifierConfigForEMail.class)
+				  .toInstance(_notifiersConfig.getForEMail());
+		} else {
+			log.warn("The notifier EMAIL config is null > any bind will be made");
+		}
+		if (_notifiersConfig.getForSMS() != null) {
+			binder.bind(NotifierConfigForSMS.class)
+				  .toInstance(_notifiersConfig.getForSMS());
+		} else {
+			log.warn("The notifier SMS config is null > any bind will be made");
+		}
+		if (_notifiersConfig.getForVoice() != null) {
+			binder.bind(NotifierConfigForVoice.class)
+				  .toInstance(_notifiersConfig.getForVoice());
+		} else {
+			log.warn("The notifier VOICE config is null > any bind will be made");
+		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  NOTIFIER SERVICE PROVIDER

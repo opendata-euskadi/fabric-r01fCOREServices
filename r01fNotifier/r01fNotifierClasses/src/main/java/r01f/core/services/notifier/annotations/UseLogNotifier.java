@@ -1,19 +1,19 @@
-package r01f.core.services.notifier;
+package r01f.core.services.notifier.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import javax.inject.Qualifier;
 
 /**
- * Annotation that tells guice to inject the the voice-based notifier services
+ * Annotation that tells guice to inject the the log-based notifier services
  * It's usually used at event listeners 
  */
-@BindingAnnotation 
+@Qualifier // @BindingAnnotation 
 @Target({ ElementType.FIELD,ElementType.PARAMETER}) 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UseVoiceNotifier {
+public @interface UseLogNotifier {
 	// nothing
 }

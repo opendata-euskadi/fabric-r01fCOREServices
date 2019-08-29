@@ -1,19 +1,18 @@
-package r01f.core.services.notifier;
+package r01f.core.services.notifier.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import javax.inject.Qualifier;
 
 /**
- * Annotation that tells guice to inject the the instant message-based notifier services
- * It's usually used at event listeners 
+ * Annotation that tells guice to inject the the eMail-based X47BEMailNotifier.java
  */
-@BindingAnnotation 
+@Qualifier //@BindingAnnotation 
 @Target({ ElementType.FIELD,ElementType.PARAMETER}) 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UseInstantMessageNotifier {
+public @interface UseEMailNotifier {
 	// nothing
 }
