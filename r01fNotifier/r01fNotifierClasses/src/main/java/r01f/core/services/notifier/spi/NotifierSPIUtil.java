@@ -51,7 +51,7 @@ public abstract class NotifierSPIUtil {
 																		}
 																})
 													    .first().orNull();
-		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find email config for selected impl!");
+		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find email config for selected impl (check there exists an email notifier dependency)!");
 		log.info("\t > The selected email notifier impl is {}",selectedImplConfig.getImpl());
 		return selectedImplConfig;
 	}
@@ -80,7 +80,7 @@ public abstract class NotifierSPIUtil {
 																		}
 																})
 													    .first().orNull();
-		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find sms config for selected impl!");
+		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find sms config for selected impl (check there exists a sms notifier dependency)!");
 		log.info("\t > The selected sms notifier impl is {}",selectedImplConfig.getImpl());
 		return selectedImplConfig;
 	}
@@ -109,7 +109,7 @@ public abstract class NotifierSPIUtil {
 																		}
 																})
 													    .first().orNull();
-		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find voice call config for selected impl!");
+		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find voice call config for selected impl (check there exists a voice notifier dependency)!");
 		log.info("\t > The selected voice notifier impl is {}",selectedImplConfig.getImpl());
 		return selectedImplConfig;
 	}
