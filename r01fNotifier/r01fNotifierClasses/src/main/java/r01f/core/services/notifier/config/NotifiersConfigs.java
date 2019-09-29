@@ -3,10 +3,13 @@ package r01f.core.services.notifier.config;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import r01f.config.ContainsConfigData;
+import r01f.debug.Debuggable;
+import r01f.util.types.Strings;
 
 @Accessors(prefix="_")
 public class NotifiersConfigs
-  implements ContainsConfigData {
+  implements ContainsConfigData,
+  			 Debuggable {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -67,5 +70,26 @@ public class NotifiersConfigs
 			 forSMS,	// SMS
 			 null,		// Voice
 			 forLog);	// log
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//	                                                                          
+/////////////////////////////////////////////////////////////////////////////////////////	
+	@Override
+	public CharSequence debugInfo() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Notifiers config:\n");
+		sb.append(Strings.customized("\t\t-EMail: {}",_forEMail != null
+															? _forEMail.isEnabled() ? "ENABLED" : "DISABLED"
+															: "NULL"));
+		sb.append(Strings.customized("\t\t-  SMS: {}",_forSMS != null
+															? _forSMS.isEnabled() ? "ENABLED" : "DISABLED"
+															: "NULL"));
+		sb.append(Strings.customized("\t\t-Voice: {}",_forVoice != null
+															? _forVoice.isEnabled() ? "ENABLED" : "DISABLED"
+															: "NULL"));
+		sb.append(Strings.customized("\t\t-  Log: {}",_forLog != null
+															? _forLog.isEnabled() ? "ENABLED" : "DISABLED"
+															: "NULL"));
+		return sb;
 	}
 }
