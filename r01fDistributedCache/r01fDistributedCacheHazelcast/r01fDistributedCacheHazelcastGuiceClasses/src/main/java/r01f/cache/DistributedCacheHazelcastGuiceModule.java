@@ -2,6 +2,8 @@ package r01f.cache;
 
 import javax.inject.Singleton;
 
+import com.google.inject.Binder;
+import com.google.inject.Module;
 import com.google.inject.Provides;
 
 import r01f.cache.hazelcast.DistributedCacheHazelcastConfig;
@@ -32,19 +34,25 @@ import r01f.cache.hazelcast.DistributedCacheServiceHazelcastImpl;
  * </pre>
  */
 public class DistributedCacheHazelcastGuiceModule
-     extends DistributedCacheGuiceModuleBase {
+			implements Module {
+	
+	final DistributedCacheConfig _cfg;
 /////////////////////////////////////////////////////////////////////////////////////////
 // 	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	public DistributedCacheHazelcastGuiceModule(final DistributedCacheConfig cfg) {
-		super(cfg);
+		_cfg = cfg;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	@Override
 	@Provides @Singleton // beware the service is a singleton
 	public DistributedCacheService provideDistributedCacheService() {
-		return new DistributedCacheServiceHazelcastImpl(_config.as(DistributedCacheHazelcastConfig.class));
+		return new DistributedCacheServiceHazelcastImpl(_cfg.as(DistributedCacheHazelcastConfig.class));
+	}
+	@Override
+	public void configure(final Binder binder) {
+		// TODO Auto-generated method stub
+		
 	}
 }
