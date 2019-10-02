@@ -46,7 +46,6 @@ public class DistributedCacheHazelcastGuiceModule
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	
 	@Provides @Singleton // beware the service is a singleton
 	public DistributedCacheService provideDistributedCacheService() {
 		return new DistributedCacheServiceHazelcastImpl(_cfg.as(DistributedCacheHazelcastConfig.class));
