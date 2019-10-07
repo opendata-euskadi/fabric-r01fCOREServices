@@ -5,14 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import r01f.enums.EnumExtended;
+import r01f.enums.EnumExtendedWrapper;
 import r01f.guids.OIDBaseImmutable;
+import r01f.types.contact.NotificationMedium;
 
 @NoArgsConstructor(access=AccessLevel.PRIVATE)
 public abstract class NotifierEnums {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	public static enum NotifierType {
+	public static enum NotifierType 
+ 			 implements EnumExtended<NotifierType> {
 		EMAIL,
 		SMS,
 		VOICE,
@@ -20,6 +24,36 @@ public abstract class NotifierEnums {
 
 		public String asStringLowerCase() {
 			return this.name().toLowerCase();
+		}
+		public static NotifierType from(final NotificationMedium medium) {
+			NotifierType outType = null;
+			switch (medium) {
+			case EMAIL:
+				outType = EMAIL;
+				break;
+			case LOG:
+				outType = LOG;
+				break;
+			case SMS:
+				outType = SMS;
+				break;
+			case VOICE:
+				outType = VOICE;
+				break;
+			default:
+				throw new IllegalArgumentException(medium + " is NOT a recognized notifier type!");
+			}
+			return outType;
+		}
+		private static final transient EnumExtendedWrapper<NotifierType> DELEGATE = EnumExtendedWrapper.wrapEnumExtended(NotifierType.class);
+		
+		@Override
+		public boolean isIn(final NotifierType... els) {
+			return DELEGATE.isIn(this,els);
+		}
+		@Override
+		public boolean is(final NotifierType el) {
+			return DELEGATE.is(this,el);
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////

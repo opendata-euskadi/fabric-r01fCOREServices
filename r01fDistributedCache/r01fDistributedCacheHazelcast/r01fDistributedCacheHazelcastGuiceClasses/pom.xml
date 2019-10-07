@@ -35,11 +35,16 @@
 
   		<!-- ///////////////////////////////////////// -->
 		<!--  Distributed Cache Guice  Classes                            -->
+		<!-- /////////////////////////////////////////   -->
+		
+		<!-- Guice  (Added to use com.google.inject.Provider )  -->
+		            
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.coreservices.cache.common</groupId>
-			<artifactId>r01fDistributedCacheGuiceBaseClasses</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+			<groupId>r01.r01f.base</groupId>
+			<artifactId>r01fGuiceClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>	
+	
 	</dependencies>
 </project>
