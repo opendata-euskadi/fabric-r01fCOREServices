@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws.ses</groupId>
 		<artifactId>r01fAWSSES</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${r01f.version}</version>
 	</parent>
 
 <!-- ====================================================================== -->

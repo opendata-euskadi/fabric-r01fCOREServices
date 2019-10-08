@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.google</groupId>
 		<artifactId>r01fGoogle</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${r01f.version}</version>
 	</parent>
 
 <!-- ====================================================================== -->

@@ -8,7 +8,7 @@
 	<parent>
 	  <groupId>r01.r01f.coreservices.cache</groupId>
       <artifactId>r01fDistributedCache</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>${r01f.version}</version>
   	</parent>
 
 <!-- ====================================================================== -->

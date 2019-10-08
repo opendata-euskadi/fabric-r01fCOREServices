@@ -11,7 +11,7 @@
   <parent>
     <groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
     <artifactId>r01fDistributedCacheHazelcast</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>${r01f.version}</version>
   </parent>
 
 <!-- ====================================================================== -->
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.cache.common</groupId>
 			<artifactId>r01fDistributedCacheBaseClasses</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${r01f.version}</version>
 		</dependency>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Hazelcast Core                           -->
