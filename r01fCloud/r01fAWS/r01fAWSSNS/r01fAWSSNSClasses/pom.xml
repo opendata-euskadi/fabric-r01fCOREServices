@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws.sns</groupId>
 		<artifactId>r01fAWSSNS</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -28,7 +28,7 @@
 			<dependency>
 				<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 				<artifactId>r01fAWS</artifactId>
-				<version>${r01f.version}</version>
+				<version>${revision}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 			<artifactId>r01fAWSClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fBaseClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.notifier</groupId>
 			<artifactId>r01fNotifierClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->

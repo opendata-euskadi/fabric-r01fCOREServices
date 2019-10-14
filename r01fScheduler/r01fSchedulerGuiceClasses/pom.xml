@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.scheduler</groupId>
 		<artifactId>r01fScheduler</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.scheduler</groupId>
 			<artifactId>r01fSchedulerClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -39,7 +39,7 @@
 		<dependency>
 			<groupId>r01.r01f.businessservices.guice</groupId>
 			<artifactId>r01fBusinessServicesGuiceClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 	</dependencies>

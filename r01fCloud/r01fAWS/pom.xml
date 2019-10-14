@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud</groupId>
 		<artifactId>r01fCloud</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->

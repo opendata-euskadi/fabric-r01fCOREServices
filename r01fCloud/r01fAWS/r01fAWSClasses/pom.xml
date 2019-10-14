@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 		<artifactId>r01fAWS</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -28,7 +28,7 @@
 			<dependency>
 				<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 				<artifactId>r01fAWS</artifactId>
-				<version>${r01f.version}</version>
+				<version>${revision}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fBaseClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Base Properties                          -->
@@ -50,7 +50,7 @@
 		<dependency>
 			<groupId>r01.r01f.properties</groupId>
 			<artifactId>r01fPropertiesInterfaceClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->

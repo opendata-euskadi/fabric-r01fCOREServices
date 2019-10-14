@@ -8,11 +8,11 @@
 <!-- ====================================================================== -->
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
-  <parent>
-    <groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
-    <artifactId>r01fDistributedCacheHazelcast</artifactId>
-    <version>${r01f.version}</version>
-  </parent>
+	<parent>
+		<groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
+		<artifactId>r01fDistributedCacheHazelcast</artifactId>
+		<version>${revision}</version>
+	</parent>
 
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.cache.common</groupId>
 			<artifactId>r01fDistributedCacheBaseClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Hazelcast Core                           -->

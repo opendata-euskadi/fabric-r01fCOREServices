@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.twilio</groupId>
 		<artifactId>r01fTwilio</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fBaseClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>r01.r01f.properties</groupId>
 			<artifactId>r01fPropertiesInterfaceClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.notifier</groupId>
 			<artifactId>r01fNotifierClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
   		<!-- ///////////////////////////////////////// -->
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>r01.r01f.httpclient</groupId>
 			<artifactId>r01fHttpClientClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
   		<!-- ///////////////////////////////////////// -->

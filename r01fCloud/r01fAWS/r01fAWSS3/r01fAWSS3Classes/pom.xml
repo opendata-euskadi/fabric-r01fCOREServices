@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws.s3</groupId>
 		<artifactId>r01fAWSS3</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fBaseClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -38,7 +38,7 @@
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fIOClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>r01.r01f.httpclient</groupId>
 			<artifactId>r01fHttpClientClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->

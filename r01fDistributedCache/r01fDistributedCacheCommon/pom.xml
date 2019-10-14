@@ -6,10 +6,10 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-	  <groupId>r01.r01f.coreservices.cache</groupId>
-      <artifactId>r01fDistributedCache</artifactId>
-      <version>${r01f.version}</version>
-  	</parent>
+		<groupId>r01.r01f.coreservices.cache</groupId>
+		<artifactId>r01fDistributedCache</artifactId>
+		<version>${revision}</version>
+	</parent>
 
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->

@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws.ses</groupId>
 		<artifactId>r01fAWSSES</artifactId>
-		<version>${r01f.version}</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -28,7 +28,7 @@
 			<dependency>
 				<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 				<artifactId>r01fAWS</artifactId>
-				<version>${r01f.version}</version>
+				<version>${revision}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -42,12 +42,12 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 			<artifactId>r01fAWSClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<dependency>
 			<groupId>r01.r01f.coreservices.email</groupId>
 			<artifactId>r01fEMailClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fBaseClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Amazon SES                               -->
