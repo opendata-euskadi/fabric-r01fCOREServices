@@ -4,24 +4,24 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>r01.r01f.coreservices.notifier</groupId>
   <artifactId>r01fNotifierClasses</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <dependencies>
     <dependency>
       <groupId>r01.r01f.base</groupId>
       <artifactId>r01fBaseClasses</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>r01.r01f.properties</groupId>
       <artifactId>r01fPropertiesInterfaceClasses</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>r01.r01f.coreservices.email</groupId>
       <artifactId>r01fEMailClasses</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>

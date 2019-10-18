@@ -4,24 +4,24 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>r01.r01f.coreservices.cloud.aws.s3</groupId>
   <artifactId>r01fAWSS3GuiceClasses</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.1</version>
   <dependencies>
     <dependency>
       <groupId>r01.r01f.coreservices.cloud.aws.s3</groupId>
       <artifactId>r01fAWSS3Classes</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>r01.r01f.base</groupId>
       <artifactId>r01fGuiceClasses</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>r01.r01f.base</groupId>
       <artifactId>r01fBaseClasses</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.1</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
