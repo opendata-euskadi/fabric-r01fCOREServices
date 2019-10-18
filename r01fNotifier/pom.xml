@@ -23,10 +23,10 @@
 <!-- ====================================================================== -->
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
-  <modules>
-    <module>r01fNotifierClasses</module>
-    <module>r01fNotifierGuiceClasses</module>
-  </modules>
+	<modules>
+		<module>r01fNotifierClasses</module>
+		<module>r01fNotifierGuiceClasses</module>
+	</modules>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

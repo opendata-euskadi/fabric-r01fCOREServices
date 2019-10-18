@@ -19,6 +19,6 @@
 	<packaging>pom</packaging>				<!-- it's a parent project -->
 
 	<modules>
-    <module>r01fAWSSNSClasses</module>
-  </modules>
+		<module>r01fAWSSNSClasses</module>
+	</modules>
 </project>

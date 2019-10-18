@@ -24,9 +24,9 @@
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-	    <module>r01fSchedulerClasses</module>
-	    <module>r01fSchedulerGuiceClasses</module>
-  	</modules>
+		<module>r01fSchedulerClasses</module>
+		<module>r01fSchedulerGuiceClasses</module>
+	</modules>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

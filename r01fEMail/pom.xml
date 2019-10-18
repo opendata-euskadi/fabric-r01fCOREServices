@@ -24,9 +24,9 @@
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-    <module>r01fEMailClasses</module>
-    <module>r01fEMailSpringClasses</module>
-  </modules>
+		<module>r01fEMailClasses</module>
+		<module>r01fEMailSpringClasses</module>
+	</modules>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

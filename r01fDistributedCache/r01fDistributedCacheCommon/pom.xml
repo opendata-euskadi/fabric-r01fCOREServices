@@ -24,7 +24,7 @@
 <!-- ====================================================================== -->
 	<modules>
 		<module>r01fDistributedCacheBaseClasses</module>
-	    <module>r01fDistributedCacheGuiceBaseClasses</module>
+		<module>r01fDistributedCacheGuiceBaseClasses</module>
 	</modules>
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
