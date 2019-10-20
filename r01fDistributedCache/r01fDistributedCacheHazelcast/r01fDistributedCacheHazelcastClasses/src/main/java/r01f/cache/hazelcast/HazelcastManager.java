@@ -59,7 +59,7 @@ public class HazelcastManager {
 						  ex.getMessage(),ex );
 				outHZInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
 				log.warn("\t\t... try again to return Hazelcast instance with name {} ({})",
-						  instanceName, (outHZInstance!=null?outHZInstance.hashCode():"null"));
+						  instanceName, (outHZInstance != null?outHZInstance.hashCode():"null")); 
 			}
 		} else {
 			log.warn("\t\t... there already exists a Hazelcast instance with name {} ({}), so this one will be returned",

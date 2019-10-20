@@ -47,12 +47,12 @@ public class S3ServiceForObjectsImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public PutResult putObject(final S3BucketName bucketName,final S3ObjectKey key,
-							   final InputStream stream){
+							   final InputStream stream) {
 		return putObject(bucketName,key,stream,null);
 	}
 	@Override
 	public PutResult putObject(final S3BucketName bucketName,final S3ObjectKey key,
-							   final InputStream streamToUpload ,final ObjectMetaData objectMetadata){
+							   final InputStream streamToUpload ,final ObjectMetaData objectMetadata) {
 		try {			
 			if (streamToUpload == null) {
 				throw new IllegalArgumentException(Strings.customized(" The object of key  {}  CANNOT be null to store!!!", key.asString()));
@@ -144,7 +144,7 @@ public class S3ServiceForObjectsImpl
 			if ( remoteObject != null ) {
 				try {
 					remoteObject.close();
-				} catch (final IOException e){				
+				} catch (final IOException e) {				
 					e.printStackTrace();
 				}
 			}
@@ -155,7 +155,7 @@ public class S3ServiceForObjectsImpl
 //	DELETE METHODS
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public DeleteResult deleteObject(final S3BucketName bucketName,final S3ObjectKey key){
+	public DeleteResult deleteObject(final S3BucketName bucketName,final S3ObjectKey key) {
 		DeleteObjectsRequest deleteObjectsRequest = (new DeleteObjectsRequest(bucketName.toString())
 																.withKeys(key.asString()));
 		DeleteObjectsResult results = _s3Client.deleteObjects(deleteObjectsRequest);

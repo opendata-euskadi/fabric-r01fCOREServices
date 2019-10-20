@@ -53,7 +53,7 @@ public abstract class PutRequestBuilder
 	public class PutRequestBuilderObjectNameStep {
 			private final PutRequest _request;
 
-		public PutRequestBuilderFileStep namedObject(final S3ObjectKey objectKey){
+		public PutRequestBuilderFileStep namedObject(final S3ObjectKey objectKey) {
 			_request.setKey(objectKey);
 			return new PutRequestBuilderFileStep(_request);
 		}
@@ -62,7 +62,7 @@ public abstract class PutRequestBuilder
 	public class PutRequestBuilderFileStep {
 		private final PutRequest _request;
 
-		public BuilderLastStep fromFile(final File file){
+		public BuilderLastStep fromFile(final File file) {
 			_request.setFile(file);
 			return new BuilderLastStep(_request);
 		}

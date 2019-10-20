@@ -58,7 +58,7 @@ public abstract class GetRequestBuilder
 	public class GetRequestBuilderObjectNameStep {
 		private final GetRequest _request;
 
-		public GetRequestBuilderFileStep namedObject(final S3ObjectKey objectKey){
+		public GetRequestBuilderFileStep namedObject(final S3ObjectKey objectKey) {
 			_request.setKey(objectKey);
 			return new GetRequestBuilderFileStep(_request);
 		}
@@ -67,7 +67,7 @@ public abstract class GetRequestBuilder
 	public class GetRequestBuilderFileStep {
 			private final GetRequest _request;
 
-		public BuilderLastStep onFile(final File file){
+		public BuilderLastStep onFile(final File file) {
 			_request.setFile(file);
 			return new BuilderLastStep(_request);
 		}

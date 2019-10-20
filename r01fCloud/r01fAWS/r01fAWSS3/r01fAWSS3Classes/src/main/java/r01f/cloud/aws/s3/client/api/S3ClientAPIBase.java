@@ -28,11 +28,11 @@ abstract class S3ClientAPIBase {
 	@SuppressWarnings("unused")
 	private S3ClientAPIBase(final ClientConfiguration clientConfiguration,
 			          		final AWSCredentials credentials,
-			          		final Url awsEndPoint){
+			          		final Url awsEndPoint) {
 		_s3Client = _buildAmazonS3Client(clientConfiguration,credentials,awsEndPoint);
 	 }
      @SuppressWarnings("null")
-	public S3ClientAPIBase(final S3ClientConfig clientConfig){
+	public S3ClientAPIBase(final S3ClientConfig clientConfig) {
     	// Checks if client config is not null
     	if (clientConfig == null) {
  			Throwables.throwUnchecked(new IllegalArgumentException(Strings.customized("In order to create instance of S3api, " +
@@ -54,7 +54,7 @@ abstract class S3ClientAPIBase {
 		ClientConfiguration clientConfiguration = new ClientConfiguration();
 		clientConfiguration.setSignerOverride("AWSS3V4SignerType");
 		if (clientConfig.getProxySettings() != null
-				&& clientConfig.getProxySettings().isEnabled() ){
+				&& clientConfig.getProxySettings().isEnabled() ) {
 			log.warn(".. building S3API. Connection to enpoint will be through a proxy");
 			clientConfiguration.setProxyPort(clientConfig.getProxySettings().getProxyPort());
 	        clientConfiguration.setProxyHost(clientConfig.getProxySettings().getProxyHost().asString());

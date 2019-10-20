@@ -22,7 +22,7 @@ public class S3ClientAPIDelegateForFolderFiler
 ///////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTOR
 ///////////////////////////////////////////////////////////////////////////////////////////
-	public S3ClientAPIDelegateForFolderFiler(final AmazonS3 s3Client){
+	public S3ClientAPIDelegateForFolderFiler(final AmazonS3 s3Client) {
 		_serviceForFolderFilerImpl = new  S3ServiceForFolderFilerImpl(s3Client);
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ public class S3ClientAPIDelegateForFolderFiler
 	public boolean copyFolder(final S3BucketName bucket,
 							  final Path srcPath,final Path dstPath,
 							  final FileFilter fileFilter,
-							  final boolean overwrite){
+							  final boolean overwrite) {
 		return _serviceForFolderFilerImpl.copyFolder(bucket,
 													 srcPath,dstPath,
 													 fileFilter,
@@ -49,7 +49,7 @@ public class S3ClientAPIDelegateForFolderFiler
 	@Override
 	public boolean moveFolder(final S3BucketName bucket,
 							  final Path srcPath,final Path dstPath,
-							  final boolean overwrite){
+							  final boolean overwrite) {
 		return _serviceForFolderFilerImpl.moveFolder(bucket,
 													 srcPath,dstPath,
 													 overwrite);
@@ -57,7 +57,7 @@ public class S3ClientAPIDelegateForFolderFiler
 	@Override
 	public boolean renameFolder(final S3BucketName bucket,
 								final Path existingPath,
-								final FileNameAndExtension newName){
+								final FileNameAndExtension newName) {
 		return _serviceForFolderFilerImpl.renameFolder(bucket,
 													   existingPath,newName);
 	}

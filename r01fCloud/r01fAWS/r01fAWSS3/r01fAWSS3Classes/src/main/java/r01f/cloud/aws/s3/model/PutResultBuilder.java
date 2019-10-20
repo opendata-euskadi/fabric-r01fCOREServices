@@ -64,7 +64,7 @@ public abstract class PutResultBuilder
 	public class PutResultBuilderContentMD5Step {
 		private final PutResult _result;
 
-		public PutResultBuilderExpirationStep contentMD5(final String contentMD5){
+		public PutResultBuilderExpirationStep contentMD5(final String contentMD5) {
 			_result.setContentMd5(contentMD5);
 			return new PutResultBuilderExpirationStep(_result);
 		}
@@ -73,7 +73,7 @@ public abstract class PutResultBuilder
 	public class PutResultBuilderExpirationStep {
     	private final PutResult _result;
 
-		public PutResultBuilderMetadataStep andExpirationTime(final Date exp){
+		public PutResultBuilderMetadataStep andExpirationTime(final Date exp) {
 			_result.setExpirationTime(exp);
 			return new PutResultBuilderMetadataStep(_result);
 		}
@@ -82,7 +82,7 @@ public abstract class PutResultBuilder
    	public class PutResultBuilderMetadataStep {
        	private final PutResult _result;
 
-   		public BuilderLastStep withMetadata(final ObjectMetaData data){
+   		public BuilderLastStep withMetadata(final ObjectMetaData data) {
    			_result.setMetadata(data);
    			return new BuilderLastStep(_result);
    		}

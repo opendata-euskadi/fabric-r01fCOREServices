@@ -55,7 +55,7 @@ public abstract class OperationsSettingsBuilder
 	public class OperationsSettingsBuilderProgressListenerStep {
 		private final OperationSettings _uploadConfig;
 
-		public BuilderLastStep usingProgressListener(final S3ProgressListener progressListener){
+		public BuilderLastStep usingProgressListener(final S3ProgressListener progressListener) {
 			_uploadConfig.setProgressListener(progressListener);
 			return new BuilderLastStep(_uploadConfig);
 		}

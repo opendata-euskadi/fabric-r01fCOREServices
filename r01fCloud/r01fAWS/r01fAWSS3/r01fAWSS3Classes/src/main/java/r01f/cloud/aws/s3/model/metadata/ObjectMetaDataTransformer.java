@@ -19,7 +19,7 @@ public class ObjectMetaDataTransformer {
 	public static ObjectMetaData fromS3ObjectMetaData( final com.amazonaws.services.s3.model.ObjectMetadata s3Metadata) {
 		ObjectMetaData metaData = new ObjectMetaData();
 
-		if ( CollectionUtils.hasData(s3Metadata.getRawMetadata().keySet())){
+		if ( CollectionUtils.hasData(s3Metadata.getRawMetadata().keySet())) {
 			metaData.putAll(FluentIterable.from(s3Metadata.getRawMetadata().keySet())
 									.transform(new Function <String,ObjectMetaDataItem>() {
 													@Override
@@ -33,9 +33,9 @@ public class ObjectMetaDataTransformer {
 									.toList());
 
 		}
-		if ( CollectionUtils.hasData(s3Metadata.getUserMetadata().keySet())){
+		if ( CollectionUtils.hasData(s3Metadata.getUserMetadata().keySet())) {
 			metaData.putAll(FluentIterable.from(s3Metadata.getUserMetadata().keySet())
-									.transform(new Function <String,ObjectMetaDataItem>(){
+									.transform(new Function <String,ObjectMetaDataItem>() {
 														@Override
 														public ObjectMetaDataItem apply(final String id) {
 															ObjectMetaDataItem item = new ObjectMetaDataItem();
@@ -60,11 +60,11 @@ public class ObjectMetaDataTransformer {
 						= new com.amazonaws.services.s3.model.ObjectMetadata();
 		//No way to use Guava Fluents here...
 
-		for (ObjectMetaDataItem item : metadata.systemDefined() ){
+		for (ObjectMetaDataItem item : metadata.systemDefined() ) {
 			s3Metadata.setHeader(item.getId().asString(),
 								 item.getValue());
 		}
-		for (ObjectMetaDataItem item : metadata.userDefined() ){
+		for (ObjectMetaDataItem item : metadata.userDefined() ) {
 			s3Metadata.addUserMetadata(item.getId().asString(),
 									   item.getValue());
 		}

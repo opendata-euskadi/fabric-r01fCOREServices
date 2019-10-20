@@ -146,14 +146,14 @@ public class S3ServiceForFolderFilerImpl
 	@Override
 	public Collection<S3ObjectSummaryItem> listFolderContents(final S3BucketName bucket,
 			                                                  final Path folderPath,final FileFilter fileFilter,
-			                                                  final boolean recursive,  final boolean excludeFolderTypes){
+			                                                  final boolean recursive,  final boolean excludeFolderTypes) {
 		FolderPath prefix = FolderPath.forPath(folderPath);
 		ListObjectsRequest req = _buildListObjectsRequest(bucket,prefix);
 		ObjectListing listing = _s3Client.listObjects(req);
 		List<S3ObjectSummaryItem> results = Lists.newArrayList();
 		// First, Filter folder results and its children if requested (recursive)
 		Collection<S3ObjectSummaryItem> folderResults = _listFolderContentsOfTypeFolder(listing,bucket,prefix);
-		if (CollectionUtils.hasData(folderResults)){
+		if (CollectionUtils.hasData(folderResults)) {
 			if (!excludeFolderTypes) {
 				results.addAll(folderResults);
 			}
@@ -165,7 +165,7 @@ public class S3ServiceForFolderFilerImpl
 		}
 		// Filter file results.
 		Collection<S3ObjectSummaryItem> fileResults = _listFolderContentsOfTypeFile(listing,bucket,prefix);
-		if (CollectionUtils.hasData(fileResults)){
+		if (CollectionUtils.hasData(fileResults)) {
 			results.addAll(fileResults);
 		}
 		return results;
@@ -174,7 +174,7 @@ public class S3ServiceForFolderFilerImpl
 	@Override
 	public Collection<S3ObjectSummaryItem> listFolderContents(final S3BucketName bucket,
 			                                                  final Path folderPath,final FileFilter fileFilter,
-			                                                  final boolean recursive){
+			                                                  final boolean recursive) {
 		return  listFolderContents(bucket,folderPath,fileFilter,recursive,false);
 	}
 
@@ -240,7 +240,7 @@ public class S3ServiceForFolderFilerImpl
                                                                            final FolderPath folderPath) {
 		// First, Filter folder results and its children if requested (recursive)
 		List<S3ObjectSummaryItem> folderResults = null;
-		if (CollectionUtils.hasData(listing.getCommonPrefixes())){
+		if (CollectionUtils.hasData(listing.getCommonPrefixes())) {
 			folderResults = FluentIterable.from(listing.getCommonPrefixes())
 									.transform(new Function<String,S3ObjectSummaryItem>() {
 														@Override
@@ -265,9 +265,9 @@ public class S3ServiceForFolderFilerImpl
 	 */
 	private Collection<S3ObjectSummaryItem> _listFolderContentsOfTypeFile(final ObjectListing listing ,
 																		 final S3BucketName bucket,
-                                                                         final FolderPath folderPath){
+                                                                         final FolderPath folderPath) {
 		Collection<S3ObjectSummaryItem> fileResults = null;
-		if (CollectionUtils.hasData(listing.getObjectSummaries())){
+		if (CollectionUtils.hasData(listing.getObjectSummaries())) {
 			List<S3ObjectSummary> summary = listing.getObjectSummaries();
 
             // Remove root folder (prefix) , returned as object.
@@ -284,7 +284,7 @@ public class S3ServiceForFolderFilerImpl
 			summary.removeAll(toRemove);
 
 			fileResults = FluentIterable.from(summary)
-								.transform(new Function<S3ObjectSummary,S3ObjectSummaryItem>(){
+								.transform(new Function<S3ObjectSummary,S3ObjectSummaryItem>() {
 													@Override
 													public S3ObjectSummaryItem apply(final S3ObjectSummary input) {
 														 S3ObjectSummaryItem folderItem = new S3ObjectSummaryItem();

@@ -52,7 +52,7 @@ public abstract class DeleteResultBuilder
 	public class DeleteResultBuilderDeleteMarkerStep {
 		private final DeleteResult _result;
 
-		public DeleteResultBuilderFileStep deleteMarker(final boolean deleteMarker){
+		public DeleteResultBuilderFileStep deleteMarker(final boolean deleteMarker) {
 			_result.setDeleteMarker(deleteMarker);
 			return new DeleteResultBuilderFileStep(_result);
 		}
@@ -61,7 +61,7 @@ public abstract class DeleteResultBuilder
 	public class DeleteResultBuilderFileStep {
 		private final DeleteResult _result;
 
-		public BuilderLastStep withDeleteMarkerId(final String deleteMarkerId){
+		public BuilderLastStep withDeleteMarkerId(final String deleteMarkerId) {
 			_result.setDeleteMarkerVersionId(deleteMarkerId);
 			return new BuilderLastStep(_result);
 		}

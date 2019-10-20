@@ -32,7 +32,7 @@ public class S3ServiceForMultipartOperationsLowLevelImpl
 //  PUT OBJECTS
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public void putObject(final PutRequest uploadRequest){
+	public void putObject(final PutRequest uploadRequest) {
 		log.debug(" Upload Object...low level impl");
 		File file = uploadRequest.getFile();
         long contentLength = file.length();
@@ -80,7 +80,7 @@ public class S3ServiceForMultipartOperationsLowLevelImpl
 
 	}
 	@Override
-	public void getObject(final GetRequest downloadRequest){
+	public void getObject(final GetRequest downloadRequest) {
 		throw  new UnsupportedOperationException("No implemented yet");
 	}
 

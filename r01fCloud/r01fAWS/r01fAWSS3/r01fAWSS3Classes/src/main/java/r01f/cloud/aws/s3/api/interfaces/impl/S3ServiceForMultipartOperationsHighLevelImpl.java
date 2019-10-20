@@ -42,14 +42,14 @@ public class S3ServiceForMultipartOperationsHighLevelImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
-	public S3ServiceForMultipartOperationsHighLevelImpl(final AmazonS3 s3Client){
+	public S3ServiceForMultipartOperationsHighLevelImpl(final AmazonS3 s3Client) {
 		 super(s3Client);
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  PUT OBJECTS
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public void putObject(final PutRequest uploadRequest){
+	public void putObject(final PutRequest uploadRequest) {
 		log.warn("Upload request with settings {}",
 				 uploadRequest.getOperationSettings().debugInfo());
 
@@ -83,9 +83,9 @@ public class S3ServiceForMultipartOperationsHighLevelImpl
 			myUpload.waitForCompletion();
 		} catch (final AmazonServiceException e) {
 			e.printStackTrace();
-		} catch (final AmazonClientException e){
+		} catch (final AmazonClientException e) {
 			e.printStackTrace();
-		} catch (final Throwable e){
+		} catch (final Throwable e) {
 			e.printStackTrace();
 		}
 		// After the upload is complete, call shutdownNow to release the resources.
@@ -93,7 +93,7 @@ public class S3ServiceForMultipartOperationsHighLevelImpl
 	}
 
 	@Override
-	public void getObject(final GetRequest downloadRequest){
+	public void getObject(final GetRequest downloadRequest) {
 		log.warn("Download request with settings {}",
 				  downloadRequest.getOperationSettings().debugInfo());
 
@@ -128,9 +128,9 @@ public class S3ServiceForMultipartOperationsHighLevelImpl
 			myDownload.waitForCompletion();
 		} catch (final AmazonServiceException e) {
 			e.printStackTrace();
-		} catch (final AmazonClientException e){
+		} catch (final AmazonClientException e) {
 			e.printStackTrace();
-		} catch (final Throwable e){
+		} catch (final Throwable e) {
 			e.printStackTrace();
 		}
 		// After the upload is complete, call shutdownNow to release the resources.

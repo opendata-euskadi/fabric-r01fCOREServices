@@ -21,23 +21,23 @@ public class S3ServiceForBucketsImpl
 //  CREATE / DELETE BUCKET
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public boolean existBucket(final S3BucketName bucketName){
+	public boolean existBucket(final S3BucketName bucketName) {
 		log.warn("existBucket  bucket {} ?",bucketName );
 		return _s3Client.doesBucketExistV2(bucketName.getId());
 	}
 	@Override
-	public boolean notExistBucket(final S3BucketName bucketName){
+	public boolean notExistBucket(final S3BucketName bucketName) {
 		log.warn("existBucket  bucket {} ?",bucketName );
 		return !_s3Client.doesBucketExistV2(bucketName.getId());
 	}
 
 	@Override
-	public void createBucket(final S3BucketName bucketName){
+	public void createBucket(final S3BucketName bucketName) {
 		log.warn("Create  bucket {}",bucketName );
 		_s3Client.createBucket(bucketName.getId());
 	}
 	@Override
-	public void deleteBucket(final S3BucketName bucketName){
+	public void deleteBucket(final S3BucketName bucketName) {
 		log.warn("Delete  bucket {}",bucketName );
 		_s3Client.deleteBucket(bucketName.getId());
 	}

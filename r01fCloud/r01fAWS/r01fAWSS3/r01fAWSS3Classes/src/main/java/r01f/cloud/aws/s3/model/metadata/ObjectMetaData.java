@@ -48,7 +48,7 @@ public class ObjectMetaData
 			    }).orNull();
 
 	}
-	public Collection<ObjectMetaDataItem> userDefined(){
+	public Collection<ObjectMetaDataItem> userDefined() {
 	    Iterable<ObjectMetaDataItem> filtered =  Iterables.filter(_items,
 	    														  new Predicate<ObjectMetaDataItem>() {
 																			@Override
@@ -57,7 +57,7 @@ public class ObjectMetaData
 																  }});
 	    return Lists.newArrayList(filtered);
 	}
-	public Collection<ObjectMetaDataItem> systemDefined(){
+	public Collection<ObjectMetaDataItem> systemDefined() {
 	    Iterable<ObjectMetaDataItem> filtered =  Iterables.filter(_items,
 	    														  new Predicate<ObjectMetaDataItem>() {
 																			@Override

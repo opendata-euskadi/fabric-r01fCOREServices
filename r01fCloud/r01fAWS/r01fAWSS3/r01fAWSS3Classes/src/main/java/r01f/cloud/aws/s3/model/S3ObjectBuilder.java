@@ -66,11 +66,11 @@ public abstract class S3ObjectBuilder
    	public class S3ObjectBuilderMetadataStep {
        	private final S3Object _object;
 
-   		public S3ObjectBuilderRedirectURLStep withMetadata(final ObjectMetaData data){
+   		public S3ObjectBuilderRedirectURLStep withMetadata(final ObjectMetaData data) {
    			_object.setMetadata(data);
    			return new S3ObjectBuilderRedirectURLStep(_object);
    		}
-   		public S3ObjectBuilderRedirectURLStep withNoMetadata(){
+   		public S3ObjectBuilderRedirectURLStep withNoMetadata() {
    			return new S3ObjectBuilderRedirectURLStep(_object);
    		}
    	}
@@ -79,13 +79,13 @@ public abstract class S3ObjectBuilder
 	public class S3ObjectBuilderRedirectURLStep {
 		private final S3Object _object;
 
-		public S3ObjectBuilderTaggingStep andRedirectLocation(final UrlPath url){
+		public S3ObjectBuilderTaggingStep andRedirectLocation(final UrlPath url) {
 			if ( url !=  null ) {
 				_object.setRedirectLocation(url);
 			}
 			return new S3ObjectBuilderTaggingStep(_object);
 		}
-		public S3Object build(){
+		public S3Object build() {
    			return new BuilderLastStep(_object).build();
    		}
 	}
@@ -93,7 +93,7 @@ public abstract class S3ObjectBuilder
 	public class S3ObjectBuilderTaggingStep {
     	private final S3Object _object;
 
-		public S3ObjectBuilderRequestChargedStep taggingCount(final Integer taggingCount){
+		public S3ObjectBuilderRequestChargedStep taggingCount(final Integer taggingCount) {
 			_object.setTaggingCount(taggingCount);
 			return new S3ObjectBuilderRequestChargedStep(_object);
 		}
@@ -102,7 +102,7 @@ public abstract class S3ObjectBuilder
    	public class S3ObjectBuilderRequestChargedStep {
        	private final S3Object _object;
 
-   		public BuilderLastStep isCharged(final boolean requestCharged){
+   		public BuilderLastStep isCharged(final boolean requestCharged) {
    			_object.setRequesterCharged(requestCharged);
    			return new BuilderLastStep(_object);
    		}
