@@ -6,10 +6,10 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-	  <groupId>r01.r01f.coreservices.cache</groupId>
-      <artifactId>r01fDistributedCache</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-  	</parent>
+		<groupId>r01.r01f.coreservices.cache</groupId>
+		<artifactId>r01fDistributedCache</artifactId>
+		<version>${revision}</version>
+	</parent>
 
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
@@ -24,7 +24,7 @@
 <!-- ====================================================================== -->
 	<modules>
 		<module>r01fDistributedCacheHazelcastClasses</module>
-	    <module>r01fDistributedCacheHazelcastGuiceClasses</module>
+		<module>r01fDistributedCacheHazelcastGuiceClasses</module>
 	</modules>
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices</groupId>
 		<artifactId>r01fCOREServices</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
@@ -24,9 +24,9 @@
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-	    <module>r01fSchedulerClasses</module>
-	    <module>r01fSchedulerGuiceClasses</module>
-  	</modules>
+		<module>r01fSchedulerClasses</module>
+		<module>r01fSchedulerGuiceClasses</module>
+	</modules>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

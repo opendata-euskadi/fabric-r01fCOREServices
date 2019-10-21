@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 		<artifactId>r01fAWS</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
@@ -19,6 +19,6 @@
 	<packaging>pom</packaging>				<!-- it's a parent project -->
 
 	<modules>
-    <module>r01fAWSSNSClasses</module>
-  </modules>
+		<module>r01fAWSSNSClasses</module>
+	</modules>
 </project>

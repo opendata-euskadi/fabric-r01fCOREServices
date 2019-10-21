@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud</groupId>
 		<artifactId>r01fCloud</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
@@ -22,6 +22,6 @@
 <!-- MODULES                                                                -->
 <!-- ====================================================================== -->
 	<modules>
-    <module>r01fTwilioClasses</module>
-  </modules>
+		<module>r01fTwilioClasses</module>
+	</modules>
 </project>

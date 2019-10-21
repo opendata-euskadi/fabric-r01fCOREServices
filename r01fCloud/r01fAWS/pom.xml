@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud</groupId>
 		<artifactId>r01fCloud</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>${revision}</version>
 	</parent>
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
@@ -24,9 +24,9 @@
 	<modules>
 		<module>r01fAWSClasses</module>
 		<module>r01fAWSS3</module>
-   		<module>r01fAWSSES</module>
-        <module>r01fAWSSNS</module>
-  </modules>
+		<module>r01fAWSSES</module>
+		<module>r01fAWSSNS</module>
+	</modules>
 
 <!-- ====================================================================== -->
 <!-- AWS SDK 2.0 BOM                                                        -->

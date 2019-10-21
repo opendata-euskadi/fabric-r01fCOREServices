@@ -8,11 +8,11 @@
 <!-- ====================================================================== -->
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
-  <parent>
-    <groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
-    <artifactId>r01fDistributedCacheHazelcast</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
+	<parent>
+		<groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
+		<artifactId>r01fDistributedCacheHazelcast</artifactId>
+		<version>${revision}</version>
+	</parent>
 
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
@@ -30,21 +30,21 @@
 		<dependency>
 			<groupId>r01.r01f.coreservices.cache.hazelcast</groupId>
 			<artifactId>r01fDistributedCacheHazelcastClasses</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>${revision}</version>
 		</dependency>
 
   		<!-- ///////////////////////////////////////// -->
 		<!--  Distributed Cache Guice  Classes                            -->
 		<!-- /////////////////////////////////////////   -->
-		
+
 		<!-- Guice  (Added to use com.google.inject.Provider )  -->
-		            
+
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
 			<artifactId>r01fGuiceClasses</artifactId>
-			<version>${r01f.version}</version>
-		</dependency>	
-	
+			<version>${revision}</version>
+		</dependency>
+
 	</dependencies>
 </project>
