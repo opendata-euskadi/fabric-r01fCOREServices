@@ -8,8 +8,8 @@ import r01f.cloud.google.GoogleAPI.GoogleAPIClientID;
 import r01f.cloud.google.GoogleAPI.GoogleAPIClientP12KeyPath;
 import r01f.cloud.google.GoogleAPI.GoogleAPIServiceAccountClientData;
 import r01f.exceptions.Throwables;
-import r01f.httpclient.HttpClient;
 import r01f.httpclient.HttpClientProxySettings;
+import r01f.httpclient.HttpClientProxySettingsBuilder;
 import r01f.resources.ResourcesLoaderDef.ResourcesLoaderType;
 import r01f.types.Path;
 import r01f.types.contact.EMail;
@@ -44,8 +44,8 @@ public class JavaMailSenderConfigForGoogleAPI
 		boolean disableMailSender = false;
 		HttpClientProxySettings proxySettings = null;
 		try {
-			proxySettings = HttpClient.guessProxySettings(xmlProps,
-														  propsRootNode);
+			proxySettings = HttpClientProxySettingsBuilder.guessProxySettings(xmlProps,
+																			  propsRootNode);
 		} catch(Throwable th) {
 			log.error("Error while guessing the internet connection proxy settings to use GMail: {}",th.getMessage(),th);
 			disableMailSender = true;	// the mail sender cannot be used

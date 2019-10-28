@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.exceptions.Throwables;
-import r01f.httpclient.HttpClient;
 import r01f.httpclient.HttpClientProxySettings;
+import r01f.httpclient.HttpClientProxySettingsBuilder;
 import r01f.types.url.Url;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
@@ -39,8 +39,8 @@ public class JavaMailSenderConfigForRESTService
 		boolean disableMailSender = false;
 		HttpClientProxySettings proxySettings = null;
 		try {
-			proxySettings = HttpClient.guessProxySettings(xmlProps,
-														  propsRootNode);
+			proxySettings = HttpClientProxySettingsBuilder.guessProxySettings(xmlProps,
+																			  propsRootNode);
 		} catch(Throwable th) {
 			log.error("Error while guessing the internet connection proxy settings to use GMail: {}",th.getMessage(),th);
 			disableMailSender = true;	// the mail sender cannot be used

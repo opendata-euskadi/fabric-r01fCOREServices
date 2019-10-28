@@ -8,8 +8,8 @@ import r01f.cloud.twilio.TwilioService.TwilioAPIData;
 import r01f.config.ContainsConfigData;
 import r01f.exceptions.Throwables;
 import r01f.guids.CommonOIDs.Password;
-import r01f.httpclient.HttpClient;
 import r01f.httpclient.HttpClientProxySettings;
+import r01f.httpclient.HttpClientProxySettingsBuilder;
 import r01f.types.contact.Phone;
 import r01f.util.types.Strings;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
@@ -44,8 +44,8 @@ public class TwilioConfig
 		// Test proxy connection to see if proxy is needed
 		HttpClientProxySettings proxySettings = null;
 		try {
-			proxySettings = HttpClient.guessProxySettings(xmlProps,
-														  thePropsRootNode);
+			proxySettings = HttpClientProxySettingsBuilder.guessProxySettings(xmlProps,
+																			  thePropsRootNode);
 		} catch(Throwable th) {
 			log.error("Error while guessing the proxy settings to use Twilio: {}",
 					  th.getMessage(),th);
