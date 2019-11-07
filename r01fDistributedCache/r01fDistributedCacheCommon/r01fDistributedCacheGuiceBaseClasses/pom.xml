@@ -40,7 +40,6 @@
 			<artifactId>r01fGuiceClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
-
 	</dependencies>
 	
 <!-- ====================================================================== -->
