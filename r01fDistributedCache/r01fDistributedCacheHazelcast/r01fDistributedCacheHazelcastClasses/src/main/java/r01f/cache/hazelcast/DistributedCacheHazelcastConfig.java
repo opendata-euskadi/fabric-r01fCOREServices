@@ -67,8 +67,8 @@ public class DistributedCacheHazelcastConfig
 		String outHZXmlConfig = null;
 		Node  hzConfigXMLNode  = cacheProps.propertyAt("/*").node();
 		if (hzConfigXMLNode != null) {
-			outHZXmlConfig = XMLStringSerializer.writeNode(hzConfigXMLNode,
-													       Charset.defaultCharset());
+			outHZXmlConfig = XMLStringSerializer.writeNodeNoFail(hzConfigXMLNode,
+													       		 Charset.defaultCharset());
 		} else {
 			//throw new IllegalStateException("The hazelcast config file is NOT valid!");
 			 log.error("The hazelcast config file is NOT valid!");
