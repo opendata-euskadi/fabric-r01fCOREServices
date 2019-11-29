@@ -84,7 +84,7 @@ public class NotifierGuiceModule
 
 			outSrvc = prov.provideEMailNotifier(_notifiersConfig.getForEMail());
 		}
-		if (outSrvc == null) throw new IllegalStateException("Could NOT find any SMS notifier implementation!");
+		if (outSrvc == null) throw new IllegalStateException("Could NOT find any email notifier implementation!");
 		return outSrvc;
 	}
 	/**

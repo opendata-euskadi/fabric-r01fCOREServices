@@ -11,6 +11,10 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
  * BEWARE!!	There MUST exist a file named as the FQN of the spi provider INTERFACE at META-INF folder
  * 			of every concrete implementation
  * 			The content of this file must be the FQN of the spi provider interface IMPLEMENTATION
+ * see:
+ * 		- EMail: [r01fEMailSpringClasses]
+ * 		- SMS: [r01fAWSSNSClasses] and [r01fLatiniaClasses]
+ * 		- Voice: [r01fTwilioClasses]
  */
 public interface NotifierSPIProviderForEMail {
 	NotifierServiceForEMail provideEMailNotifier(final NotifierConfigForEMail config);
