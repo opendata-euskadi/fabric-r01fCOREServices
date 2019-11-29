@@ -41,7 +41,8 @@
 		<module>r01fNotifier</module>
 		<module>r01fScheduler</module>
 		<module>r01fDistributedCache</module>
-	</modules>
+    <module>r01fGeo</module>
+  </modules>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
@@ -292,7 +293,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
