@@ -13,7 +13,7 @@ import r01f.guids.CommonOIDs.UserCode;
  * How to create an app password:
  *		1.- Login to the account settings: https://myaccount.google.com/
  *		2.- Find the [Signing in] section and click on [App passwords]
- *		3.- Select [Other(custom name)] and give it a name (ie X47B)
+ *		3.- Select [Other(custom name)] and give it a name (ie appCode)
  *		4.- Copy the generated password and put it here
  */
 @Deprecated

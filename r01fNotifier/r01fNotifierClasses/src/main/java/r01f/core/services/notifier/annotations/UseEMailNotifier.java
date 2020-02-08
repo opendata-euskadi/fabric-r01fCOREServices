@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Annotation that tells guice to inject the the eMail-based X47BEMailNotifier.java
+ * Annotation that tells guice to inject the the eMail-based XXXEMailNotifier.java
  */
-@Qualifier //@BindingAnnotation 
-@Target({ ElementType.FIELD,ElementType.PARAMETER}) 
+@Qualifier //@BindingAnnotation
+@Target({ ElementType.FIELD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UseEMailNotifier {
 	// nothing
