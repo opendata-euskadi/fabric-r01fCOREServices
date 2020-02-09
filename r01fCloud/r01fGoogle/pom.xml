@@ -23,5 +23,6 @@
 <!-- ====================================================================== -->
 	<modules>
 		<module>r01fGoogleClasses</module>
+		<module>r01fFirebaseClasses</module>
 	</modules>
 </project>

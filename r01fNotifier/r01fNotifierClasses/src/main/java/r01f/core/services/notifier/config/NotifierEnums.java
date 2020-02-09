@@ -15,12 +15,13 @@ public abstract class NotifierEnums {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	public static enum NotifierType 
+	public static enum NotifierType
  			 implements EnumExtended<NotifierType> {
 		EMAIL,
 		SMS,
 		VOICE,
-		LOG;
+		LOG,
+		PUSH_MESSAGE;
 
 		public String asStringLowerCase() {
 			return this.name().toLowerCase();
@@ -40,13 +41,16 @@ public abstract class NotifierEnums {
 			case VOICE:
 				outType = VOICE;
 				break;
+			case PUSH_MESSAGE:
+				outType = PUSH_MESSAGE;
+				break;
 			default:
 				throw new IllegalArgumentException(medium + " is NOT a recognized notifier type!");
 			}
 			return outType;
 		}
 		private static final transient EnumExtendedWrapper<NotifierType> DELEGATE = EnumExtendedWrapper.wrapEnumExtended(NotifierType.class);
-		
+
 		@Override
 		public boolean isIn(final NotifierType... els) {
 			return DELEGATE.isIn(this,els);
@@ -125,6 +129,21 @@ public abstract class NotifierEnums {
 		@Getter private final NotifierImpl _id;
 
 		private LogNotifierImpl(final String id) {
+			_id = NotifierImpl.forId(id);
+		}
+		public boolean is(final NotifierImpl impl) {
+			return _id.is(impl);
+		}
+	}
+	@Accessors(prefix="_")
+	@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+	public static enum PushMessageNotifierImpl {
+		FIREBASE("firebase"),
+		AZURE("azure");
+
+		@Getter private final NotifierImpl _id;
+
+		private PushMessageNotifierImpl(final String id) {
 			_id = NotifierImpl.forId(id);
 		}
 		public boolean is(final NotifierImpl impl) {
