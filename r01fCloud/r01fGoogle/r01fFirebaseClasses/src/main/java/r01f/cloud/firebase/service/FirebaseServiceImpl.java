@@ -130,7 +130,10 @@ public class FirebaseServiceImpl
 	  Builder baseMessage  = Message.builder()
 							  		 .setApnsConfig(_buildApnsConfig(pushMesageRequest.getTopic()))
 							  		 .setAndroidConfig(_buildAndroidConfig(pushMesageRequest.getTopic()))
-							  		 .setNotification( new Notification(pushMesageRequest.getTitle(), pushMesageRequest.getMessage()));
+							  		 .setNotification(   Notification.builder()
+							  				                        .setBody(pushMesageRequest.getMessage())
+					                                                .setTitle(pushMesageRequest.getTitle())
+					                                                 .build());
 
 
 	  if (pushMesageRequest.hasToken()) {
