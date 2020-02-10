@@ -12,7 +12,7 @@ import r01f.core.services.notifier.spi.NotifierSPIProviderForPushMessage;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
 /**
- * SPI provider for AWS SNS based SMS notifier
+ * SPI provider for AWS SNS based push provider notifier
  * (see: https://www.baeldung.com/java-spi)
  * BEWARE!!	There MUST exist a file named as the FQN of the spi provider INTERFACE at META-INF folder
  * 			The content of this file must be the FQN of the spi provider interface IMPLEMENTATION
