@@ -39,4 +39,21 @@ public abstract class FirebaseIds {
 		}
 	}
 
+	/**
+	 * Data items that could be send with message body.
+	 * @author PCI
+	 */
+	@MarshallType(as="pushMessageDataItemId")
+	public static class PushMessageDataItemId
+				extends OIDBaseImmutable<String> {
+
+		private static final long serialVersionUID = -5867457273405673410L;
+		private PushMessageDataItemId(final String id) {
+			super(id);
+		}
+		public static PushMessageDataItemId of(final String id) {
+			return new PushMessageDataItemId(id);
+		}
+	}
+
 }

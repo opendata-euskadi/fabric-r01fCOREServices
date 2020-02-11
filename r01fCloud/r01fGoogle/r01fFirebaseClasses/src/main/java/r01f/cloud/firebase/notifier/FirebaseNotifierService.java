@@ -72,7 +72,7 @@ public class FirebaseNotifierService
 				PushMessageRequest pushMessageRequest = new PushMessageRequest(subscriber.getTopic(),
 						                                                       subscriber.getToken(),
 						                                                       pushMessage.getText(),
-						                                                       pushMessage.getTitle());
+						                                                       pushMessage.getTitle(),null);
 
 
 				PushMessageResponse response = _firebaseService.push(pushMessageRequest);
@@ -80,7 +80,7 @@ public class FirebaseNotifierService
 				responses.add(new NotifierResponseImpl<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>(NotifierTaskOID.supply(),
 																																  subscriber,
 																																  true));	// success
-			} catch (Throwable restEx) {
+			} catch (final Throwable nitex) {
 
 				responses.add(new NotifierResponseImpl<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>(NotifierTaskOID.supply(),
 					                                                                                                         	  subscriber,

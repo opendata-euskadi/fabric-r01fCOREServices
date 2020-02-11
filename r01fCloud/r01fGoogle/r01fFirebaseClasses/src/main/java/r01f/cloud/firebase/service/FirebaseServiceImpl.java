@@ -18,13 +18,13 @@ import com.google.firebase.messaging.Notification;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import r01f.cloud.firebase.model.FirebaseIds.RegistredDevicesTopic;
+import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.firebase.model.PushMessageRequest;
 import r01f.cloud.firebase.model.PushMessageResponse;
 import r01f.httpclient.HttpClientProxySettings;
 import r01f.service.ServiceCanBeDisabled;
 
-
+@Slf4j
 public class FirebaseServiceImpl
 		implements FirebaseService,
 		            ServiceCanBeDisabled {
@@ -85,7 +85,10 @@ public class FirebaseServiceImpl
 /////////////////////////////////////////////////////////////////////////////
 	@Override
 	public PushMessageResponse push(final PushMessageRequest pushMessageRequest) {
-		return _pushMessage(_buidMessage(pushMessageRequest));
+		log.warn(".. push {}",
+							pushMessageRequest.debugInfo());
+		Message message = _buidMessage(pushMessageRequest);
+		return _pushMessage(message);
 	}
 /////////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS
@@ -102,11 +105,12 @@ public class FirebaseServiceImpl
    * @param topic
    * @return
    */
-  private static ApnsConfig _buildApnsConfig(final RegistredDevicesTopic topic) {
+  private static ApnsConfig _buildApnsConfig() {
       return ApnsConfig.builder()
 			              .setAps(Aps.builder()
-			            		      .setCategory(topic.asString())
-			                          .setThreadId(topic.asString()).build())
+			            		     // .setCategory(topic.asString())
+			                         // .setThreadId(topic.asString()
+			                       .build())
 			              .build();
   }
   /**
@@ -114,24 +118,25 @@ public class FirebaseServiceImpl
    * @param topic
    * @return
    */
-  private static AndroidConfig _buildAndroidConfig(final RegistredDevicesTopic topic) {
+  private static AndroidConfig _buildAndroidConfig() {
       return AndroidConfig.builder()
 			              .setTtl(Duration.ofMinutes(2).toMillis())
-			              .setCollapseKey(topic.getId())
+			              .setCollapseKey("collapsekey")//¿?
 			              .setPriority(AndroidConfig.Priority.HIGH)
 			              .setNotification(AndroidNotification.builder()
 			            		                              .setSound("default")
 			                                                  .setColor("#FFFF00")
-			                                                  .setTag(topic.getId()).build())
+			                                                  .setTag("collapsekey")//¿?
+			                                                  .build())
 			              .build();
   }
 
   private static Message _buidMessage(final PushMessageRequest pushMesageRequest) {
 	  Builder baseMessage  = Message.builder()
-							  		 .setApnsConfig(_buildApnsConfig(pushMesageRequest.getTopic()))
-							  		 .setAndroidConfig(_buildAndroidConfig(pushMesageRequest.getTopic()))
+							  		  .setApnsConfig(_buildApnsConfig())
+							  	     .setAndroidConfig(_buildAndroidConfig())
 							  		 .setNotification(Notification.builder()
-							  				 					 		.setBody(pushMesageRequest.getMessage())
+							  				 					 		.setBody(pushMesageRequest.getBody())
 								  				 						.setTitle(pushMesageRequest.getTitle())
 					                                                .build());
 
@@ -141,7 +146,12 @@ public class FirebaseServiceImpl
 	  } else {
 		  baseMessage.setTopic(pushMesageRequest.getTopic().asString());
 	  }
+	  if (pushMesageRequest.hasDataItems()) {
+		  pushMesageRequest.getDataItems()
+		  				   .forEach(i-> {
+		  					   				baseMessage.putData(i.getId().asString(), i.getValue());
+		  				   				});
+	  }
 	  return baseMessage.build();
   }
-
 }
