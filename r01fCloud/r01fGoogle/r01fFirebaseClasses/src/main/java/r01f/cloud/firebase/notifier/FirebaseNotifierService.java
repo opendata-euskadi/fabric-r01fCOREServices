@@ -10,18 +10,21 @@ import com.google.common.collect.Lists;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import r01f.cloud.firebase.model.FirebaseIds.PushMessageDataItemId;
 import r01f.cloud.firebase.model.FirebaseIds.RegistredDeviceToken;
 import r01f.cloud.firebase.model.FirebaseIds.RegistredDevicesTopic;
+import r01f.cloud.firebase.model.PushMessageDataItem;
 import r01f.cloud.firebase.model.PushMessageRequest;
 import r01f.cloud.firebase.model.PushMessageResponse;
 import r01f.cloud.firebase.service.FirebaseServiceImpl;
 import r01f.core.services.notifier.NotifierPushMessage;
-import r01f.core.services.notifier.NotifierPushMessageSubcriber;
+import r01f.core.services.notifier.NotifierPushMessageSubscriber;
 import r01f.core.services.notifier.NotifierResponse;
 import r01f.core.services.notifier.NotifierServiceForPushMessage;
 import r01f.core.services.notifier.NotifierTaskOID;
 import r01f.guids.CommonOIDs.AppCode;
 import r01f.patterns.Factory;
+import r01f.util.types.collections.CollectionUtils;
 
 @Slf4j
 @Singleton
@@ -42,47 +45,55 @@ public class FirebaseNotifierService
 // [to do ] OwnedContactMean... cannot be expose a Phone, so
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public NotifierResponse<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>> notify(final AppCode from,
-																											  final NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken> to,
-																											  final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
+	public NotifierResponse<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>> notify(final AppCode from,
+																											   final NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken> to,
+																											   final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
 		@SuppressWarnings("unchecked")
-		Collection<NotifierResponse<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>> res = this.notifyAll(from,Lists.newArrayList(to),
-				 																													  messageToBeDeliveredFactory);
+		Collection<NotifierResponse<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>>> res = this.notifyAll(from,
+																																	 Lists.newArrayList(to),
+				 																													 messageToBeDeliveredFactory);
 		return Iterables.getFirst(res,null);
 	}
 	@SuppressWarnings("unused")
 	@Override
-	public Collection<NotifierResponse<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>> notifyAll(final AppCode from,
-			                                                                                                                 final Collection<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>> to,
+	public Collection<NotifierResponse<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>>> notifyAll(final AppCode from,
+			                                                                                                                 final Collection<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>> to,
 			                                                                                                                 final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>> responses
+		Collection<NotifierResponse<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>>> responses
 						= Lists.newArrayListWithExpectedSize(to.size());
 
-		// [1] - Create the pushm message
+		// [1] - Create the push message
 		NotifierPushMessage pushMessage = messageToBeDeliveredFactory.create();
 
-		// [2] - push to every destination
+		//[2] key value data items.
+		Collection<PushMessageDataItem> pushMessageDataItems = Lists.newArrayList();
+		if ( CollectionUtils.hasData(pushMessage.getKeyValueData())) {
+			 for (final String key : pushMessage.getKeyValueData().keySet() ) {
+				 pushMessageDataItems.add(new PushMessageDataItem(PushMessageDataItemId.of(key),pushMessage.getKeyValueData().get(key)));
+			 }
+		}
+
+		// [3] - push to every destination
 		log.info("[{}] > push to {} subscribers",
 												  FirebaseNotifierService.class.getSimpleName(),
 												   to.size());
-		for (final NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken> subscriber : to) {
+		for (final NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken> subscriber : to) {
 			try {
-
 
 				PushMessageRequest pushMessageRequest = new PushMessageRequest(subscriber.getTopic(),
 						                                                       subscriber.getToken(),
-						                                                       pushMessage.getText(),
-						                                                       pushMessage.getTitle(),null);
-
+						                                                       pushMessage.getBody(),
+						                                                       pushMessage.getTitle(),
+						                                                       pushMessageDataItems);
 
 				PushMessageResponse response = _firebaseService.push(pushMessageRequest);
 
-				responses.add(new NotifierResponseImpl<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>(NotifierTaskOID.supply(),
+				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>>(NotifierTaskOID.supply(),
 																																  subscriber,
 																																  true));	// success
 			} catch (final Throwable nitex) {
 
-				responses.add(new NotifierResponseImpl<NotifierPushMessageSubcriber<RegistredDevicesTopic, RegistredDeviceToken>>(NotifierTaskOID.supply(),
+				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber<RegistredDevicesTopic, RegistredDeviceToken>>(NotifierTaskOID.supply(),
 					                                                                                                         	  subscriber,
 														  	                                                                      false));	// failed
 			}

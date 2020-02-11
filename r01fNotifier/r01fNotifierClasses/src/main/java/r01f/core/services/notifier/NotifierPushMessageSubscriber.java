@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
  */
 @Accessors(prefix="_")
 @RequiredArgsConstructor
-public  class NotifierPushMessageSubcriber<T,TK>{
+public  class NotifierPushMessageSubscriber<T,TK>{
 	@Getter private final T _topic;
 	@Getter private final TK _token;
 }
