@@ -1,7 +1,7 @@
 package r01f.cloud.firebase.notifier;
 
-import r01f.cloud.firebase.model.FirebaseIds.RegistredDeviceToken;
-import r01f.cloud.firebase.model.FirebaseIds.RegistredDevicesTopic;
+import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDeviceToken;
+import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDevicesTopic;
 import r01f.cloud.firebase.service.FirebaseConfig;
 import r01f.cloud.firebase.service.FirebaseServiceImpl;
 import r01f.core.services.notifier.NotifierServiceForPushMessage;
@@ -23,7 +23,7 @@ public class SPIProviderForFirebaseNotifierService
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override @SuppressWarnings("unchecked")
-	public NotifierServiceForPushMessage<RegistredDevicesTopic,RegistredDeviceToken>  providePushMessageNotifier(final NotifierConfigForPushMessage config) {
+	public NotifierServiceForPushMessage<FirebaseRegisteredDevicesTopic,FirebaseRegisteredDeviceToken>  providePushMessageNotifier(final NotifierConfigForPushMessage config) {
 		// [1] - get the firebase config
 		FirebaseConfig fcmCfg = config.getServiceImplConfigAs(FirebaseConfig.class);
 		// [2] - Create the firebase service

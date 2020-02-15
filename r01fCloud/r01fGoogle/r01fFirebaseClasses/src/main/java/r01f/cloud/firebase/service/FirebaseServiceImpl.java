@@ -19,39 +19,43 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import r01f.cloud.firebase.model.PushMessageRequest;
-import r01f.cloud.firebase.model.PushMessageResponse;
+import r01f.cloud.firebase.model.FirebasePushMessageRequest;
+import r01f.cloud.firebase.model.FirebasePushMessageResponse;
 import r01f.httpclient.HttpClientProxySettings;
 import r01f.service.ServiceCanBeDisabled;
 
 @Slf4j
 public class FirebaseServiceImpl
-		implements FirebaseService,
-		            ServiceCanBeDisabled {
-////////////////////////////////////
+  implements FirebaseService,
+			 ServiceCanBeDisabled {
+/////////////////////////////////////////////////////////////////////////////////////////
+//	FIELDS
+/////////////////////////////////////////////////////////////////////////////////////////
 	private final FirebaseAPIData _apiData;
 	@SuppressWarnings("unused")
 	private final HttpClientProxySettings _proxySettings;	// TODO enable api with proxy
 	private boolean _disabled;
 /////////////////////////////////////////////////////////////////////////////////////////
-//CONSTRUCTOR
+//	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	public FirebaseServiceImpl(final FirebaseConfig config) {
 		this(config.getApiData(),
-		     config.getProxySettings());
+			 config.getProxySettings());
 	}
 	public FirebaseServiceImpl(final FirebaseAPIData apiData) {
-		this(apiData,null);	// proxy settings
+		this(apiData,
+			 null);		// proxy settings
 	}
 	public FirebaseServiceImpl(final FirebaseAPIData apiData,
-							    final HttpClientProxySettings proxySettings) {
+							   final HttpClientProxySettings proxySettings) {
 		_apiData = apiData;
 		_proxySettings = proxySettings;
-		 FirebaseOptions	options = new FirebaseOptions.Builder()
-				 										  .setCredentials(_apiData.getGoogleCredentials()).build();
+		FirebaseOptions	options = new FirebaseOptions.Builder()
+												  .setCredentials(_apiData.getGoogleCredentials())
+												  .build();
 		if (FirebaseApp.getApps().isEmpty()) {
-	        FirebaseApp.initializeApp(options);
-	    }
+			FirebaseApp.initializeApp(options);
+		}
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 //ServiceCanBeDisabled
@@ -73,7 +77,7 @@ public class FirebaseServiceImpl
 		_disabled = true;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
-//API DATA
+//	API DATA
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Accessors(prefix="_")
 	@RequiredArgsConstructor
@@ -81,77 +85,74 @@ public class FirebaseServiceImpl
 		@Getter private final GoogleCredentials _googleCredentials;  //GoogleCredentials.fromStream(stream)
 	}
 /////////////////////////////////////////////////////////////////////////////
-// METHODS TO IMPLEMENT
+//
 /////////////////////////////////////////////////////////////////////////////
 	@Override
-	public PushMessageResponse push(final PushMessageRequest pushMessageRequest) {
+	public FirebasePushMessageResponse push(final FirebasePushMessageRequest pushMessageRequest) {
 		log.warn(".. push {}",
 							pushMessageRequest.debugInfo());
 		Message message = _buidMessage(pushMessageRequest);
 		return _pushMessage(message);
 	}
-/////////////////////////////////////////////////////////////////////////////
-// PRIVATE METHODS
-/////////////////////////////////////////////////////////////////////////////
-  private static PushMessageResponse _pushMessage(final Message message){
-       try {
-		return new PushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
-	} catch (final InterruptedException | ExecutionException e) {
-		throw new RuntimeException(e.getLocalizedMessage());
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+	private static FirebasePushMessageResponse _pushMessage(final Message message){
+	   try {
+		return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
+	   } catch (final InterruptedException | ExecutionException e) {
+		   throw new RuntimeException(e.getLocalizedMessage());
+	   }
 	}
-  }
-  /**
-   * Builds APN Config.
-   * @param topic
-   * @return
-   */
-  private static ApnsConfig _buildApnsConfig() {
-      return ApnsConfig.builder()
-			              .setAps(Aps.builder()
-			            		     // .setCategory(topic.asString())
-			                         // .setThreadId(topic.asString()
-			                       .build())
-			              .build();
-  }
-  /**
-   * Builds the Android-specific options that can be included in a Message.Instances of this class are thread-safe and immutable
-   * @param topic
-   * @return
-   */
-  private static AndroidConfig _buildAndroidConfig() {
-      return AndroidConfig.builder()
-			              .setTtl(Duration.ofMinutes(2).toMillis())
-			              .setCollapseKey("collapsekey")//¿?
-			              .setPriority(AndroidConfig.Priority.HIGH)
-			              .setNotification(AndroidNotification.builder()
-			            		                              .setSound("default")
-			                                                  .setColor("#FFFF00")
-			                                                  .setTag("collapsekey")//¿?
-			                                                  .build())
-			              .build();
-  }
-
-  private static Message _buidMessage(final PushMessageRequest pushMesageRequest) {
-	  Builder baseMessage  = Message.builder()
+	/**
+	 * Builds APN Config.
+	 * @param topic
+	 * @return
+	 */
+	private static ApnsConfig _buildApnsConfig() {
+		return ApnsConfig.builder()
+  						  .setAps(Aps.builder()
+  									 // .setCategory(topic.asString())
+  									 // .setThreadId(topic.asString()
+  								   .build())
+  						  .build();
+	}
+	/**
+	 * Builds the Android-specific options that can be included in a Message.Instances of this class are thread-safe and immutable
+	 * @param topic
+	 * @return
+	 */
+	private static AndroidConfig _buildAndroidConfig() {
+	  	return AndroidConfig.builder()
+						  .setTtl(Duration.ofMinutes(2).toMillis())
+						  .setCollapseKey("collapsekey")//¿?
+						  .setPriority(AndroidConfig.Priority.HIGH)
+						  .setNotification(AndroidNotification.builder()
+															  .setSound("default")
+															  .setColor("#FFFF00")
+															  .setTag("collapsekey")//¿?
+															  .build())
+						  .build();
+	}
+  	private static Message _buidMessage(final FirebasePushMessageRequest pushMesageRequest) {
+  		Builder baseMessage  = Message.builder()
 							  		  .setApnsConfig(_buildApnsConfig())
-							  	     .setAndroidConfig(_buildAndroidConfig())
+							  		 .setAndroidConfig(_buildAndroidConfig())
 							  		 .setNotification(Notification.builder()
 							  				 					 		.setBody(pushMesageRequest.getBody())
 								  				 						.setTitle(pushMesageRequest.getTitle())
-					                                                .build());
-
-
-	  if (pushMesageRequest.hasToken()) {
-		  baseMessage.setToken(pushMesageRequest.getToken().asString());
-	  } else {
-		  baseMessage.setTopic(pushMesageRequest.getTopic().asString());
-	  }
-	  if (pushMesageRequest.hasDataItems()) {
-		  pushMesageRequest.getDataItems()
-		  				   .forEach(i-> {
-		  					   				baseMessage.putData(i.getId().asString(), i.getValue());
-		  				   				});
-	  }
-	  return baseMessage.build();
-  }
+																	.build());
+		if (pushMesageRequest.hasToken()) {
+			baseMessage.setToken(pushMesageRequest.getToken().asString());
+		} else {
+			baseMessage.setTopic(pushMesageRequest.getTopic().asString());
+		}
+		if (pushMesageRequest.hasDataItems()) {
+			pushMesageRequest.getDataItems()
+						   	 .forEach(i-> {
+							   				baseMessage.putData(i.getId().asString(), i.getValue());
+						   			  });
+  		}
+  		return baseMessage.build();
+  	}
 }
