@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.notifier.config.NotifierConfigForEMail;
+import r01f.core.services.notifier.config.NotifierConfigForPushMessage;
 import r01f.core.services.notifier.config.NotifierConfigForSMS;
 import r01f.core.services.notifier.config.NotifierConfigForVoice;
 import r01f.core.services.notifier.config.NotifierConfigProviders.NotifierAppDependentConfigProviderFromProperties;
@@ -111,6 +112,35 @@ public abstract class NotifierSPIUtil {
 													    .first().orNull();
 		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find voice call config for selected impl (check there exists a voice notifier dependency)!");
 		log.info("\t > The selected voice notifier impl is {}",selectedImplConfig.getImpl());
+		return selectedImplConfig;
+	}
+	public static NotifierConfigForPushMessage pushMessageNotifierConfigFrom(final XMLPropertiesForAppComponent props,
+				 final NotifierAppDependentConfigProviderFromProperties appDepConfigProvider) {
+		log.info("[Notifier] discovering push message notifiers");
+
+		// Use java's SPI to get the available configs
+		final Collection<NotifierConfigForPushMessage> cfgs = Lists.newArrayList();
+		ServiceLoader.load(NotifierSPIProviderForPushMessage.class)
+			.forEach(new Consumer<NotifierSPIProviderForPushMessage>() {
+				@Override
+				public void accept(final NotifierSPIProviderForPushMessage prov) {
+					log.info("\t...found push message notifier provided by {}",
+					prov.getClass());
+					cfgs.add(prov.providePushMessageNotifierConfig(props,
+							 appDepConfigProvider));
+				}
+			});
+		// Get the config for the selected service impl
+		NotifierConfigForPushMessage selectedImplConfig = FluentIterable.from(cfgs)
+			.filter(new Predicate<NotifierConfigForPushMessage>() {
+							@Override
+							public boolean apply(final NotifierConfigForPushMessage cfg) {
+								return cfg.isSelectedImpl();
+							}
+					})
+		   .first().orNull();
+		if (selectedImplConfig == null) throw new IllegalStateException("Could NOT find push message config for selected impl (check there exists a push message notifier dependency)!");
+		log.info("\t > The selected push message notifier impl is {}",selectedImplConfig.getImpl());
 		return selectedImplConfig;
 	}
 }

@@ -11,14 +11,17 @@ import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.notifier.NotifierServiceForEMail;
+import r01f.core.services.notifier.NotifierServiceForPushMessage;
 import r01f.core.services.notifier.NotifierServiceForSMS;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
 import r01f.core.services.notifier.config.NotifierConfigForEMail;
 import r01f.core.services.notifier.config.NotifierConfigForLog;
+import r01f.core.services.notifier.config.NotifierConfigForPushMessage;
 import r01f.core.services.notifier.config.NotifierConfigForSMS;
 import r01f.core.services.notifier.config.NotifierConfigForVoice;
 import r01f.core.services.notifier.config.NotifiersConfigs;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForEMail;
+import r01f.core.services.notifier.spi.NotifierSPIProviderForPushMessage;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForSMS;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForVoice;
 
@@ -60,6 +63,12 @@ public class NotifierGuiceModule
 				  .toInstance(_notifiersConfig.getForVoice());
 		} else {
 			log.warn("The notifier VOICE config is null > any bind will be made");
+		}
+		if (_notifiersConfig.getForPushMessage() != null) {
+			binder.bind(NotifierConfigForPushMessage.class)
+				  .toInstance(_notifiersConfig.getForPushMessage());
+		} else {
+			log.warn("The notifier Push Message config is null > any bind will be made");
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@ public abstract class NotifierEnums {
 		SMS,
 		VOICE,
 		LOG,
-		PUSH_MESSAGE;
+		PUSH;
 
 		public String asStringLowerCase() {
 			return this.name().toLowerCase();
@@ -41,8 +41,8 @@ public abstract class NotifierEnums {
 			case VOICE:
 				outType = VOICE;
 				break;
-			case PUSH_MESSAGE:
-				outType = PUSH_MESSAGE;
+			case PUSH:
+				outType = PUSH;
 				break;
 			default:
 				throw new IllegalArgumentException(medium + " is NOT a recognized notifier type!");

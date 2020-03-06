@@ -24,7 +24,7 @@ public abstract class NotifierConfigForPushMessage
 										final boolean enabled,
 										final NotifierImpl impl,final ContainsConfigData serviceImplDepConfig,
 										final ContainsConfigData appDepConfig) {
-		super(NotifierType.PUSH_MESSAGE,
+		super(NotifierType.PUSH,
 			  appCode,
 			  enabled,
 			  impl,serviceImplDepConfig,
@@ -39,7 +39,7 @@ public abstract class NotifierConfigForPushMessage
 	public NotifierConfigForPushMessage(final XMLPropertiesForAppComponent props,
 								        final NotifierServiceImplDependentConfigProviderFromProperties serviceImplDepConfigProvider,
 								        final NotifierAppDependentConfigProviderFromProperties appDepConfigProvider) {
-		super(NotifierType.VOICE,
+		super(NotifierType.PUSH,
 			  props,
 			  serviceImplDepConfigProvider,
 			  appDepConfigProvider);
