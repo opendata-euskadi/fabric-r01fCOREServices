@@ -88,7 +88,7 @@ public class NotifiersConfigs
 		forPushMessage);	// push message
 	}
 	public NotifiersConfigs(final NotifierConfigForPushMessage forPushMessage,
-			final NotifierConfigForLog forLog) {
+			                final NotifierConfigForLog forLog) {
 		this( null,	// Email
 		null,		// SMS
 		null,		// Voice

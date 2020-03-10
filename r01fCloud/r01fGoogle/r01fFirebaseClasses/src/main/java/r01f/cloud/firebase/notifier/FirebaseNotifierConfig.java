@@ -19,19 +19,20 @@ public class FirebaseNotifierConfig
 		super(props,
 			  // builds the impl-dependent config
 			  new NotifierServiceImplDependentConfigProviderFromProperties() {
-					@Override
-					public ContainsConfigData provideConfigUsing(final NotifierImpl impl,
-																 final XMLPropertiesForAppComponent props) {
-						ContainsConfigData outCfg = null;
-						if (PushMessageNotifierImpl.FIREBASE.is(impl)) {
-							outCfg = FirebaseConfig.createFrom(props,
-															 "notifier/push");
-						}
-						else {
-							throw new IllegalStateException(impl + " is NOT a supported voice notifier");
-						}
-						return outCfg;
-					}
+													@SuppressWarnings("hiding")
+													@Override
+													public ContainsConfigData provideConfigUsing(final NotifierImpl impl,
+																								 final XMLPropertiesForAppComponent props) {
+														ContainsConfigData outCfg = null;
+														if (PushMessageNotifierImpl.FIREBASE.is(impl)) {
+															outCfg = FirebaseConfig.createFrom(props,
+																							  "notifier/push/firebase");
+														}
+														else {
+															throw new IllegalStateException(impl + " is NOT a supported push notifier");
+														}
+														return outCfg;
+													}
 			   },
 			   // the app-dependent config
 			   appDepConfigProvider);

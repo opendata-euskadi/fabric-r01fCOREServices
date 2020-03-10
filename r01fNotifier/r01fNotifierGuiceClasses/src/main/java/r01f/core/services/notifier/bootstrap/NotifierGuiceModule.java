@@ -11,7 +11,6 @@ import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.notifier.NotifierServiceForEMail;
-import r01f.core.services.notifier.NotifierServiceForPushMessage;
 import r01f.core.services.notifier.NotifierServiceForSMS;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
 import r01f.core.services.notifier.config.NotifierConfigForEMail;
@@ -21,7 +20,6 @@ import r01f.core.services.notifier.config.NotifierConfigForSMS;
 import r01f.core.services.notifier.config.NotifierConfigForVoice;
 import r01f.core.services.notifier.config.NotifiersConfigs;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForEMail;
-import r01f.core.services.notifier.spi.NotifierSPIProviderForPushMessage;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForSMS;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForVoice;
 
@@ -39,6 +37,11 @@ public class NotifierGuiceModule
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void configure(final Binder binder) {
+		if (  _notifiersConfig == null ) {
+			throw new IllegalStateException(" Cannot use NotifierGuiceModule  without providing a NotifiersConfigs ,"
+											+ " check your properties.");
+		}
+		
 		// Bind configs
 		if (_notifiersConfig.getForLog() != null) {
 			binder.bind(NotifierConfigForLog.class)
