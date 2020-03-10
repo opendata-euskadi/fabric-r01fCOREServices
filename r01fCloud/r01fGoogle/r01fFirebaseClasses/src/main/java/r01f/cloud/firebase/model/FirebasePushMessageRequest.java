@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDeviceToken;
 import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDevicesTopic;
+import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.debug.Debuggable;
 import r01f.util.types.collections.CollectionUtils;
 
 @Accessors(prefix="_")
 @RequiredArgsConstructor
 public class FirebasePushMessageRequest
+     extends NotifierPushMessage
   implements Debuggable {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
@@ -36,14 +38,6 @@ public class FirebasePushMessageRequest
 			 title,body,
 			 Lists.newArrayList(dataItems));
 	}
-	public FirebasePushMessageRequest(final FirebaseRegisteredDevicesTopic topic,
-							  		  final String title,
-							  		  final String body) {
-		this(topic,
-			 null,			// token
-			 title,body,
-			 null);			// data items
-	}
 	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
 							  		  final String title,
 							  		  final String body,
@@ -52,14 +46,6 @@ public class FirebasePushMessageRequest
 			 token,
 			 title,body,
 			 Lists.newArrayList(dataItems));
-	}
-	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
-							  		  final String title,
-							  		  final String body) {
-		this(null,			// topic
-			 token,
-			 title,body,
-			 null);			// data items
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
