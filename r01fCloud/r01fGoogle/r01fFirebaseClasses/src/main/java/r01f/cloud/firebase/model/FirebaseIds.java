@@ -11,7 +11,7 @@ public abstract class FirebaseIds {
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	/**
-	 * A token for a registered device token.
+	 * A token for a registered a firebase device token.
 	 */
 	@MarshallType(as="firebaseRegisteredDeviceToken")
 	public static class FirebaseRegisteredDeviceToken
@@ -26,7 +26,7 @@ public abstract class FirebaseIds {
 		}
 	}
 	/**
-	 * A topic represents a group of one or more devices which are subscribed to.
+	 * A firebase topic represents a group of one or more devices which are subscribed to.
 	 */
 	@MarshallType(as="firebaseRegisteredDevicesTopic")
 	public static class FirebaseRegisteredDevicesTopic

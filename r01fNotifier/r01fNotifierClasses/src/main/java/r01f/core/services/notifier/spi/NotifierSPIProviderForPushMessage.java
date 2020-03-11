@@ -16,10 +16,11 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
  * 		- EMail: [r01fEMailSpringClasses]
  * 		- SMS: [r01fAWSSNSClasses] and [r01fLatiniaClasses]
  * 		- Voice: [r01fTwilioClasses]
+ * @param <T>
  */
-public interface NotifierSPIProviderForPushMessage {
+public interface NotifierSPIProviderForPushMessage{
 	NotifierImpl getImpl();
-    <TK, T> NotifierServiceForPushMessage<T,TK> providePushMessageNotifier(final NotifierConfigForPushMessage config);
-	NotifierConfigForPushMessage providePushMessageNotifierConfig(final XMLPropertiesForAppComponent props,
+    NotifierServiceForPushMessage providePushMessageNotifier(final NotifierConfigForPushMessage config);
+	NotifierConfigForPushMessage  providePushMessageNotifierConfig(final XMLPropertiesForAppComponent props,
 												                  final NotifierAppDependentConfigProviderFromProperties appDepConfigProvider);
 }

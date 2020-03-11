@@ -17,11 +17,11 @@ import r01f.cloud.firebase.model.FirebasePushMessageDataItem;
 import r01f.cloud.firebase.model.FirebasePushMessageRequest;
 import r01f.cloud.firebase.model.FirebasePushMessageResponse;
 import r01f.cloud.firebase.service.FirebaseServiceImpl;
+import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.core.services.notifier.NotifierPushMessageSubscriber;
 import r01f.core.services.notifier.NotifierResponse;
 import r01f.core.services.notifier.NotifierServiceForPushMessage;
-import r01f.core.services.notifier.NotifierTaskOID;
 import r01f.guids.CommonOIDs.AppCode;
 import r01f.patterns.Factory;
 import r01f.util.types.collections.CollectionUtils;
@@ -29,7 +29,7 @@ import r01f.util.types.collections.CollectionUtils;
 @Slf4j
 @Singleton
 public class FirebaseNotifierService
-  implements NotifierServiceForPushMessage<FirebaseRegisteredDevicesTopic,FirebaseRegisteredDeviceToken> {
+  implements NotifierServiceForPushMessage {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -45,21 +45,21 @@ public class FirebaseNotifierService
 // [to do ] OwnedContactMean... cannot be expose a Phone, so
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public NotifierResponse<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>> notify(final AppCode from,
-																											   final NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken> to,
-																											   final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
-		@SuppressWarnings("unchecked")
-		Collection<NotifierResponse<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>>> res = this.notifyAll(from,
-																																	 Lists.newArrayList(to),
-				 																													 messageToBeDeliveredFactory);
+	public NotifierResponse<NotifierPushMessageSubscriber> notify(final AppCode from,
+																 final NotifierPushMessageSubscriber to,
+														         final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
+
+		Collection<NotifierResponse<NotifierPushMessageSubscriber>> res = this.notifyAll(from,
+																						 Lists.newArrayList(to),
+				 																	     messageToBeDeliveredFactory);
 		return Iterables.getFirst(res,null);
 	}
-	@SuppressWarnings("unused")
+
 	@Override
-	public Collection<NotifierResponse<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>>> notifyAll(final AppCode from,
-			                                                                                                                 final Collection<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>> to,
-			                                                                                                                 final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>>> responses
+	public Collection<NotifierResponse<NotifierPushMessageSubscriber>> notifyAll(final AppCode from,
+			                                                                     final Collection<NotifierPushMessageSubscriber> to,
+			                                                                     final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
+		Collection<NotifierResponse<NotifierPushMessageSubscriber>> responses
 						= Lists.newArrayListWithExpectedSize(to.size());
 
 		// [1] - Create the push message
@@ -77,25 +77,31 @@ public class FirebaseNotifierService
 		log.info("[{}] > push to {} subscribers",
 												  FirebaseNotifierService.class.getSimpleName(),
 												   to.size());
-		for (final NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken> subscriber : to) {
+		for (final NotifierPushMessageSubscriber subscriber : to) {
 			try {
-
-				FirebasePushMessageRequest pushMessageRequest = new FirebasePushMessageRequest(subscriber.getTopic(),
-						                                                       subscriber.getToken(),
-						                                                       pushMessage.getBody(),
-						                                                       pushMessage.getTitle(),
-						                                                       pushMessageDataItems);
+				FirebaseRegisteredDevicesTopic topic = subscriber.getTopic() != null ?
+						                                                                FirebaseRegisteredDevicesTopic.of(subscriber.getTopic().asString()) : null ;
+				FirebaseRegisteredDeviceToken token  = subscriber.getToken() != null ?
+					                                                                 	FirebaseRegisteredDeviceToken.of(subscriber.getToken().asString()) : null ;
+				FirebasePushMessageRequest pushMessageRequest = new FirebasePushMessageRequest(topic,
+						                                                                       token,
+						                                                                       pushMessage.getBody(),
+						                                                                       pushMessage.getTitle(),
+						                                                                       pushMessageDataItems);
 
 				FirebasePushMessageResponse response = _firebaseService.push(pushMessageRequest);
 
-				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>>(NotifierTaskOID.supply(),
-																																  subscriber,
-																																  true));	// success
+				log.warn(" response : {}",
+						                 response.getMessage());
+
+				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+																					  subscriber,
+																				      true));	// success
 			} catch (final Throwable nitex) {
 
-				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber<FirebaseRegisteredDevicesTopic, FirebaseRegisteredDeviceToken>>(NotifierTaskOID.supply(),
-					                                                                                                         	  subscriber,
-														  	                                                                      false));	// failed
+				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+					                                                                  subscriber,
+														  	                          false));	// failed
 			}
 		}
 	    // [3] - Build the response

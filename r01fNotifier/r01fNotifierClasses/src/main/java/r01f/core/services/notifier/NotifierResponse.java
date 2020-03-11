@@ -1,5 +1,7 @@
 package r01f.core.services.notifier;
 
+import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
+
 /**
  * Models a notification response
  * @param <A>

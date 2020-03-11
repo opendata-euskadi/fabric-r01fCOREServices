@@ -1,7 +1,5 @@
 package r01f.cloud.firebase.notifier;
 
-import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDeviceToken;
-import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDevicesTopic;
 import r01f.cloud.firebase.service.FirebaseConfig;
 import r01f.cloud.firebase.service.FirebaseServiceImpl;
 import r01f.core.services.notifier.NotifierServiceForPushMessage;
@@ -12,7 +10,7 @@ import r01f.core.services.notifier.spi.NotifierSPIProviderForPushMessage;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
 /**
- * SPI provider for AWS SNS based push provider notifier
+ * SPI provider for Firebase based push provider notifier as spu provider
  * (see: https://www.baeldung.com/java-spi)
  * BEWARE!!	There MUST exist a file named as the FQN of the spi provider INTERFACE at META-INF folder
  * 			The content of this file must be the FQN of the spi provider interface IMPLEMENTATION
@@ -22,8 +20,8 @@ public class SPIProviderForFirebaseNotifierService
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	@Override @SuppressWarnings("unchecked")
-	public NotifierServiceForPushMessage<FirebaseRegisteredDevicesTopic,FirebaseRegisteredDeviceToken>  providePushMessageNotifier(final NotifierConfigForPushMessage config) {
+	@Override
+	public NotifierServiceForPushMessage providePushMessageNotifier(final NotifierConfigForPushMessage config) {
 		// [1] - get the firebase config
 		FirebaseConfig fcmCfg = config.getServiceImplConfigAs(FirebaseConfig.class);
 		// [2] - Create the firebase service

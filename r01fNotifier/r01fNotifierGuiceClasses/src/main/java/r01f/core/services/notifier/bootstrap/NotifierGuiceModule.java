@@ -11,6 +11,7 @@ import com.google.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.notifier.NotifierServiceForEMail;
+import r01f.core.services.notifier.NotifierServiceForPushMessage;
 import r01f.core.services.notifier.NotifierServiceForSMS;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
 import r01f.core.services.notifier.config.NotifierConfigForEMail;
@@ -20,6 +21,7 @@ import r01f.core.services.notifier.config.NotifierConfigForSMS;
 import r01f.core.services.notifier.config.NotifierConfigForVoice;
 import r01f.core.services.notifier.config.NotifiersConfigs;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForEMail;
+import r01f.core.services.notifier.spi.NotifierSPIProviderForPushMessage;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForSMS;
 import r01f.core.services.notifier.spi.NotifierSPIProviderForVoice;
 
@@ -149,6 +151,37 @@ public class NotifierGuiceModule
 				log.info("\t...found impl={} (ENABLED)",
 						 prov.getImpl());
 				outSrvc = prov.provideVoiceNotifier(_notifiersConfig.getForVoice());
+			} else {
+				log.info("\t...found impl={} (NOT ENABLED)",
+						 prov.getImpl());
+			}
+		}
+		if (outSrvc == null) throw new IllegalStateException("Could NOT find any Voice notifier implementation!");
+		return outSrvc;
+	}
+	
+	
+	/**
+	 * Provides a {@link NotifierServicesForPush} implementation
+	 * @param props
+	 * @return
+	 */
+	@Provides @Singleton	// creates a single instance of the push service (firebase)
+	NotifierServiceForPushMessage _providePushNotifier() {
+		if (_notifiersConfig.getForPushMessage() == null) throw new IllegalStateException("NO push notifier configured!");
+
+		log.info("[Notifier]: SPI finding {} implementations",
+				  NotifierSPIProviderForPushMessage.class);
+		// BEWARE! there MUST exists a file named as the spi provider interface FQN at the META-INF folder
+		//		   of every implementation project
+		NotifierServiceForPushMessage outSrvc = null;
+		for (Iterator<NotifierSPIProviderForPushMessage> pIt = ServiceLoader.load(NotifierSPIProviderForPushMessage.class).iterator(); pIt.hasNext(); ) {
+			NotifierSPIProviderForPushMessage prov = pIt.next();
+
+			if (_notifiersConfig.getForPushMessage().getImpl().is(prov.getImpl())) {
+				log.info("\t...found impl={} (ENABLED)",
+						 prov.getImpl());
+				outSrvc = prov.providePushMessageNotifier(_notifiersConfig.getForPushMessage());
 			} else {
 				log.info("\t...found impl={} (NOT ENABLED)",
 						 prov.getImpl());

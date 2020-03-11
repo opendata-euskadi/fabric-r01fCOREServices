@@ -4,9 +4,10 @@ import r01f.guids.CommonOIDs.AppCode;
 
 
 
-public interface NotifierServiceForPushMessage<T,TK>
-         extends NotifierService<AppCode,NotifierPushMessageSubscriber<T,TK>,// subscriber topic / token
+public interface NotifierServiceForPushMessage
+         extends NotifierService<AppCode,NotifierPushMessageSubscriber,// subscriber topic / token (SecurityToken)
                                  NotifierPushMessage> {
-	//
+
+	// Notifier Service for Push Message
 
 }
