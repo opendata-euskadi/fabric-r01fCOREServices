@@ -60,7 +60,7 @@ public class S3ServiceForObjectsImpl
 			byte[]  contentBytes = Streams.inputStreamBytes(streamToUpload); // This Streams.inputStreamBytes method closes the stream.
 		    ByteArrayInputStream  stream = new ByteArrayInputStream(contentBytes);
 			log.warn(" > Put input stream  {}  of size {} on bucket {}",
-					 key,  contentBytes.length, bucketName );
+					 									key,  contentBytes.length, bucketName );
 
 			// All systems compatible with S3 should provide a metadata system, but there are some that don't, f.e  MINIO
 			ObjectMetadata metadata = null;
@@ -123,8 +123,6 @@ public class S3ServiceForObjectsImpl
 			//Content reading.
 			byte[]  contentBytes = Streams.inputStreamBytes(remoteObject.getObjectContent());
 		    ByteArrayInputStream stream = new ByteArrayInputStream(contentBytes);
-		    System.out.println( " remoteObject.getObjectMetadata()! ===========>"
-		      +    remoteObject.getObjectMetadata().getLastModified());
 			return S3ObjectBuilder.create()
 					               .forObject(key)
 					               .onBucket(bucketName)
