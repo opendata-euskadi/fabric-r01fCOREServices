@@ -53,7 +53,7 @@ public class S3ServiceForObjectsImpl
 	@Override
 	public PutResult putObject(final S3BucketName bucketName,final S3ObjectKey key,
 							   final InputStream streamToUpload ,final ObjectMetaData objectMetadata) {
-		try {			
+		try {
 			if (streamToUpload == null) {
 				throw new IllegalArgumentException(Strings.customized(" The object of key  {}  CANNOT be null to store!!!", key.asString()));
 			}
@@ -61,7 +61,7 @@ public class S3ServiceForObjectsImpl
 		    ByteArrayInputStream  stream = new ByteArrayInputStream(contentBytes);
 			log.warn(" > Put input stream  {}  of size {} on bucket {}",
 					 key,  contentBytes.length, bucketName );
-			
+
 			// All systems compatible with S3 should provide a metadata system, but there are some that don't, f.e  MINIO
 			ObjectMetadata metadata = null;
 			if (objectMetadata != null
@@ -69,7 +69,7 @@ public class S3ServiceForObjectsImpl
 				log.warn(" Metadata externally provided {}",
 						 objectMetadata.debugInfo());
 				metadata = ObjectMetaDataTransformer.toS3ObjectMetaData(objectMetadata);
-			} else {			
+			} else {
 				metadata = new ObjectMetadata();
 			}
 		    metadata.setContentLength( contentBytes.length);
@@ -92,7 +92,7 @@ public class S3ServiceForObjectsImpl
 
 	@Override
 	public PutResult putObject(final S3BucketName bucketName,final S3ObjectKey key,
-							  final File file) {
+							   final File file) {
 		if (file == null) {
 			throw new IllegalArgumentException(Strings.customized(" The object of key  {} "
 																	+ " CANNOT be null to store!!!", key.asString()));
@@ -119,24 +119,25 @@ public class S3ServiceForObjectsImpl
 		try {
 			GetObjectRequest objectRequest = new GetObjectRequest(bucketName.asString(), key.asString());
 			remoteObject = _s3Client.getObject(objectRequest);
-			
+
 			//Content reading.
 			byte[]  contentBytes = Streams.inputStreamBytes(remoteObject.getObjectContent());
 		    ByteArrayInputStream stream = new ByteArrayInputStream(contentBytes);
-	
+		    System.out.println( " remoteObject.getObjectMetadata()! ===========>"
+		      +    remoteObject.getObjectMetadata().getLastModified());
 			return S3ObjectBuilder.create()
-		               .forObject(key)
-		               .onBucket(bucketName)
-		               .withContent(stream)
-		               .withMetadata(ObjectMetaDataTransformer.fromS3ObjectMetaData(remoteObject.getObjectMetadata()))
-		               .andRedirectLocation( (remoteObject.getRedirectLocation() != null) ?
-		            		   													 UrlPath.from(remoteObject.getRedirectLocation()) : null)
-		               .taggingCount(remoteObject.getTaggingCount())
-	
-		               .isCharged(remoteObject.isRequesterCharged())
-	               .build();
-		
-		} catch (final IOException e) {			
+					               .forObject(key)
+					               .onBucket(bucketName)
+					               .withContent(stream)
+					               .withMetadata(ObjectMetaDataTransformer.fromS3ObjectMetaData(remoteObject.getObjectMetadata()))
+					               .andRedirectLocation( (remoteObject.getRedirectLocation() != null) ?
+					            		   													 UrlPath.from(remoteObject.getRedirectLocation()) : null)
+					               .taggingCount(remoteObject.getTaggingCount())
+
+					               .isCharged(remoteObject.isRequesterCharged())
+				               .build();
+
+		} catch (final IOException e) {
 			e.printStackTrace();
 			log.error( " Error {}  loading object of key '{}'  on bucket '{}'" , e.getLocalizedMessage(), key, bucketName);
 			throw Throwables.throwUnchecked(e);
@@ -144,11 +145,11 @@ public class S3ServiceForObjectsImpl
 			if ( remoteObject != null ) {
 				try {
 					remoteObject.close();
-				} catch (final IOException e) {				
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////

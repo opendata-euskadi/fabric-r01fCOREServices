@@ -26,6 +26,7 @@ import r01f.enums.EnumWithCodeWrapper;
 		CONTENT_MD5("Content-MD5"),
 		CONTENT_TYPE("Content-Type"),
 		CONTENT_LANGUAGE("Content-Language"),
+		LAST_MODIFIED("Last-Modified"),
 		DIMENSION("dimension");												// XXX: Image metadata
 
 		@Getter private final Class<S3ObjectMetadataItemId> _codeType = S3ObjectMetadataItemId.class;
