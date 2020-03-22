@@ -97,7 +97,7 @@ public class FirebaseServiceImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	private static FirebasePushMessageResponse _pushMessage(final Message message){
+	private static FirebasePushMessageResponse _pushMessage(final Message message) {
 	   try {
 		return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
 	   } catch (final InterruptedException | ExecutionException e) {
