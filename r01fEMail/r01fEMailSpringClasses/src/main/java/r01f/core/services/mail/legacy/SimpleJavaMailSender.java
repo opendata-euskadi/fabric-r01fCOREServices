@@ -181,7 +181,7 @@ public class SimpleJavaMailSender
 																				                file_part.setDisposition(Part.ATTACHMENT);
 																				                file_part.setDataHandler(dh);
 																				                return file_part;
-																							} catch(MessagingException msgEx) {
+																							} catch (MessagingException msgEx) {
 																								throw Throwables.throwUnchecked(msgEx);
 																							}
 																						}

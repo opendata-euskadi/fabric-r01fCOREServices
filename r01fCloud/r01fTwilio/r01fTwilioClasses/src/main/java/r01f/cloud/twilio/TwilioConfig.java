@@ -46,7 +46,7 @@ public class TwilioConfig
 		try {
 			proxySettings = HttpClientProxySettingsBuilder.guessProxySettings(xmlProps,
 																			  thePropsRootNode);
-		} catch(Throwable th) {
+		} catch (Throwable th) {
 			log.error("Error while guessing the proxy settings to use Twilio: {}",
 					  th.getMessage(),th);
 		}

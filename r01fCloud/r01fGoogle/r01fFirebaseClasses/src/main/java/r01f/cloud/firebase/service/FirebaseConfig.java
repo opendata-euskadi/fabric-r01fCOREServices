@@ -45,7 +45,7 @@ public class FirebaseConfig
 		try {
 			proxySettings = HttpClientProxySettingsBuilder.guessProxySettings(xmlProps,
 																			  thePropsRootNode);
-		} catch(final Throwable th) {
+		} catch (final Throwable th) {
 			log.error("Error while guessing the proxy settings to use Twilio: {}",
 					  th.getMessage(),th);
 		}

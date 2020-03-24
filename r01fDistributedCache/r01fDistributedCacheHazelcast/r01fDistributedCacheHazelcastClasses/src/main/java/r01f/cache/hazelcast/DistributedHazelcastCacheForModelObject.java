@@ -66,7 +66,7 @@ implements DistributedCache<O,M> {
 				result.put(entrada.getKey(), entrada.getValue());
 			}
 			return result;
-		} catch(HazelcastSerializationException hazex) {
+		} catch (HazelcastSerializationException hazex) {
 			 _removeInvalidSerializedObjectFromMap();
 		}
 		// Try again

@@ -203,7 +203,7 @@ public class JavaMailSenderGmailImpl
 			} catch (IOException ioEx) {
 				Object original = (originalMessages != null ? originalMessages[i] : mimeMessage);
 				failedMessages.put(original,ioEx);
-			} catch(MessagingException gmailMsgEx) {
+			} catch (MessagingException gmailMsgEx) {
 				Object original = (originalMessages != null ? originalMessages[i] : mimeMessage);
 				failedMessages.put(original,gmailMsgEx);
 			}

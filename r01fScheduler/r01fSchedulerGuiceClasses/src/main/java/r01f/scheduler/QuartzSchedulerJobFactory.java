@@ -43,7 +43,7 @@ public class QuartzSchedulerJobFactory
 		try {
 	        outJob = (Job)_guiceInjector.getInstance(bundle.getJobDetail()
 	        										  	   .getJobClass());
-		} catch(Throwable th) {
+		} catch (Throwable th) {
 			log.error("Could not create a quartz job of type {}: {}",
 					  bundle.getJobDetail()
 	        				.getJobClass(),

@@ -46,7 +46,7 @@ public class JavaMailSenderConfigForGoogleAPI
 		try {
 			proxySettings = HttpClientProxySettingsBuilder.guessProxySettings(xmlProps,
 																			  propsRootNode);
-		} catch(Throwable th) {
+		} catch (Throwable th) {
 			log.error("Error while guessing the internet connection proxy settings to use GMail: {}",th.getMessage(),th);
 			disableMailSender = true;	// the mail sender cannot be used
 		}

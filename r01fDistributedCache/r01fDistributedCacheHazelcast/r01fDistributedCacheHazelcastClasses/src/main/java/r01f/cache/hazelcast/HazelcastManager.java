@@ -54,7 +54,7 @@ public class HazelcastManager {
 				outHZInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
 				log.warn("\t\t... Hazelcast instance exists yet ... return Hazelcast instance with name {} ({})",
 						  instanceName, outHZInstance.hashCode());
-			} catch(Throwable ex) {
+			} catch (Throwable ex) {
 				log.error("Error while creating the Hazelcast instance: {} ",
 						  ex.getMessage(),ex );
 				outHZInstance = Hazelcast.getHazelcastInstanceByName(instanceName);
