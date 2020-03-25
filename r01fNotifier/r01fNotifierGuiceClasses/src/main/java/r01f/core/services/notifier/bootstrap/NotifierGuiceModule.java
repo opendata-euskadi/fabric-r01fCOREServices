@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import com.google.inject.Binder;
+import com.google.inject.Exposed;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -43,7 +44,7 @@ public class NotifierGuiceModule
 			throw new IllegalStateException(" Cannot use NotifierGuiceModule  without providing a NotifiersConfigs ,"
 											+ " check your properties.");
 		}
-		
+				
 		// Bind configs
 		if (_notifiersConfig.getForLog() != null) {
 			binder.bind(NotifierConfigForLog.class)
@@ -84,7 +85,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton	// creates a single instance of the java mail sender
+	@Provides @Singleton @Exposed	// creates a single instance of the java mail sender
 	NotifierServiceForEMail _provideEMailNotifier() {
 		if (_notifiersConfig.getForEMail() == null) throw new IllegalStateException("NO EMail notifier configured!");
 
@@ -106,7 +107,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton	// creates a single instance of the java mail sender
+	@Provides @Singleton @Exposed	// creates a single instance of the java mail sender
 	NotifierServiceForSMS _provideSMSNotifier() {
 		if (_notifiersConfig.getForSMS() == null) throw new IllegalStateException("NO SMS notifier configured!");
 
@@ -135,7 +136,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton	// creates a single instance of the twilio service
+	@Provides @Singleton @Exposed	// creates a single instance of the twilio service
 	NotifierServiceForVoicePhoneCall _provideVoiceNotifier() {
 		if (_notifiersConfig.getForVoice() == null) throw new IllegalStateException("NO Voice notifier configured!");
 
@@ -166,7 +167,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton	// creates a single instance of the push service (firebase)
+	@Provides @Singleton @Exposed	// creates a single instance of the push service (firebase)
 	NotifierServiceForPushMessage _providePushNotifier() {
 		if (_notifiersConfig.getForPushMessage() == null) throw new IllegalStateException("NO push notifier configured!");
 
