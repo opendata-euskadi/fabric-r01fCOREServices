@@ -16,8 +16,8 @@
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<name>r01fAWSS3Classes</name>
-	<artifactId>r01fAWSS3Classes</artifactId>
+	<name>r01fAWSS3GlacierClasses</name>
+	<artifactId>r01fAWSS3GlacierClasses</artifactId>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
@@ -34,6 +34,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	
 	<dependencies>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Base Classes                             -->
@@ -43,18 +44,9 @@
 			<artifactId>r01fBaseClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		
-		<!-- ///////////////////////////////////////// -->
-		<!--  Base Cloud & Core                        -->
-		<!-- ///////////////////////////////////////// -->
-		<dependency>
-			<groupId>r01.r01f.coreservices.cloud.aws</groupId>
-			<artifactId>r01fAWSClasses</artifactId>
-			<version>${revision}</version>
-		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!-- IO Classes                                -->
+		<!--  IO Classes                               -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
@@ -77,7 +69,7 @@
 		<dependency>
 		    <groupId>software.amazon.awssdk</groupId>
 		    <artifactId>s3</artifactId>
-			<exclusions> <!-- Note  1.11.442:  Be Careful with Jackson libraries!!! . Amazon S3 works  with 2.6.7 and R01FB with 2.9!!!!   -->
+			<exclusions> <!-- Note  1.11.442:  Be Careful with Jackson libraries!!!. Amazon S3 works  with 2.6.7 and R01FB with 2.9!!!!   -->
 	        	<exclusion>
 	         		 <groupId>com.fasterxml.jackson.core</groupId>
 	         		 <artifactId>*</artifactId>

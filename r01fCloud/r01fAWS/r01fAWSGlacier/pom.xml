@@ -13,14 +13,12 @@
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<groupId>r01.r01f.coreservices.cloud.aws.s3</groupId>
-	<name>r01fAWSS3</name>
-	<artifactId>r01fAWSS3</artifactId>
+	<groupId>r01.r01f.coreservices.cloud.aws.glacier</groupId>
+	<name>r01fAWSGlacier</name>
+	<artifactId>r01fAWSGlacier</artifactId>
 	<packaging>pom</packaging>				<!-- it's a parent project -->
 
 	<modules>
-		<module>r01fAWSS3Classes</module>
-		<module>r01fAWSS3GuiceClasses</module>
-    <module>r01fAWSS3GlacierClasses</module>
+    <module>r01fAWSGlacierClasses</module>
   </modules>
 </project>

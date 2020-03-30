@@ -8,16 +8,16 @@
 <!-- PARENT                                                                 -->
 <!-- ====================================================================== -->
 	<parent>
-		<groupId>r01.r01f.coreservices.cloud.aws.s3</groupId>
-		<artifactId>r01fAWSS3</artifactId>
+		<groupId>r01.r01f.coreservices.cloud.aws.glacier</groupId>
+		<artifactId>r01fAWSGlacier</artifactId>
 		<version>${revision}</version>
 	</parent>
 
 <!-- ====================================================================== -->
 <!-- ARTIFACT                                                               -->
 <!-- ====================================================================== -->
-	<name>r01fAWSS3Classes</name>
-	<artifactId>r01fAWSS3Classes</artifactId>
+	<name>r01fAWSGlacierClasses</name>
+	<artifactId>r01fAWSGlacierClasses</artifactId>
 
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
@@ -34,18 +34,10 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
 	<dependencies>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Base Classes                             -->
-		<!-- ///////////////////////////////////////// -->
-		<dependency>
-			<groupId>r01.r01f.base</groupId>
-			<artifactId>r01fBaseClasses</artifactId>
-			<version>${revision}</version>
-		</dependency>
-		
-		<!-- ///////////////////////////////////////// -->
-		<!--  Base Cloud & Core                        -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.coreservices.cloud.aws</groupId>
@@ -54,42 +46,32 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!-- IO Classes                                -->
+		<!--  R01: AWS                                 -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
-			<artifactId>r01fIOClasses</artifactId>
+			<artifactId>r01fBaseClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!--  Http Client                              -->
+		<!--  Notifier                                 -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.httpclient</groupId>
-			<artifactId>r01fHttpClientClasses</artifactId>
+			<groupId>r01.r01f.coreservices.notifier</groupId>
+			<artifactId>r01fNotifierClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!--  Amazon S3 Client Classes                 -->
+		<!--  Amazon SNS                               -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 		    <groupId>software.amazon.awssdk</groupId>
-		    <artifactId>s3</artifactId>
-			<exclusions> <!-- Note  1.11.442:  Be Careful with Jackson libraries!!! . Amazon S3 works  with 2.6.7 and R01FB with 2.9!!!!   -->
-	        	<exclusion>
-	         		 <groupId>com.fasterxml.jackson.core</groupId>
-	         		 <artifactId>*</artifactId>
-	        	</exclusion>
-	        	<exclusion>
-	         		 <groupId>com.fasterxml.jackson.dataformat</groupId>
-	         		 <artifactId>*</artifactId>
-	        	</exclusion>
-      		</exclusions>
+		    <artifactId>glacier</artifactId>
 		</dependency>
 	</dependencies>
-
+	
 <!-- ====================================================================== -->
 <!-- BUILD                                                                  -->
 <!-- ====================================================================== -->
@@ -107,7 +89,7 @@
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>1.0.0</version>
-					<configuration>
+					<configuration> 
 						<lifecycleMappingMetadata>
 							<pluginExecutions>
 								<!-- flatten plugin -->

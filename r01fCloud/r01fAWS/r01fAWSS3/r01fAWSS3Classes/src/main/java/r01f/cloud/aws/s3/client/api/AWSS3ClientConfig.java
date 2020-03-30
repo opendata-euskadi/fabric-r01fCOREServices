@@ -1,6 +1,7 @@
-package r01f.cloud.aws.ses;
+package r01f.cloud.aws.s3.client.api;
 
 import java.nio.charset.Charset;
+import java.util.Properties;
 
 import lombok.experimental.Accessors;
 import r01f.cloud.aws.AWSAccessKey;
@@ -12,25 +13,34 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
 import software.amazon.awssdk.regions.Region;
 
 @Accessors(prefix="_")
-public class AWSSESClientConfig
+public class AWSS3ClientConfig
 	 extends AWSClientConfig {
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
-	public AWSSESClientConfig(final Region region,
-							  final AWSAccessKey accessKey,final AWSAccessSecret accessSecret) {
+	public AWSS3ClientConfig(final Region region,
+						     final AWSAccessKey accessKey,final AWSAccessSecret accessSecret) {
 		this(region,
 			 accessKey,accessSecret,
 			 Charset.defaultCharset());
 	}
-	public AWSSESClientConfig(final Region region,
+	public AWSS3ClientConfig(final Region region,
 							  final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
 							  final Charset charset) {
+		this(region,
+			 accessKey,accessSecret,
+			 charset,
+			 null);		// no system properties
+	}
+	public AWSS3ClientConfig(final Region region,
+							  final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
+							  final Charset charset,
+							  final Properties systemProps) {
 		super(region,
 			  accessKey,accessSecret,
 			  charset);
 	}
-	public AWSSESClientConfig(final AWSClientConfig cfg) {
+	public AWSS3ClientConfig(final AWSClientConfig cfg) {
 		super(cfg.getRegion(),
 			  cfg.getAccessKey(),cfg.getAccessSecret(),
 			  cfg.getCharset());
@@ -38,10 +48,10 @@ public class AWSSESClientConfig
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	public static final AWSSESClientConfig fromXMLProperties(final XMLPropertiesForAppComponent props,
+	public static final AWSS3ClientConfig fromXMLProperties(final XMLPropertiesForAppComponent props,
 															 final String propsRootNode) {
 		AWSClientConfig baseCfg = AWSClientConfigBuilder.fromXMLProperties(props,
 																    	   propsRootNode,AWSService.SES);
-		return new AWSSESClientConfig(baseCfg);
+		return new AWSS3ClientConfig(baseCfg);
 	}
 }

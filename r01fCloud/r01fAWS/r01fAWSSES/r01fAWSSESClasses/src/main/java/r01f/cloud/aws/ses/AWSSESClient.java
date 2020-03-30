@@ -76,11 +76,10 @@ public class AWSSESClient {
 		if (CollectionUtils.isNullOrEmpty(attachs)) {
 			log.info("[AWS SES]: Sending simple email");
 			return _sendSimpleEmail(mailMsg);
-		} else {
-			log.info("[AWS SES]: Sending email with attachments");
-			return _sendRawEMail(mailMsg,
-								 attachs);
 		}
+		log.info("[AWS SES]: Sending email with attachments");
+		return _sendRawEMail(mailMsg,
+							 attachs);
 	}
 	public SesResponse sendEMail(final EMailRFC822Address from,final EMailDestinations destinations,
 								 final MimeMessage mimeMessage) throws MessagingException {
@@ -170,9 +169,10 @@ public class AWSSESClient {
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	private Destination _eMailDestinationFrom(final Collection<EMailRFC822Address> to,
-											  final Collection<EMailRFC822Address> cc,
-											  final Collection<EMailRFC822Address> bcc) {
+	@SuppressWarnings("unused") 
+	private static Destination _eMailDestinationFrom(final Collection<EMailRFC822Address> to,
+											  		 final Collection<EMailRFC822Address> cc,
+											  		 final Collection<EMailRFC822Address> bcc) {
 		return Destination.builder()
 				   .toAddresses(to.stream()
 						   		  .map(addr -> addr.asRFC822Address())
