@@ -25,8 +25,8 @@ public class AWSS3ClientConfig
 			 Charset.defaultCharset());
 	}
 	public AWSS3ClientConfig(final Region region,
-							  final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
-							  final Charset charset) {
+							 final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
+							 final Charset charset) {
 		this(region,
 			 accessKey,accessSecret,
 			 charset,
@@ -38,7 +38,7 @@ public class AWSS3ClientConfig
 							  final Properties systemProps) {
 		super(region,
 			  accessKey,accessSecret,
-			  charset);
+			  charset,systemProps);
 	}
 	public AWSS3ClientConfig(final AWSClientConfig cfg) {
 		super(cfg.getRegion(),

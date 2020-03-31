@@ -44,8 +44,8 @@ public class AWSS3ClientAPI {
 /////////////////////////////////////////////////////////////////////////////////////////
 	@SuppressWarnings("unused")
 	private AWSS3ClientAPI(final Region region,	// ie: Region.EU_WEST_1
-				 final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
-				 final Charset charset) {
+				           final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
+				           final Charset charset) {
 		this(new AWSS3ClientConfig(region,
 								   accessKey,accessSecret,
 								   charset));
