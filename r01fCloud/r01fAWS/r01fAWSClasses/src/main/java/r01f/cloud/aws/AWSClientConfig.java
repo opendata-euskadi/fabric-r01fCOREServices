@@ -21,7 +21,7 @@ public class AWSClientConfig
 	@Getter protected final AWSAccessKey _accessKey;
 	@Getter protected final AWSAccessSecret _accessSecret;
 	@Getter protected final Charset _charset;
-	@Getter private final Properties _systemProperties;	
+	@Getter private   final Properties _systemProperties;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -42,14 +42,14 @@ public class AWSClientConfig
 		_accessSecret = accessSecret;
 		_charset = charset;
 		_systemProperties = systemProperties;
-		
+
 		if (_systemProperties != null) {
 			log.warn("WARNING!!!!!! Updating System Properties " +
 					"(check: https://aws-amplify.github.io/aws-sdk-android/docs/reference/com/amazonaws/SDKGlobalConfiguration.html!");
 
 			Set<String> keys = _systemProperties.stringPropertyNames();
 			for (final String key : keys) {
-				log.warn("\t-Setting property {} to value {}!!!", 
+				log.warn("\t-Setting property {} to value {}!!!",
 						 key,
 						 _systemProperties.getProperty(key));
 	 			System.setProperty(key,_systemProperties.getProperty(key));

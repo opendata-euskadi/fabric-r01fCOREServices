@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @Accessors(prefix="_")
 public class AWSS3ObjectGetResult
-	 extends AWSS3RequestResultBase<AWSS3ObjectGetResult> 
+	 extends AWSS3RequestResultBase<AWSS3ObjectGetResult>
   implements Closeable {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
@@ -26,7 +26,7 @@ public class AWSS3ObjectGetResult
 /////////////////////////////////////////////////////////////////////////////////////////
 	public AWSS3ObjectGetResult(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {
 		super(bucket,key,
-			  AWSS3RequestedOperation.DELETE);
+			  AWSS3RequestedOperation.GET);
 	}
 	@SuppressWarnings("resource")
 	public static AWSS3ObjectDownloadResultBuilderInputStreamStep fromGetObjectResponseOn(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {
@@ -35,7 +35,7 @@ public class AWSS3ObjectGetResult
 	}
 	@NoArgsConstructor(access=AccessLevel.PRIVATE)
 	public class AWSS3ObjectDownloadResultBuilderInputStreamStep {
-		
+
 		public AWSS3ObjectGetResult returning(final ResponseInputStream<GetObjectResponse> inputStream) {
 			_inputStream = inputStream;
 			return AWSS3ObjectGetResult.this;

@@ -1,5 +1,8 @@
 package r01f.cloud.aws.s3.client.api;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
 import lombok.Getter;
@@ -25,8 +28,9 @@ public class AWSS3ClientAPI {
 // 	FIELDS
 ///////////////////////////////////////////////////////////////////////////////////////////
 	 private final S3Client _s3Client;
-	 private final Charset _charset;
-	 
+	 @SuppressWarnings("unused")
+	private final Charset _charset;
+
 	/**
 	 * BUCKETS SUB-APIs (created at the constructor)
 	 */
@@ -40,7 +44,7 @@ public class AWSS3ClientAPI {
 	 */
 	@Getter private final AWSS3ClientAPIDelegateForFiler  _forFiler;
 /////////////////////////////////////////////////////////////////////////////////////////
-//	
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	@SuppressWarnings("unused")
 	private AWSS3ClientAPI(final Region region,	// ie: Region.EU_WEST_1
@@ -52,17 +56,42 @@ public class AWSS3ClientAPI {
 	 }
 	@SuppressWarnings("null")
 	public AWSS3ClientAPI(final AWSS3ClientConfig config) {
-		// Checks if client config is not null		
-		if (config == null) Throwables.throwUnchecked(new IllegalArgumentException("In order to create instance of S3api, a client config, must be provided"));
-		
-		_s3Client = S3Client.builder()
-							 .region(config.getRegion())
-							 // Credentials: https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html
-							 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
+		// Checks if client config is not null
+		if (config == null) {
+			Throwables.throwUnchecked(new IllegalArgumentException("In order to create instance of S3api, a client config, must be provided"));
+		}
+
+		// Build config
+		if ( config.getEndPoint() == null) {
+		    // Default Behaviour Connect to  Amazon
+			_s3Client = S3Client.builder()
+								 .region(config.getRegion())
+								 // Credentials: https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html
+								 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
 									 																		  config.getAccessSecret().asString())))
-							 .build();
+								 .build();
+		} else {
+			URI endPoint = null;;
+			try {
+				endPoint = config.getEndPoint().asUrl().toURI();
+			} catch (final MalformedURLException e) {
+				e.printStackTrace();
+			} catch (final URISyntaxException e) {
+				e.printStackTrace();
+			}
+			  // Connect to another s3 provider.
+			_s3Client = S3Client.builder()
+								 .region(config.getRegion())
+								 // Credentials: https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html
+								 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
+								 	 																		  config.getAccessSecret().asString())))
+								 //end point
+								 .endpointOverride(endPoint)
+								 .build();
+		}
+
 		_charset = config.getCharset();
-		
+
 		// build every sub-api
 		_forBuckets = new AWSS3ClientAPIDelegateForBuckets(_s3Client);
 		_forObjects  = new AWSS3ClientAPIDelegateForObjects (_s3Client);

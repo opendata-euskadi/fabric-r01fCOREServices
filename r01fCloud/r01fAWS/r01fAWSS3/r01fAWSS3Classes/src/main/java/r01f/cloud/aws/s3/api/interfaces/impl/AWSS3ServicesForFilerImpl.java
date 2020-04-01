@@ -56,14 +56,14 @@ public class AWSS3ServicesForFilerImpl
 	public boolean existsFolder(final AWSS3Bucket bucket,
 								final Path path,
 								final boolean physicallyExistenceCheck)  {
-		log.warn("Check if folder exists bucket/key={}/{}", 
+		log.warn("Check if folder exists bucket/key={}/{}",
 				 bucket,path);
 		if (!path.asString().contains(AWSS3FolderPath.DELIMITER)) {
 			log.warn("... object bucket/key={}/{} was supposed to be a FOLDER but it has NO path delimiter={}",
 					 bucket,path,DELIMITER);
 			return false;
 		}
-		
+
 		//	Checks the folder has a logical existence within a hierarchy as part of the key of a file.
 		Collection<AWSS3ObjectSummary> folderContents = this.listFolderContents(bucket,path,
 																			    null,	// no filter
@@ -96,7 +96,7 @@ public class AWSS3ServicesForFilerImpl
 				log.warn("Folder NOT found at={}",
 						 path.asString());
 				return false;
-			} 
+			}
 			log.error(" Error {}",
 					  s3Ex.getMessage(),s3Ex);
 			throw s3Ex;
@@ -105,7 +105,7 @@ public class AWSS3ServicesForFilerImpl
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	COPY / MOVE / RENAME
-/////////////////////////////////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean copyFolder(final AWSS3Bucket bucket,
 							  final Path srcPath,final Path dstPath,
@@ -132,8 +132,8 @@ public class AWSS3ServicesForFilerImpl
 								final Path path)  {
 		Collection<AWSS3FolderPath> fp = AWSS3FolderPath.getAllFoldersForPath(path);
 		for (AWSS3FolderPath folder : fp ) {
-			boolean existsFolder = this.existsFolder(bucket, 
-													 Path.valueOf(folder.asString()), 
+			boolean existsFolder = this.existsFolder(bucket,
+													 Path.valueOf(folder.asString()),
 													 true);		// physicallyExistenceCheck
 			if (!existsFolder) {
 				 log.warn("folder {} does NOT exists: it'll be created",folder);
@@ -152,7 +152,7 @@ public class AWSS3ServicesForFilerImpl
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	DELETE
-/////////////////////////////////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean deleteFolder(final AWSS3Bucket bucket,
 								final Path path) {
@@ -166,7 +166,7 @@ public class AWSS3ServicesForFilerImpl
 															 final AWSS3FileFilter fileFilter,
 															 final boolean recursive) {
 		return this.listFolderContents(bucket,Path.from("/"),
-									   fileFilter, 
+									   fileFilter,
 									   recursive,
 									   false);		// do not exclude folders
 	}
@@ -174,12 +174,12 @@ public class AWSS3ServicesForFilerImpl
 	public Collection<AWSS3ObjectSummary> listFolderContents(final AWSS3Bucket bucket,
 															 final Path folderPath,
 															 final AWSS3FileFilter fileFilter,
-															 final boolean recursive,  
+															 final boolean recursive,
 															 final boolean excludeFolderTypes) {
 		AWSS3FolderPath prefix = AWSS3FolderPath.forPath(folderPath);
 		ListObjectsRequest req = _buildListObjectsRequest(bucket,prefix);
 		ListObjectsResponse listing = _s3Client.listObjects(req);
-		
+
 		Collection<AWSS3ObjectSummary> results = Lists.newArrayList();
 		// [1] - Filter folder results and its children if requested (recursive)
 		Collection<AWSS3ObjectSummary> folderResults = _listFolderContentsOfTypeFolder(listing,
@@ -192,9 +192,9 @@ public class AWSS3ServicesForFilerImpl
 			if (recursive) {
 				for (AWSS3ObjectSummary folder : folderResults ) {
 					Collection<AWSS3ObjectSummary> contents = listFolderContents(bucket,
-																				 Path.valueOf(folder.getKey().asString()), 
+																				 Path.valueOf(folder.getKey().asString()),
 																				 null,		// no file filtr
-																				 recursive,excludeFolderTypes); 
+																				 recursive,excludeFolderTypes);
 					results.addAll(contents);
 				}
 			}
@@ -242,8 +242,8 @@ public class AWSS3ServicesForFilerImpl
 	 * @return
 	 */
 	private static Collection<AWSS3ObjectSummary> _listFolderContentsOfTypeFolder(final ListObjectsResponse listing ,
-																				   final AWSS3Bucket bucket,
-																				   final AWSS3FolderPath folderPath) {
+																				  final AWSS3Bucket bucket,
+																				  final AWSS3FolderPath folderPath) {
 		// Filter folder results and its children if requested (recursive)
 		Collection<AWSS3ObjectSummary> folderResults = null;
 		if (CollectionUtils.hasData(listing.commonPrefixes())) {
@@ -273,7 +273,7 @@ public class AWSS3ServicesForFilerImpl
 																		  		 final AWSS3Bucket bucket,
 																		  		 final AWSS3FolderPath folderPath) {
 		if (!listing.hasContents()) return null;
-		
+
 		Collection<AWSS3ObjectSummary> fileResults = null;
 		List<S3Object> s3Objs = listing.contents();
 

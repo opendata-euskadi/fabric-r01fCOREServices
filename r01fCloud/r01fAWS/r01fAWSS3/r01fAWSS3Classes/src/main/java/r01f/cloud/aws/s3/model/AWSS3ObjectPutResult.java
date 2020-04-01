@@ -19,13 +19,13 @@ public class AWSS3ObjectPutResult
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Getter @Setter private AWSS3ObjectVersionID _versionId;
 	@Getter @Setter private AWSS3ObjectETag _eTag;
-	@Getter @Setter private Url _location;	
+	@Getter @Setter private Url _location;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR / BUILDER
 /////////////////////////////////////////////////////////////////////////////////////////
 	public AWSS3ObjectPutResult(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {
 		super(bucket,key,
-			  AWSS3RequestedOperation.DELETE);
+			  AWSS3RequestedOperation.PUT);
 	}
 	public static AWSS3ObjectPutResultBuilderInputStreamStep fromPutObjectResponseOn(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {
 		AWSS3ObjectPutResult res = new AWSS3ObjectPutResult(bucket,key);
@@ -33,7 +33,7 @@ public class AWSS3ObjectPutResult
 	}
 	@NoArgsConstructor(access=AccessLevel.PRIVATE)
 	public class AWSS3ObjectPutResultBuilderInputStreamStep {
-		
+
 		public AWSS3ObjectPutResult with(final PutObjectResponse putRes) {
 			if (Strings.isNOTNullOrEmpty(putRes.versionId())) _versionId = AWSS3ObjectVersionID.forId(putRes.versionId());
 			if (Strings.isNOTNullOrEmpty(putRes.eTag())) _eTag = AWSS3ObjectETag.forId(putRes.eTag());

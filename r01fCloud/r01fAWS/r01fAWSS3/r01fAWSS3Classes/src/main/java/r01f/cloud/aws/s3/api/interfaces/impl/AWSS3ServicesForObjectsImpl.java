@@ -57,13 +57,13 @@ public class AWSS3ServicesForObjectsImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override @SneakyThrows
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
-							   	 	   final InputStream streamToUpload ,
-							   	 	   final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
+							   	 	      final InputStream streamToUpload ,
+							   	 	      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
 		if (streamToUpload == null) throw new IllegalArgumentException(Strings.customized("The stream to be uploaded to bucket/key={}/{} cannot be null!!",
 																						  bucket,key));
 		log.info("PUT stream on bucket/key={}/{}",
 				 bucket,key);
-		
+
 		// User multi-part uploading
 		// [1] - Init the multipart upload
 		CreateMultipartUploadRequest multipartUploadReq = CreateMultipartUploadRequest.builder()
@@ -76,7 +76,7 @@ public class AWSS3ServicesForObjectsImpl
 		CreateMultipartUploadResponse multipartUploadRes = _s3Client.createMultipartUpload(multipartUploadReq);
 		String multipartUploadId = multipartUploadRes.uploadId();
 		log.debug("...created multipart upload request with id={}",multipartUploadId);
-		
+
 		// [2] - Upoad individual parts
 		Collection<CompletedPart> completedParts = Lists.newArrayList();
 		int currPartNum = 1;
@@ -90,7 +90,7 @@ public class AWSS3ServicesForObjectsImpl
 															   .uploadId(multipartUploadId)
 															   .partNumber(1)
 															   .build();
-			String etag = _s3Client.uploadPart(uploadPartReq, 
+			String etag = _s3Client.uploadPart(uploadPartReq,
 											   RequestBody.fromByteBuffer(ByteBuffer.wrap(buffer,0,readed)))
 								   .eTag();
 			CompletedPart completedPart = CompletedPart.builder()
@@ -98,13 +98,13 @@ public class AWSS3ServicesForObjectsImpl
 													   .eTag(etag)
 													   .build();
 			completedParts.add(completedPart);
-			
+
 			// next part
 			readed = streamToUpload.read(buffer);
 			currPartNum = currPartNum + 1;
-		} 
+		}
 		if (CollectionUtils.isNullOrEmpty(completedParts)) throw new IllegalStateException("No parts to be uploded at bucket/key=" + bucket + "/" + key + ": NO data!!");
-		
+
 		// [3] - call completeMultipartUpload operation to tell S3 to merge all uploaded
 		// 		 parts and finish the multipart operation.
 		CompletedMultipartUpload completedMultipartUpload = CompletedMultipartUpload.builder()
@@ -117,14 +117,14 @@ public class AWSS3ServicesForObjectsImpl
 																								  .multipartUpload(completedMultipartUpload)
 																								  .build();
 		CompleteMultipartUploadResponse res = _s3Client.completeMultipartUpload(completeMultipartUploadReq);
-		
+
 		// [4] - Return
 		return AWSS3ObjectPutResult.fromPutObjectResponseOn(bucket,key)
 								.with(res);
 	}
 	@Override
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket, final AWSS3ObjectKey key,final byte[] bytes,
-									   final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
+									      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
 		if (bytes == null) throw new IllegalArgumentException(Strings.customized("The bytes to be stored at bucket/key={}/{} cannot be null!!!",
 																  				 bucket,key));
 		log.info("PUT bytes at bucket/key={}/{}",
@@ -143,8 +143,8 @@ public class AWSS3ServicesForObjectsImpl
 	}
 	@Override
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
-							     	   final File file,
-							     	   final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
+							     	      final File file,
+							     	      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
 		if (file == null) throw new IllegalArgumentException(Strings.customized("The file to be stored at bucket/key={}/{} cannot be null!!!",
 																  				bucket,key));
 		log.info("PUT file at bucket/key={}/{}",
@@ -159,7 +159,7 @@ public class AWSS3ServicesForObjectsImpl
 		PutObjectResponse putRes = _s3Client.putObject(req,
 													   RequestBody.fromFile(file));
 		return AWSS3ObjectPutResult.fromPutObjectResponseOn(bucket,key)
-								.with(putRes);
+								  .with(putRes);
 	}
     @Override
 	public void putHugeObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
@@ -184,7 +184,7 @@ public class AWSS3ServicesForObjectsImpl
 								 .with(headRes);
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
-// 	GET 
+// 	GET
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override @SuppressWarnings("resource")
 	public AWSS3ObjectGetResult getObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {

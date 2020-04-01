@@ -23,13 +23,13 @@ public abstract class AWSS3RequestResultBase<SELF_TYPE extends AWSS3RequestResul
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
     public AWSS3RequestResultBase(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
-    						   final AWSS3RequestedOperation operation) {
+    						      final AWSS3RequestedOperation operation) {
     	_bucket = bucket;
     	_key = key;
     	_operation = operation;
     }
 /////////////////////////////////////////////////////////////////////////////////////////
-//	
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	@SuppressWarnings("unchecked")
 	public <R extends S3Response> SELF_TYPE copyFieldsFrom(final S3Response res) {
@@ -42,7 +42,11 @@ public abstract class AWSS3RequestResultBase<SELF_TYPE extends AWSS3RequestResul
  	@Override
 	public CharSequence debugInfo() {
 		StringBuilder outDbgInfo = new StringBuilder();
-	    outDbgInfo.append("s3 operation result for ").append(_operation).append(" at bucket/key=").append(_bucket).append("/").append(_key);
+	    outDbgInfo.append("s3 operation result for ")
+	              .append(_operation)
+	              .append(" at bucket/key=")
+	              .append(_bucket)
+	              .append("/").append(_key);
 	    return outDbgInfo.toString();
 	}
 }
