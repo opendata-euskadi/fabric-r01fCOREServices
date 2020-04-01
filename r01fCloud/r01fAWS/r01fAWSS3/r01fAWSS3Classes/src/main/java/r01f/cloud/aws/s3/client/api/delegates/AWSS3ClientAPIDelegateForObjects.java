@@ -55,7 +55,7 @@ public class AWSS3ClientAPIDelegateForObjects
 												customMetadata);
 	}
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
-							     	     final byte[] bytes) {
+							     	      final byte[] bytes) {
 		return _serviceForObjectsImpl.putObject(bucket,key,
 												bytes,
 												null);	// no metadta
@@ -69,7 +69,7 @@ public class AWSS3ClientAPIDelegateForObjects
 	@Override
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
 									      final File file,
-									       final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
+									      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
 		return _serviceForObjectsImpl.putObject(bucket,key,
 												file,
 												customMetadata);
