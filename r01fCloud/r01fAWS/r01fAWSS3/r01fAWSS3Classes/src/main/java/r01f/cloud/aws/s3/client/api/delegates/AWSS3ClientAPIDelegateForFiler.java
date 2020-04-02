@@ -64,7 +64,7 @@ public class AWSS3ClientAPIDelegateForFiler
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CREATE & DELETE
-/////////////////////////////////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public boolean createFolder(final AWSS3Bucket bucket,
 								final Path path) {
@@ -79,10 +79,10 @@ public class AWSS3ClientAPIDelegateForFiler
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //	LIST
-/////////////////////////////////////////////////////////////////////////////////////////	
+/////////////////////////////////////////////////////////////////////////////////////////
 	public Collection<AWSS3ObjectSummary> listFolderContents(final AWSS3Bucket bucket,final  Path folderPath,
-															  final AWSS3FileFilter fileFilter,
-															  final boolean recursive)  {
+															 final AWSS3FileFilter fileFilter,
+															 final boolean recursive)  {
 		return _serviceForFolderFilerImpl.listFolderContents(bucket,folderPath,
 															 fileFilter,
 															 recursive,
@@ -97,21 +97,21 @@ public class AWSS3ClientAPIDelegateForFiler
 	}
 	@Override
 	public Collection<AWSS3ObjectSummary> listFolderContents(final AWSS3Bucket bucket,final Path folderPath,
-															 final AWSS3FileFilter fileFilter, 
-															 final boolean recursive, 
+															 final AWSS3FileFilter fileFilter,
+															 final boolean recursive,
 															 final boolean excludeFolderTypes) {
 		return _serviceForFolderFilerImpl.listFolderContents(bucket,folderPath,
 															 fileFilter,
-															 recursive, 
+															 recursive,
 															 excludeFolderTypes);
 	}
 	public Collection<AWSS3ObjectSummary> listFolderContents(final AWSS3Bucket bucket,final Path folderPath,
-															 final boolean recursive, 
+															 final boolean recursive,
 															 final boolean excludeFolderTypes) {
 		return _serviceForFolderFilerImpl.listFolderContents(bucket,
 															 folderPath,
 															 null,			// no filter
-															 recursive, 
+															 recursive,
 															 excludeFolderTypes);
 	}
 	@Override

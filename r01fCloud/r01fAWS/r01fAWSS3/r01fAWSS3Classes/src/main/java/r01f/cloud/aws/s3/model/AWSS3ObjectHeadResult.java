@@ -66,9 +66,9 @@ public class AWSS3ObjectHeadResult
 										.transform(new Function <String,AWSS3ObjectMetaDataItem>() {
 														@Override
 														public AWSS3ObjectMetaDataItem apply(final String id) {
-															AWSS3ObjectMetaDataItem item = new AWSS3ObjectMetaDataItem();
-															item.setId(AWSS3ObjectMetadataItemId.forId(id));
-															item.setValue(headRes.metadata().get(id));
+															AWSS3ObjectMetaDataItem item = new AWSS3ObjectMetaDataItem(AWSS3ObjectMetadataItemId.forId(id),
+																	                                                   headRes.metadata().get(id));
+
 															return item;
 														}
 												   })

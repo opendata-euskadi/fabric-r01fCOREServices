@@ -144,8 +144,8 @@ public class AWSS3ServicesForFilerImpl
 				 RequestBody body = RequestBody.empty();	// there's NO such a thing as folder in s3: an empty object is created
 				 _s3Client.putObject(req,
 						 			 body);
-				_s3Client.putObject(req,
-									body);
+				/*_s3Client.putObject(req,
+									body);*/
 			}
 		}
 		return true;
@@ -190,7 +190,7 @@ public class AWSS3ServicesForFilerImpl
 				results.addAll(folderResults);
 			}
 			if (recursive) {
-				for (AWSS3ObjectSummary folder : folderResults ) {
+				for (final AWSS3ObjectSummary folder : folderResults ) {
 					Collection<AWSS3ObjectSummary> contents = listFolderContents(bucket,
 																				 Path.valueOf(folder.getKey().asString()),
 																				 null,		// no file filtr

@@ -43,7 +43,7 @@
 			<artifactId>r01fBaseClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
-		
+
 		<!-- ///////////////////////////////////////// -->
 		<!--  Base Cloud & Core                        -->
 		<!-- ///////////////////////////////////////// -->
@@ -88,6 +88,10 @@
 	        	</exclusion>
       		</exclusions>
 		</dependency>
+		<dependency>
+		     <groupId>software.amazon.awssdk</groupId>
+		     <artifactId>apache-client</artifactId>
+    	</dependency>
 	</dependencies>
 
 <!-- ====================================================================== -->

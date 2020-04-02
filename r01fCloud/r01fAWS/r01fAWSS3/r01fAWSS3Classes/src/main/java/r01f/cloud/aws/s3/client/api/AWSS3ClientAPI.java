@@ -7,27 +7,35 @@ import java.nio.charset.Charset;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.aws.AWSAccessKey;
 import r01f.cloud.aws.AWSAccessSecret;
 import r01f.cloud.aws.s3.client.api.delegates.AWSS3ClientAPIDelegateForBuckets;
 import r01f.cloud.aws.s3.client.api.delegates.AWSS3ClientAPIDelegateForFiler;
 import r01f.cloud.aws.s3.client.api.delegates.AWSS3ClientAPIDelegateForObjects;
 import r01f.exceptions.Throwables;
+import r01f.util.types.Strings;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.http.SdkHttpClient;
+import software.amazon.awssdk.http.apache.ApacheHttpClient;
+import software.amazon.awssdk.http.apache.ProxyConfiguration;
+import software.amazon.awssdk.http.apache.ProxyConfiguration.Builder;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3ClientBuilder;
 
 
 /**
  * Base type for every API implementation of S3API
  */
+@Slf4j
 @Accessors(prefix="_")
 public class AWSS3ClientAPI {
 ///////////////////////////////////////////////////////////////////////////////////////////
 // 	FIELDS
 ///////////////////////////////////////////////////////////////////////////////////////////
-	 private final S3Client _s3Client;
+    private final S3Client _s3Client;
 	 @SuppressWarnings("unused")
 	private final Charset _charset;
 
@@ -56,42 +64,13 @@ public class AWSS3ClientAPI {
 	 }
 	@SuppressWarnings("null")
 	public AWSS3ClientAPI(final AWSS3ClientConfig config) {
-		// Checks if client config is not null
+
+		// Checks if client config is not null AmazonS3Client
 		if (config == null) {
 			Throwables.throwUnchecked(new IllegalArgumentException("In order to create instance of S3api, a client config, must be provided"));
 		}
-
-		// Build config
-		if ( config.getEndPoint() == null) {
-		    // Default Behaviour Connect to  Amazon
-			_s3Client = S3Client.builder()
-								 .region(config.getRegion())
-								 // Credentials: https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html
-								 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
-									 																		  config.getAccessSecret().asString())))
-								 .build();
-		} else {
-			URI endPoint = null;;
-			try {
-				endPoint = config.getEndPoint().asUrl().toURI();
-			} catch (final MalformedURLException e) {
-				e.printStackTrace();
-			} catch (final URISyntaxException e) {
-				e.printStackTrace();
-			}
-			  // Connect to another s3 provider.
-			_s3Client = S3Client.builder()
-								 .region(config.getRegion())
-								 // Credentials: https://docs.aws.amazon.com/sdk-for-java/v2/developer-guide/credentials.html
-								 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
-								 	 																		  config.getAccessSecret().asString())))
-								 //end point
-								 .endpointOverride(endPoint)
-								 .build();
-		}
-
+		_s3Client = _buildS3Client(config);
 		_charset = config.getCharset();
-
 		// build every sub-api
 		_forBuckets = new AWSS3ClientAPIDelegateForBuckets(_s3Client);
 		_forObjects  = new AWSS3ClientAPIDelegateForObjects (_s3Client);
@@ -108,5 +87,58 @@ public class AWSS3ClientAPI {
 	}
 	public AWSS3ClientAPIDelegateForFiler forFiler() {
 		return _forFiler;
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+// PROTECTED METHODS
+/////////////////////////////////////////////////////////////////////////////////////////
+	@SuppressWarnings("resource")
+	protected static S3Client _buildS3Client(final AWSS3ClientConfig config) {
+		// Checks if client config is not null AmazonS3Client
+		if (config == null) {
+			Throwables.throwUnchecked(new IllegalArgumentException("In order to create instance of S3api, a client config, must be provided"));
+		}
+		// Minimun data for builder ( credentials & Amazon Enpoint )
+		 //..but don't call to build before checking the rest of parameters.
+		S3ClientBuilder clientBuilder = S3Client.builder()
+			                                   	 .region(config.getRegion())
+		                                         .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
+				                                                                                                                  config.getAccessSecret().asString())));
+
+		// ...next check endpoint (use the just created clientbuilder)
+		if ( config.getEndPoint() != null) {
+			URI endPoint = null;
+			try {
+				endPoint = config.getEndPoint().asUrl().toURI();
+			} catch (final MalformedURLException |  URISyntaxException e) {
+				Throwables.throwUnchecked(new IllegalArgumentException(e.getLocalizedMessage()));
+			}
+			clientBuilder = clientBuilder.endpointOverride(endPoint);
+		}
+		// ...next check proxysettings (use the just created clientbuilder)
+		if ( config.getProxySettings() != null
+				&& config.getProxySettings().isEnabled() ){
+			Builder proxyBuilder = ProxyConfiguration.builder()
+					                                 .useSystemPropertyValues(false)
+			                                         .endpoint(URI.create(Strings.customized("{}:{}",
+			                                        		                                 config.getProxySettings().getProxyHost(),
+			                		                                                         config.getProxySettings().getProxyPort())));
+            if (config.getProxySettings().getUser() != null ) {
+            	proxyBuilder = proxyBuilder.username(config.getProxySettings().getUser().asString());
+            }
+            if (config.getProxySettings().getPassword() != null ) {
+            	proxyBuilder = proxyBuilder.password(config.getProxySettings().getPassword().asString());
+            }
+            log.warn(" Add proxy {}",
+            		                config.getProxySettings().getProxyHost());
+
+
+            clientBuilder = clientBuilder.httpClient(ApacheHttpClient.builder()
+            																.proxyConfiguration(proxyBuilder.build())
+												                      .build());
+
+			System.out.println(" the proxy......");
+		}
+		// now, yes...call to the builder build.
+		return clientBuilder.build();
 	}
 }
