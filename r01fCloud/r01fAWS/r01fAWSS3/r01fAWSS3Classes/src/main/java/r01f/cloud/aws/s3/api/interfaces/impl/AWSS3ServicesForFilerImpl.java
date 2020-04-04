@@ -270,9 +270,11 @@ public class AWSS3ServicesForFilerImpl
 	 * @return
 	 */
 	private static Collection<AWSS3ObjectSummary> _listFolderContentsOfTypeFile(final ListObjectsResponse listing ,
-																		  		 final AWSS3Bucket bucket,
-																		  		 final AWSS3FolderPath folderPath) {
-		if (!listing.hasContents()) return null;
+																		  		final AWSS3Bucket bucket,
+																		  	    final AWSS3FolderPath folderPath) {
+		if (!listing.hasContents()) {
+			return null;
+		}
 
 		Collection<AWSS3ObjectSummary> fileResults = null;
 		List<S3Object> s3Objs = listing.contents();
@@ -286,6 +288,8 @@ public class AWSS3ServicesForFilerImpl
 																	return s3Obj.key().equalsIgnoreCase(folderPath.asString());
 																}
 															});
+
+		System.out.println( " to remove List :" + toRemove.size());
 		// ..and then, remove from summary ( "toRemove" is a list with just one element)
 		s3Objs.removeAll(toRemove);
 

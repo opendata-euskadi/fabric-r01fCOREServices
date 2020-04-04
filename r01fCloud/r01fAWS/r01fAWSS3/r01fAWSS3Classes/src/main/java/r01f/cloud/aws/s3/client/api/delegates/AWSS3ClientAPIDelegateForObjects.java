@@ -9,9 +9,11 @@ import r01f.cloud.aws.s3.api.interfaces.impl.AWSS3ServicesForObjectsImpl;
 import r01f.cloud.aws.s3.model.AWSS3Bucket;
 import r01f.cloud.aws.s3.model.AWSS3ObjectKey;
 import r01f.cloud.aws.s3.model.AWSS3ObjectDeleteResult;
+import r01f.cloud.aws.s3.model.AWSS3ObjectGetRequest;
 import r01f.cloud.aws.s3.model.AWSS3ObjectGetResult;
 import r01f.cloud.aws.s3.model.AWSS3ObjectHeadResult;
 import r01f.cloud.aws.s3.model.AWSS3ObjectMetaDataItem;
+import r01f.cloud.aws.s3.model.AWSS3ObjectPutRequest;
 import r01f.cloud.aws.s3.model.AWSS3ObjectPutResult;
 import r01f.cloud.aws.s3.model.AWSS3OperationSettings;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -32,6 +34,10 @@ public class AWSS3ClientAPIDelegateForObjects
 ///////////////////////////////////////////////////////////////////////////////////////////
 //	PUT
 ///////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public AWSS3ObjectPutResult putObject(final AWSS3ObjectPutRequest putRequest) {
+		return _serviceForObjectsImpl.putObject(putRequest);
+	}
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
 									      final InputStream stream) {
 		return _serviceForObjectsImpl.putObject(bucket,key,
@@ -102,6 +108,11 @@ public class AWSS3ClientAPIDelegateForObjects
 /////////////////////////////////////////////////////////////////////////////////////////
 //	GET
 /////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public AWSS3ObjectGetResult getObject(final AWSS3ObjectGetRequest getRequest) {
+		return _serviceForObjectsImpl.getObject(getRequest);
+	}
+
 	@Override
 	public AWSS3ObjectGetResult getObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {
 		return _serviceForObjectsImpl.getObject(bucket,key);

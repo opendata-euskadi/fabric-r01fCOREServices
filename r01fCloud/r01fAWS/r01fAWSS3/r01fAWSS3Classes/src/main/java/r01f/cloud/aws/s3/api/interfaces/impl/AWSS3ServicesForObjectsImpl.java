@@ -15,9 +15,11 @@ import r01f.cloud.aws.s3.api.interfaces.AWSS3ServicesForObjects;
 import r01f.cloud.aws.s3.model.AWSS3Bucket;
 import r01f.cloud.aws.s3.model.AWSS3ObjectKey;
 import r01f.cloud.aws.s3.model.AWSS3ObjectDeleteResult;
+import r01f.cloud.aws.s3.model.AWSS3ObjectGetRequest;
 import r01f.cloud.aws.s3.model.AWSS3ObjectGetResult;
 import r01f.cloud.aws.s3.model.AWSS3ObjectHeadResult;
 import r01f.cloud.aws.s3.model.AWSS3ObjectMetaDataItem;
+import r01f.cloud.aws.s3.model.AWSS3ObjectPutRequest;
 import r01f.cloud.aws.s3.model.AWSS3ObjectPutResult;
 import r01f.cloud.aws.s3.model.AWSS3OperationSettings;
 import r01f.util.types.Strings;
@@ -55,6 +57,13 @@ public class AWSS3ServicesForObjectsImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 // PUT
 /////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public AWSS3ObjectPutResult putObject(final AWSS3ObjectPutRequest putRequest) {
+		return putObject(putRequest.getBucket(), putRequest.getKey(),
+				         putRequest.getStreamToUpload(),
+				         putRequest.getCustomMetadata());
+	}
+
 	@Override @SneakyThrows
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
 							   	 	      final InputStream streamToUpload ,
@@ -186,6 +195,10 @@ public class AWSS3ServicesForObjectsImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 // 	GET
 /////////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	public AWSS3ObjectGetResult getObject(final AWSS3ObjectGetRequest getRequest) {
+		return getObject(getRequest.getBucket(), getRequest.getKey());
+	}
 	@Override @SuppressWarnings("resource")
 	public AWSS3ObjectGetResult getObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key) {
 		log.info("GET object at bucket/key={}/{}",

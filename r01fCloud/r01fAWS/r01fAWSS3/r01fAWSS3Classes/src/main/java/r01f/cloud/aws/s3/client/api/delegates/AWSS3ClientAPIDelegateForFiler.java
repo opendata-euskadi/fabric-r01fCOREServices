@@ -3,7 +3,7 @@ package r01f.cloud.aws.s3.client.api.delegates;
 import java.util.Collection;
 
 import r01f.cloud.aws.s3.api.interfaces.AWSS3ServicesForFiler;
-import r01f.cloud.aws.s3.api.interfaces.impl.AWSS3ServicesForFilerImpl;
+import r01f.cloud.aws.s3.api.interfaces.impl.AWSS3ServicesForFilerImplLegacy;
 import r01f.cloud.aws.s3.model.AWSS3Bucket;
 import r01f.cloud.aws.s3.model.AWSS3FileFilter;
 import r01f.cloud.aws.s3.model.AWSS3ObjectSummary;
@@ -16,13 +16,13 @@ public class AWSS3ClientAPIDelegateForFiler
 ///////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 ///////////////////////////////////////////////////////////////////////////////////////////
-	protected final AWSS3ServicesForFilerImpl _serviceForFolderFilerImpl;
+	protected final AWSS3ServicesForFilerImplLegacy _serviceForFolderFilerImpl;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTOR
 ///////////////////////////////////////////////////////////////////////////////////////////
 	public AWSS3ClientAPIDelegateForFiler(final S3Client s3Client) {
-		_serviceForFolderFilerImpl = new  AWSS3ServicesForFilerImpl(s3Client);
+		_serviceForFolderFilerImpl = new  AWSS3ServicesForFilerImplLegacy(s3Client);
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////
 //	EXISTENCE
