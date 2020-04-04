@@ -11,7 +11,8 @@ import software.amazon.awssdk.services.s3.model.S3Response;
  */
 @Accessors(prefix="_")
 public abstract class AWSS3RequestResultBase<SELF_TYPE extends AWSS3RequestResultBase<SELF_TYPE>>
-  		   implements Debuggable {
+     extends AWSS3RequestBase<SELF_TYPE>
+	implements Debuggable {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -24,8 +25,7 @@ public abstract class AWSS3RequestResultBase<SELF_TYPE extends AWSS3RequestResul
 /////////////////////////////////////////////////////////////////////////////////////////
     public AWSS3RequestResultBase(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
     						      final AWSS3RequestedOperation operation) {
-    	_bucket = bucket;
-    	_key = key;
+    	super(bucket,key);
     	_operation = operation;
     }
 /////////////////////////////////////////////////////////////////////////////////////////
