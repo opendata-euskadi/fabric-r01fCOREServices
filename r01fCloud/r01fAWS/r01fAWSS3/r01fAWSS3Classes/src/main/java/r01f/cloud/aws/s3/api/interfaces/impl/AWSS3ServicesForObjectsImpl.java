@@ -210,7 +210,7 @@ public class AWSS3ServicesForObjectsImpl
 		ResponseInputStream<GetObjectResponse> resIs = _s3Client.getObject(req,
 																		   ResponseTransformer.toInputStream());
 		return AWSS3ObjectGetResult.fromGetObjectResponseOn(bucket,key)
-								.returning(resIs);
+								   .returning(resIs);
 	}
 	@Override
 	public void getHugeObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,

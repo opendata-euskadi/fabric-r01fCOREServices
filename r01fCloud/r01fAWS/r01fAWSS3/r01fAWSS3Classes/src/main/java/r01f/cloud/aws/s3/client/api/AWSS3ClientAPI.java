@@ -111,33 +111,30 @@ public class AWSS3ClientAPI {
 			} catch (final MalformedURLException |  URISyntaxException e) {
 				Throwables.throwUnchecked(new IllegalArgumentException(e.getLocalizedMessage()));
 			}
-			clientBuilder = clientBuilder.endpointOverride(endPoint);
+			clientBuilder.endpointOverride(endPoint);
 		}
 		// ...next check proxysettings (use the just created clientbuilder)
 		if ( config.getProxySettings() != null
 				&& config.getProxySettings().isEnabled() ){
 			Builder proxyBuilder = ProxyConfiguration.builder()
-					                                 .useSystemPropertyValues(false)
-			                                         .endpoint(URI.create(Strings.customized("{}:{}",
+													 .useSystemPropertyValues(false)
+			                                         .endpoint(URI.create(Strings.customized("http://{}:{}",
 			                                        		                                 config.getProxySettings().getProxyHost(),
 			                		                                                         config.getProxySettings().getProxyPort())));
             if (config.getProxySettings().getUser() != null ) {
-            	proxyBuilder = proxyBuilder.username(config.getProxySettings().getUser().asString());
+            	proxyBuilder.username(config.getProxySettings().getUser().asString());
             }
             if (config.getProxySettings().getPassword() != null ) {
-            	proxyBuilder = proxyBuilder.password(config.getProxySettings().getPassword().asString());
+            	 proxyBuilder.password(config.getProxySettings().getPassword().asString());
             }
-            log.warn(" Add proxy {}",
-            		                config.getProxySettings().getProxyHost());
-
-
-            clientBuilder = clientBuilder.httpClient(ApacheHttpClient.builder()
-            																.proxyConfiguration(proxyBuilder.build())
-												                      .build());
-
-			System.out.println(" the proxy......");
+            ProxyConfiguration proxyConfig = proxyBuilder.build();
+            log.warn(" \n \n Add proxy {}",proxyConfig);
+            clientBuilder = clientBuilder.httpClient( ApacheHttpClient.builder()
+					                                                   .proxyConfiguration(proxyConfig)
+					                                                 .build());
 		}
 		// now, yes...call to the builder build.
 		return clientBuilder.build();
 	}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
