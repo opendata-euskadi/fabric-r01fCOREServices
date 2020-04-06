@@ -21,6 +21,6 @@
 	<modules>
 		<module>r01fAWSS3Classes</module>
 		<module>r01fAWSS3GuiceClasses</module>
-    <module>r01fAWSS3GlacierClasses</module>
+        <module>r01fAWSS3GlacierClasses</module>
   </modules>
 </project>
