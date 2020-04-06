@@ -289,9 +289,10 @@ public class AWSS3ServicesForFilerImpl
 																}
 															});
 
-		System.out.println( " to remove List :" + toRemove.size());
 		// ..and then, remove from summary ( "toRemove" is a list with just one element)
-		s3Objs.removeAll(toRemove);
+		if (CollectionUtils.hasData(toRemove)) {
+			s3Objs.removeAll(toRemove);
+		}
 
 		fileResults = FluentIterable.from(s3Objs)
 							.transform(new Function<S3Object,AWSS3ObjectSummary>() {
