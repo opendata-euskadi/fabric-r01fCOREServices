@@ -115,7 +115,7 @@ public class AWSS3ClientAPI {
 		}
 		// ...next check proxysettings (use the just created clientbuilder)
 		if ( config.getProxySettings() != null
-				&& config.getProxySettings().isEnabled() ){
+				&& config.getProxySettings().isEnabled() ) {
 			Builder proxyBuilder = ProxyConfiguration.builder()
 													 .useSystemPropertyValues(false)
 			                                         .endpoint(URI.create(Strings.customized("http://{}:{}",
