@@ -6,6 +6,11 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -20,6 +25,7 @@ import r01f.util.types.Strings;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.http.SdkHttpConfigurationOption;
+import software.amazon.awssdk.http.TlsTrustManagersProvider;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.http.apache.ProxyConfiguration;
 import software.amazon.awssdk.regions.Region;
@@ -134,7 +140,17 @@ public class AWSS3ClientAPI {
 			} else {
 				System.out.println(" cert checking is not disabled...");
 			}
-			httpClientBuilder.buildWithDefaults(attributeMapBuilder.build());
+			TlsTrustManagersProvider trust = new TlsTrustManagersProvider() {
+				@Override
+				public TrustManager[] trustManagers() {
+
+					return trustAllTrustManager();
+				}};
+			httpClientBuilder.tlsTrustManagersProvider(trust);
+			//httpClientBuilder.buildWithDefaults(attributeMapBuilder.build());
+
+
+
 			// Check proxySettings.
 			if ( config.getHttpSettings().getProxySettings() != null
 					&& config.getHttpSettings().getProxySettings().isEnabled() ) {
@@ -156,10 +172,33 @@ public class AWSS3ClientAPI {
 			}
 		    clientBuilder = clientBuilder.httpClient(httpClientBuilder.build());
 		}
+
+		S3Client client = clientBuilder.build();
 		// now, yes...call to the builder build.
-		return clientBuilder.build();
+
+		return client;
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 private static TrustManager[] trustAllTrustManager() {
+         return new TrustManager[] {
+             new X509TrustManager() {
+                 @Override
+                 public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                     log.debug("Accepting a client certificate: " + x509Certificates[0].getSubjectDN());
+                 }
+
+                 @Override
+                 public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+                     log.debug("Accepting a client certificate: " + x509Certificates[0].getSubjectDN());
+                 }
+
+                 @Override
+                 public X509Certificate[] getAcceptedIssuers() {
+                     return new X509Certificate[0];
+                 }
+             }
+         };
+     }
 
 }
