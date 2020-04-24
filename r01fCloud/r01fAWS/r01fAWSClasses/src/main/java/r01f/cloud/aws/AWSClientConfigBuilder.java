@@ -50,12 +50,18 @@ public abstract class AWSClientConfigBuilder {
 																}
 														  },
 											  			  AWSAccessSecret.forId("--SECRET NOT FOUND--"));
-		if (key == null || secret == null) throw new IllegalStateException("AWS SES key/secret pair is mandatory!");
 
+		////////// HttpSettings
+		AWSClientHttpSettings httpSettings = AWSClientHttpSettingsBuilder.fromXMLProperties(props, propsRootNode, awsService);
+
+		if (key == null || secret == null) {
+			throw new IllegalStateException("AWS SES key/secret pair is mandatory!");
+		}
 		// return
 		return new AWSClientConfig(region,
-									  key,secret,
-									  charset);
+							       key,secret,
+							       charset,
+								   httpSettings);
 	}
 	public static AWSClientConfigBuilderCredentialsStep region(final Region region) {
 		return new AWSClientConfigBuilder() {/* nothing */}

@@ -9,8 +9,8 @@ import lombok.experimental.Accessors;
 import r01f.cloud.aws.AWSAccessKey;
 import r01f.cloud.aws.AWSAccessSecret;
 import r01f.cloud.aws.AWSClientConfig;
+import r01f.cloud.aws.AWSClientHttpSettings;
 import r01f.debug.Debuggable;
-import r01f.httpclient.HttpClientProxySettings;
 import r01f.types.url.Url;
 import r01f.util.types.Strings;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
@@ -24,7 +24,6 @@ public class AWSS3ClientConfig
 //CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
     @Getter @Setter private Url _endPoint;
-    @Getter @Setter private HttpClientProxySettings _proxySettings;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -40,20 +39,22 @@ public class AWSS3ClientConfig
 		this(region,
 			 accessKey,accessSecret,
 			 charset,
-			 null);		// no system properties
+			 null,  // no http settings
+			 null);	// no system properties
 	}
 	public AWSS3ClientConfig(final Region region,
 							 final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
 							 final Charset charset,
+							 final AWSClientHttpSettings httpSettings,
 							 final Properties systemProps) {
 		super(region,
 			  accessKey,accessSecret,
-			  charset,systemProps);
+			  charset,httpSettings,systemProps);
 	}
 	public AWSS3ClientConfig(final AWSClientConfig cfg) {
 		super(cfg.getRegion(),
 			  cfg.getAccessKey(),cfg.getAccessSecret(),
-			  cfg.getCharset());
+			  cfg.getCharset(),cfg.getHttpSettings());
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -73,8 +74,11 @@ public class AWSS3ClientConfig
 	    	                                                                	_accessSecret  != null ? _accessSecret : " is null!" ));
 	    outDbgInfo.append("\n").append(Strings.customized("accessKey {}",
 	    												  _accessKey  != null ? _accessKey : " is null!" ));
-	    outDbgInfo.append("\n").append(Strings.customized("proxyEnabled  {}",
-	    												  _proxySettings  != null && _proxySettings.isEnabled() ? " yes!" : " no!" ));
+	    if (_httpSettings != null) {
+	    	outDbgInfo.append("\n").append(Strings.customized("disableCertChecking  {}",_httpSettings.isDisableCertChecking()));
+		    outDbgInfo.append("\n").append(Strings.customized("proxyEnabled  {}",
+		    		_httpSettings.getProxySettings()  != null && _httpSettings.getProxySettings().isEnabled()  ? " yes!" : " no!" ));
+	    }
 		outDbgInfo.append(" } \n")	;
 	    return outDbgInfo.toString();
 	}

@@ -21,6 +21,7 @@ public class AWSClientConfig
 	@Getter protected final AWSAccessKey _accessKey;
 	@Getter protected final AWSAccessSecret _accessSecret;
 	@Getter protected final Charset _charset;
+	@Getter protected final AWSClientHttpSettings _httpSettings;
 	@Getter private   final Properties _systemProperties;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
@@ -31,16 +32,31 @@ public class AWSClientConfig
 		this(region,
 			 accessKey,accessSecret,
 			 charset,
-			 null);		// no system properties
+			 null,   // no http settingd
+			 null);	// no system properties
 	}
+
 	public AWSClientConfig(final Region region,
 						   final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
 						   final Charset charset,
+						   final AWSClientHttpSettings httpSettings) {
+		this(region,
+			 accessKey,accessSecret,
+	     	 charset,
+		     httpSettings,
+		     null);	// no system properties
+	}
+
+	public AWSClientConfig(final Region region,
+						   final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
+						   final Charset charset,
+						   final AWSClientHttpSettings httpSettings,
 						   final Properties systemProperties) {
 		_region = region;
 		_accessKey = accessKey;
 		_accessSecret = accessSecret;
 		_charset = charset;
+		_httpSettings = httpSettings;
 		_systemProperties = systemProperties;
 
 		if (_systemProperties != null) {

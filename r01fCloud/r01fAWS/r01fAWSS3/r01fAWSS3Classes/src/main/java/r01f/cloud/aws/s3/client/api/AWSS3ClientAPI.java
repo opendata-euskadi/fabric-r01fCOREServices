@@ -1,5 +1,7 @@
 package r01f.cloud.aws.s3.client.api;
 
+import static software.amazon.awssdk.http.SdkHttpConfigurationOption.TRUST_ALL_CERTIFICATES;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,9 +19,9 @@ import r01f.exceptions.Throwables;
 import r01f.util.types.Strings;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.http.SdkHttpConfigurationOption;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.http.apache.ProxyConfiguration;
-import software.amazon.awssdk.http.apache.ProxyConfiguration.Builder;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
@@ -113,28 +115,44 @@ public class AWSS3ClientAPI {
 			}
 			clientBuilder.endpointOverride(endPoint);
 		}
-		// ...next check proxysettings (use the just created clientbuilder)
-		if ( config.getProxySettings() != null
-				&& config.getProxySettings().isEnabled() ) {
-			Builder proxyBuilder = ProxyConfiguration.builder()
-													 .useSystemPropertyValues(false)
-			                                         .endpoint(URI.create(Strings.customized("http://{}:{}",
-			                                        		                                 config.getProxySettings().getProxyHost(),
-			                		                                                         config.getProxySettings().getProxyPort())));
-            if (config.getProxySettings().getUser() != null ) {
-            	proxyBuilder.username(config.getProxySettings().getUser().asString());
-            }
-            if (config.getProxySettings().getPassword() != null ) {
-            	 proxyBuilder.password(config.getProxySettings().getPassword().asString());
-            }
-            ProxyConfiguration proxyConfig = proxyBuilder.build();
-            log.warn(" \n \n Add proxy {}",proxyConfig);
-            clientBuilder = clientBuilder.httpClient( ApacheHttpClient.builder()
-					                                                   .proxyConfiguration(proxyConfig)
-					                                                 .build());
+
+		// ... custom http settings
+		if ( config.getHttpSettings() != null ) {
+			ApacheHttpClient.Builder httpClientBuilder = ApacheHttpClient.builder();
+			// Set attributes, from GLOBAL_HTTP_DEFAULTS.
+			software.amazon.awssdk.utils.AttributeMap.Builder attributeMapBuilder =
+					SdkHttpConfigurationOption.GLOBAL_HTTP_DEFAULTS.toBuilder(); // See https://github.com/aws/aws-sdk-java-v2/blob/master/http-clients/apache-client/src/main/java/software/amazon/awssdk/http/apache/ApacheHttpClient.java
+			//Disable SSLCertChecking
+			if (config.getHttpSettings().isDisableCertChecking()) {
+				log.warn(" ...Disabling cert checking");
+				attributeMapBuilder.put(TRUST_ALL_CERTIFICATES, Boolean.TRUE);
+			}
+			httpClientBuilder.buildWithDefaults(attributeMapBuilder.build());
+			// Check proxySettings.
+			if ( config.getHttpSettings().getProxySettings() != null
+					&& config.getHttpSettings().getProxySettings().isEnabled() ) {
+				software.amazon.awssdk.http.apache.ProxyConfiguration.Builder proxyBuilder =
+						ProxyConfiguration.builder()
+										 .useSystemPropertyValues(false)
+                                         .endpoint(URI.create(Strings.customized("http://{}:{}",
+                                        		                                 config.getHttpSettings().getProxySettings().getProxyHost(),
+                		                                                         config.getHttpSettings().getProxySettings().getProxyPort())));
+	            if (config.getHttpSettings().getProxySettings().getUser() != null ) {
+	            	proxyBuilder.username(config.getHttpSettings().getProxySettings().getUser().asString());
+	            }
+	            if (config.getHttpSettings().getProxySettings().getPassword() != null ) {
+	            	 proxyBuilder.password(config.getHttpSettings().getProxySettings().getPassword().asString());
+	            }
+	            ProxyConfiguration proxyConfig = proxyBuilder.build();
+	            log.warn(" \n \n Add proxy {}",proxyConfig);
+	            httpClientBuilder.proxyConfiguration(proxyConfig);
+			}
+		    clientBuilder = clientBuilder.httpClient(httpClientBuilder.build());
 		}
 		// now, yes...call to the builder build.
 		return clientBuilder.build();
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }
