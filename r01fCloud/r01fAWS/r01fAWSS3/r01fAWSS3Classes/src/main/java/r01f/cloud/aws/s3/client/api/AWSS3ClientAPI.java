@@ -94,10 +94,14 @@ public class AWSS3ClientAPI {
 /////////////////////////////////////////////////////////////////////////////////////////
 	@SuppressWarnings("resource")
 	protected static S3Client _buildS3Client(final AWSS3ClientConfig config) {
+
 		// Checks if client config is not null AmazonS3Client
 		if (config == null) {
 			Throwables.throwUnchecked(new IllegalArgumentException("In order to create instance of S3api, a client config, must be provided"));
 		}
+
+		System.out.println("....building s3clientConfig :" + config.debugInfo());
+
 		// Minimun data for builder ( credentials & Amazon Enpoint )
 		 //..but don't call to build before checking the rest of parameters.
 		S3ClientBuilder clientBuilder = S3Client.builder()
@@ -125,7 +129,10 @@ public class AWSS3ClientAPI {
 			//Disable SSLCertChecking
 			if (config.getHttpSettings().isDisableCertChecking()) {
 				log.warn(" ...Disabling cert checking");
+				System.out.println(" disabling cert checking");
 				attributeMapBuilder.put(TRUST_ALL_CERTIFICATES, Boolean.TRUE);
+			} else {
+				System.out.println(" cert checking is not disabled...");
 			}
 			httpClientBuilder.buildWithDefaults(attributeMapBuilder.build());
 			// Check proxySettings.
