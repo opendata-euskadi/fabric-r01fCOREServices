@@ -106,7 +106,6 @@ public class AWSS3ClientAPI {
 			Throwables.throwUnchecked(new IllegalArgumentException("In order to create instance of S3api, a client config, must be provided"));
 		}
 
-		System.out.println("....building s3clientConfig :" + config.debugInfo());
 
 		// Minimun data for builder ( credentials & Amazon Enpoint )
 		 //..but don't call to build before checking the rest of parameters.
@@ -135,21 +134,10 @@ public class AWSS3ClientAPI {
 			//Disable SSLCertChecking
 			if (config.getHttpSettings().isDisableCertChecking()) {
 				log.warn(" ...Disabling cert checking");
-				System.out.println(" disabling cert checking");
 				attributeMapBuilder.put(TRUST_ALL_CERTIFICATES, Boolean.TRUE);
-			} else {
-				System.out.println(" cert checking is not disabled...");
+				httpClientBuilder.tlsTrustManagersProvider(_trustAllTrustManager());
 			}
-			TlsTrustManagersProvider trust = new TlsTrustManagersProvider() {
-				@Override
-				public TrustManager[] trustManagers() {
-
-					return trustAllTrustManager();
-				}};
-			httpClientBuilder.tlsTrustManagersProvider(trust);
 			//httpClientBuilder.buildWithDefaults(attributeMapBuilder.build());
-
-
 
 			// Check proxySettings.
 			if ( config.getHttpSettings().getProxySettings() != null
@@ -178,27 +166,30 @@ public class AWSS3ClientAPI {
 
 		return client;
 	}
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	 private static TrustManager[] trustAllTrustManager() {
-         return new TrustManager[] {
-             new X509TrustManager() {
-                 @Override
-                 public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                     log.debug("Accepting a client certificate: " + x509Certificates[0].getSubjectDN());
-                 }
-
-                 @Override
-                 public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
-                     log.debug("Accepting a client certificate: " + x509Certificates[0].getSubjectDN());
-                 }
-
-                 @Override
-                 public X509Certificate[] getAcceptedIssuers() {
-                     return new X509Certificate[0];
-                 }
-             }
-         };
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PRIVATE METHODS
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 private static TlsTrustManagersProvider _trustAllTrustManager() {
+	     return  new TlsTrustManagersProvider() {
+						@Override
+						public TrustManager[] trustManagers() {
+							return  new TrustManager[] {
+									 new X509TrustManager() {
+										  @Override
+							                 public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s) throws CertificateException {
+							                     log.warn("Accepting a client certificate: " , x509Certificates[0].getSubjectDN());
+							                 }
+							                 @Override
+							                 public void checkServerTrusted(final X509Certificate[]  x509Certificates, final String s) throws CertificateException {
+							                     log.warn("Accepting a client certificate: {}" ,x509Certificates[0].getSubjectDN());
+							                 }
+							                 @Override
+							                 public X509Certificate[] getAcceptedIssuers() {
+							                     return new X509Certificate[0];
+							                 }
+							          }
+							};
+						}};
      }
 
 }

@@ -20,14 +20,11 @@ public abstract class AWSClientHttpSettingsBuilder {
 														        final String propsRootNode,final AWSService awsService) {
 		// No HttpSettings.
 		if (  ! props.propertyAt(propsRootNode + "/aws/" + AWSService.S3.nameLowerCase() + "/httpSettings").exist() ) {
-			System.out.println(" No Settings Version");
 			return null;
 		}
 		// No ProxySettigs.
 		boolean disableCertChecking = props.propertyAt(propsRootNode + "/aws/" + AWSService.S3.nameLowerCase() + "/httpSettings/@disableCertChecking").asBoolean(false);
-		System.out.println(" Disable Cert Checking:" + disableCertChecking);
 		if ( ! props.propertyAt(propsRootNode + "/aws/" + AWSService.S3.nameLowerCase() + "/httpSettings/proxySettings").exist() ) {
-			System.out.println(" No Proxy Settings");
 			return new AWSClientHttpSettings(disableCertChecking,null);
 		}
 		 //////////  ProxySettings
@@ -62,7 +59,6 @@ public abstract class AWSClientHttpSettingsBuilder {
 
 		 HttpClientProxySettings proxye = new HttpClientProxySettings(host,port, userCode, password,enabled);
 		 log.warn( "Proxy Info {}",proxye.debugInfo());
-		// return
 		 return new AWSClientHttpSettings(disableCertChecking,proxye);
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
