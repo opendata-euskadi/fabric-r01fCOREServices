@@ -29,11 +29,12 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
 @Slf4j
+@Deprecated
 public class AWSS3ServicesForFilerImplLegacy
 	extends AWSS3ServicesBaseImpl
   implements AWSS3ServicesForFiler {
 /////////////////////////////////////////////////////////////////////////////////////////
-//  CONSTRUCTOR
+// Includes to see [legacy version, based on aw3.v1...remove as soon as posible.] CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	public AWSS3ServicesForFilerImplLegacy(final S3Client s3Client)  {
 		super(s3Client);
