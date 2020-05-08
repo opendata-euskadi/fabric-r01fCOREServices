@@ -1,16 +1,10 @@
 package r01f.cloud.aws.s3.services;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-import com.google.common.collect.Lists;
 import com.google.inject.Binder;
-import com.google.inject.ConfigurationException;
 import com.google.inject.Module;
-import com.google.inject.spi.Message;
 
-import r01f.cloud.aws.s3.client.api.S3ClientAPI;
-import r01f.cloud.aws.s3.client.api.S3ClientConfig;
+import r01f.cloud.aws.s3.client.api.AWSS3ClientAPI;
+import r01f.cloud.aws.s3.client.api.AWSS3ClientConfig;
 
 
 public class S3GuiceModule
@@ -18,11 +12,11 @@ public class S3GuiceModule
 ///////////////////////////////////////////////////////////////////////
 /// MEMBERS
 ///////////////////////////////////////////////////////////////////////	
-	private final S3ClientConfig _clientConfig;
+	private final AWSS3ClientConfig _clientConfig;
 ///////////////////////////////////////////////////////////////////////
 /// CONSTRUCTOR
 ///////////////////////////////////////////////////////////////////////	
-	public S3GuiceModule(final S3ClientConfig clientConfig ) {
+	public S3GuiceModule(final AWSS3ClientConfig clientConfig ) {
 		_clientConfig = clientConfig;
 	}
 ///////////////////////////////////////////////////////////////////////
@@ -30,16 +24,7 @@ public class S3GuiceModule
 ///////////////////////////////////////////////////////////////////////	
 	@Override
 	public void configure(final Binder binder) {
-		if (_clientConfig.validate().isNOTValid()) {			
-			throw new ConfigurationException(new Iterable<Message>() {										
-														@Override
-														public Iterator<Message> iterator() {
-															Collection<Message> error = Lists.newArrayList();
-															error.add(new Message(_clientConfig,_clientConfig.debugInfo().toString()));
-															return error.iterator();
-														}}); 
-		}
-		binder.bind(S3ClientAPI.class)
-		      .toInstance(new S3ClientAPI(_clientConfig));	
+		binder.bind(AWSS3ClientAPI.class)
+		      .toInstance(new AWSS3ClientAPI(_clientConfig));	
 	}
 }

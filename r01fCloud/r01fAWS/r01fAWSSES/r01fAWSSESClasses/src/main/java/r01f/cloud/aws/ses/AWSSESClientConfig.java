@@ -18,6 +18,12 @@ public class AWSSESClientConfig
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	public AWSSESClientConfig(final Region region,
+							  final AWSAccessKey accessKey,final AWSAccessSecret accessSecret) {
+		this(region,
+			 accessKey,accessSecret,
+			 Charset.defaultCharset());
+	}
+	public AWSSESClientConfig(final Region region,
 							  final AWSAccessKey accessKey,final AWSAccessSecret accessSecret,
 							  final Charset charset) {
 		super(region,

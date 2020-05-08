@@ -22,6 +22,18 @@
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->
 <!-- ====================================================================== -->
+	<dependencyManagement>
+		<!-- Reference to the parent project where the AWS POM is defined -->
+		<dependencies>
+			<dependency>
+				<groupId>r01.r01f.coreservices.cloud.aws</groupId>
+				<artifactId>r01fAWS</artifactId>
+				<version>${revision}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<!-- ///////////////////////////////////////// -->
 		<!--  Base Classes                             -->
@@ -33,7 +45,16 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!--  IO Classes                               -->
+		<!--  Base Cloud & Core                        -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.coreservices.cloud.aws</groupId>
+			<artifactId>r01fAWSClasses</artifactId>
+			<version>${revision}</version>
+		</dependency>
+
+		<!-- ///////////////////////////////////////// -->
+		<!-- IO Classes                                -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
@@ -54,10 +75,9 @@
 		<!--  Amazon S3 Client Classes                 -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-		    <groupId>com.amazonaws</groupId>
-		    <artifactId>aws-java-sdk-s3</artifactId>
-		    <version>1.11.748</version>
-			<exclusions> <!-- Note  1.11.442:  Be Carefull with Jackons libraries!!! . Amazon S3 works  with 2.6.7 and R01FB with 2.9!!!!   -->
+		    <groupId>software.amazon.awssdk</groupId>
+		    <artifactId>s3</artifactId>
+			<exclusions> <!-- Note  1.11.442:  Be Careful with Jackson libraries!!! . Amazon S3 works  with 2.6.7 and R01FB with 2.9!!!!   -->
 	        	<exclusion>
 	         		 <groupId>com.fasterxml.jackson.core</groupId>
 	         		 <artifactId>*</artifactId>
@@ -68,6 +88,10 @@
 	        	</exclusion>
       		</exclusions>
 		</dependency>
+		<dependency>
+		     <groupId>software.amazon.awssdk</groupId>
+		     <artifactId>apache-client</artifactId>
+    	</dependency>
 	</dependencies>
 
 <!-- ====================================================================== -->

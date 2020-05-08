@@ -1,6 +1,7 @@
 package r01f.cloud.firebase.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import com.google.auth.oauth2.GoogleCredentials;
 
@@ -11,6 +12,7 @@ import r01f.cloud.firebase.service.FirebaseServiceImpl.FirebaseAPIData;
 import r01f.config.ContainsConfigData;
 import r01f.httpclient.HttpClientProxySettings;
 import r01f.httpclient.HttpClientProxySettingsBuilder;
+import r01f.io.util.StreamEncrypterDecrypter;
 import r01f.util.types.Strings;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
@@ -64,13 +66,24 @@ public class FirebaseConfig
 	 static FirebaseAPIData apiDataFromProperties(final XMLPropertiesForAppComponent props,
 											      final String propsRootNode) {
 		String credentialsPath = props.propertyAt(propsRootNode + "/credentials")
-								 .asString();
-
+								 .asString();		
+		String keyAsString = props.propertyAt(propsRootNode + "/credentials/@key")
+				                    .asString();	
 		log.warn("Loading Google Firebase Credentials from {}",
 				                                             credentialsPath);
 		GoogleCredentials googleCredentials;
-		try {
-			googleCredentials = GoogleCredentials.fromStream(Thread.currentThread().getContextClassLoader().getResourceAsStream(credentialsPath));
+		try {			
+			InputStream  stream  = Thread.currentThread().getContextClassLoader().getResourceAsStream(credentialsPath);
+			if (stream == null) {
+				throw new IllegalStateException(Strings.customized("Cannot find firebase credentials at {}", credentialsPath)) ;
+			}
+			if (keyAsString == null ){			
+				googleCredentials = GoogleCredentials.fromStream(stream);			
+			} else {
+				System.out.println("key=" + keyAsString);
+				StreamEncrypterDecrypter encdec = new StreamEncrypterDecrypter(keyAsString.trim().toCharArray());
+				googleCredentials = GoogleCredentials.fromStream(encdec.decrypt(stream));
+			}			
 			// Create the firebase service
 			FirebaseAPIData apiData = new FirebaseAPIData(googleCredentials);
 			return apiData;
@@ -79,4 +92,9 @@ public class FirebaseConfig
 			throw new IllegalStateException(e.getLocalizedMessage());
 		}
 	}
+	 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+	 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 }

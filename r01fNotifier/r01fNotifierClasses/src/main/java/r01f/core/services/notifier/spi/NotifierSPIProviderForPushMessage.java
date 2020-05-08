@@ -18,7 +18,7 @@ import r01f.xmlproperties.XMLPropertiesForAppComponent;
  * 		- Voice: [r01fTwilioClasses]
  * @param <T>
  */
-public interface NotifierSPIProviderForPushMessage{
+public interface NotifierSPIProviderForPushMessage {
 	NotifierImpl getImpl();
     NotifierServiceForPushMessage providePushMessageNotifier(final NotifierConfigForPushMessage config);
 	NotifierConfigForPushMessage  providePushMessageNotifierConfig(final XMLPropertiesForAppComponent props,

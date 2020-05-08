@@ -101,6 +101,7 @@ public class FirebaseServiceImpl
 	   try {
 		return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
 	   } catch (final InterruptedException | ExecutionException e) {
+		   e.printStackTrace();
 		   throw new RuntimeException(e.getLocalizedMessage());
 	   }
 	}

@@ -11,6 +11,15 @@ import lombok.experimental.Accessors;
 @Accessors(prefix="_")
 @RequiredArgsConstructor
 public  class NotifierPushMessage {
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+	@Getter private String _title;
+	@Getter private String _body;
+	@Getter private String _notificationSound;
+	@Getter private Map<String,String> _keyValueData; //will be transformed to provider (firebase, etc..), key value format.
+//////////////////////////////////////////////////////////////////////////////
+// CONSTRUCTOR
+//////////////////////////////////////////////////////////////////////////////
 	public NotifierPushMessage(final String title, final String body) {
 		this(title, body, null);
 	}
@@ -27,9 +36,4 @@ public  class NotifierPushMessage {
 		_notificationSound = notificationSound;
 		_keyValueData = keyValueData != null ? keyValueData : new HashMap<String, String>();
 	}
-
-	@Getter private String _title;
-	@Getter private String _body;
-	@Getter private String _notificationSound;
-	@Getter private Map<String,String> _keyValueData; //will be transformed to provider (firebase, etc..), key value format.
 }

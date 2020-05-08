@@ -15,7 +15,7 @@ import r01f.guids.CommonOIDs.SecurityToken;
  */
 @Accessors(prefix="_")
 @RequiredArgsConstructor
-public  class NotifierPushMessageSubscriber{
+public  class NotifierPushMessageSubscriber {
 	@Getter private NotifierPushTopic  _topic;
 	@Getter private SecurityToken  _token;
 ///////////////////////////////////////////////////////////////////
