@@ -11,6 +11,7 @@ import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDeviceToken;
 import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDevicesTopic;
 import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.debug.Debuggable;
+import r01f.util.types.Strings;
 import r01f.util.types.collections.CollectionUtils;
 
 @Accessors(prefix="_")
@@ -25,6 +26,7 @@ public class FirebasePushMessageRequest
 	@Getter private final FirebaseRegisteredDeviceToken _token;
 	@Getter private final String _title;
 	@Getter private final String _body;
+	@Getter private final String _notificationSound;
 	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTORS
@@ -32,19 +34,21 @@ public class FirebasePushMessageRequest
 	public FirebasePushMessageRequest(final FirebaseRegisteredDevicesTopic topic,
 									  final String title,
 									  final String body,
+									  final String notificationSound,
 									  final FirebasePushMessageDataItem... dataItems) {
 		this(topic,
 			 null,			// token
-			 title,body,
+			 title, body, notificationSound,
 			 Lists.newArrayList(dataItems));
 	}
 	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
 							  		  final String title,
 							  		  final String body,
+							  		  final String notificationSound,
 							  		  final FirebasePushMessageDataItem... dataItems) {
 		this(null,			// topic
 			 token,
-			 title,body,
+			 title, body, notificationSound,
 			 Lists.newArrayList(dataItems));
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -70,6 +74,10 @@ public class FirebasePushMessageRequest
 			dbg.append("\n body: ")
 			   .append(_body);
 		}
+		if (hasCustomNotificationSound()) {
+			dbg.append("\n sound: ")
+			   .append(_notificationSound);
+		}
 		if (_token != null) {
 			dbg.append("\n token: ")
 			   .append(_token);
@@ -85,5 +93,9 @@ public class FirebasePushMessageRequest
 			}
 		}
 		return dbg;
+	}
+
+	public boolean hasCustomNotificationSound() {
+		return Strings.isNOTNullOrEmpty(_notificationSound);
 	}
 }

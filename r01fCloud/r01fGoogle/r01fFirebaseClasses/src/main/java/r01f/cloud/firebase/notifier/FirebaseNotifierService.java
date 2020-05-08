@@ -85,8 +85,9 @@ public class FirebaseNotifierService
 					                                                                 	FirebaseRegisteredDeviceToken.of(subscriber.getToken().asString()) : null ;
 				FirebasePushMessageRequest pushMessageRequest = new FirebasePushMessageRequest(topic,
 						                                                                       token,
-						                                                                       pushMessage.getBody(),
 						                                                                       pushMessage.getTitle(),
+						                                                                       pushMessage.getBody(),
+						                                                                       pushMessage.getNotificationSound(),
 						                                                                       pushMessageDataItems);
 
 				FirebasePushMessageResponse response = _firebaseService.push(pushMessageRequest);
