@@ -22,6 +22,8 @@ public class TwilioNotifierConfig
 					@Override
 					public ContainsConfigData provideConfigUsing(final NotifierImpl impl,
 																 final XMLPropertiesForAppComponent props) {
+						if (impl == null) throw new IllegalStateException("null mail sender impl (review notifier properties)!");
+						
 						ContainsConfigData outCfg = null;
 						if (VoiceNotifierImpl.TWILIO.is(impl)) {
 							outCfg = TwilioConfig.createFrom(props,

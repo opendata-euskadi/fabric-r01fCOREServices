@@ -9,6 +9,44 @@ import r01f.guids.CommonOIDs.AppCode;
 import r01f.patterns.FactoryFrom;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
+/**
+ * Loads app notifier config:
+ * <pre class='brush:xml'>
+		<notifier>
+			<!-- BEWARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
+			<!-- The notifier services (smtp mail / aws ses / aws sns / latinia / twilio...) -->
+			<!-- is at the properties at the config by env module                            -->
+		
+			<!-- Notifiers config -->
+			<notifiers>
+				<log enabled="false"/>
+				<email enabled="true" impl="aws">	<!-- impls: smtp | aws | google/api | google/smtp -->
+					<from mail="me@futuretelematics.net">Zuzenean</from>
+					... any app dependent property like:
+						- message templates
+						- from email address
+						- etc
+				</email>
+				<sms enabled="false" impl="aws">	<!-- impls: latinia | aws -->
+					<from phone="012">Zuzenean</from>
+					... any app dependent property like:
+						- message templates
+						- from phone
+						- etc
+				</sms>
+				<voice enabled="false" impl="twilio">	<!-- impls: twilio -->
+					<from phone="012">Zuzenean</from>
+					... any app dependent property like:
+						- message templates
+						- from phone
+						- twilio message url
+				</voice>
+				<push enabled="true" impl="firebase"/>
+			</notifiers>
+			...
+		</notifier>
+ * </pre>
+ */
 @Accessors(prefix="_")
 abstract class NotifierConfigBase
     implements ContainsConfigData {
@@ -35,7 +73,9 @@ abstract class NotifierConfigBase
 /////////////////////////////////////////////////////////////////////////////////////////
 	protected static NotifierImpl _implFrom(final NotifierType type,
 										    final XMLPropertiesForAppComponent props) {
-		return props.propertyAt(_xPathBase(type) + "/@impl")
+		String xpath = _xPathBase(type) + "/@impl";
+		if (type.isNOT(NotifierType.LOG) && !props.propertyAt(xpath).exist()) throw new IllegalStateException("There does NOT exists the property xpath=" + xpath + " at " + props.getAppCode() + "." + props.getAppComponent() + " properties file!"); 
+		return props.propertyAt(xpath)
 			 	    .asOID(new FactoryFrom<String,NotifierImpl>() {
 								@Override
 								public NotifierImpl from(final String id) {

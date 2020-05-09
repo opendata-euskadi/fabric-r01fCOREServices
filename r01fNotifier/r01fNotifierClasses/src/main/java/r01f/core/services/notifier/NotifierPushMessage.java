@@ -15,18 +15,21 @@ public  class NotifierPushMessage {
 //////////////////////////////////////////////////////////////////////////////	
 	@Getter private String _title;
 	@Getter private String _body;
-	@Getter private Map<String,String> _keyValueData; //will be transformed to provider (firebase, etc..), key value format.
+	@Getter private Map<String,String> _keyValueData; // will be transformed to provider (firebase, etc..), key value format.
 //////////////////////////////////////////////////////////////////////////////
 // CONSTRUCTOR	
 //////////////////////////////////////////////////////////////////////////////
-	public NotifierPushMessage(final String title, final String body) {
-		this(title, body, null);
+	public NotifierPushMessage(final String title,final String body) {
+		this(title, body,
+			 null);
 	}
 
-	public NotifierPushMessage(final String title, final String body, final Map<String, String> keyValueData) {
+	public NotifierPushMessage(final String title,final String body,
+							   final Map<String, String> keyValueData) {
 		_title = title;
 		_body = body;
-		_keyValueData = keyValueData != null ? keyValueData : new HashMap<String, String>();
+		_keyValueData = keyValueData != null ? keyValueData 
+											 : new HashMap<String,String>();
 	}
 
 

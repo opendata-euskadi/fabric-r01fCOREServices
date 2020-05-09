@@ -23,6 +23,8 @@ public class FirebaseNotifierConfig
 													@Override
 													public ContainsConfigData provideConfigUsing(final NotifierImpl impl,
 																								 final XMLPropertiesForAppComponent props) {
+														if (impl == null) throw new IllegalStateException("null push message notifier impl! (review notifier properties)");
+														
 														ContainsConfigData outCfg = null;
 														if (PushMessageNotifierImpl.FIREBASE.is(impl)) {
 															outCfg = FirebaseConfig.createFrom(props,

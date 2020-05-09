@@ -47,9 +47,9 @@ public abstract class NotifierConfigForEMail
 			  serviceImplDepConfigProvider,
 			  appDepConfigProvider);
 		EMail fromMail = props.propertyAt(_xPathBase() + "/from/@mail")
-							  .asEMail("Zuzenean-No-Reply@euskadi.eus");
+							  .asEMail("no-from-email-addr-configured");
 		String fromName = props.propertyAt(_xPathBase() + "/from")
-							   .asString("Zuzenean");
+							   .asString("no-from-name-configured");
 
 		_from = EMailRFC822Address.of(fromMail,fromName);
 	}

@@ -55,9 +55,15 @@ public abstract class NotifierEnums {
 		public boolean isIn(final NotifierType... els) {
 			return DELEGATE.isIn(this,els);
 		}
+		public boolean isNOTIn(final NotifierType... els) {
+			return DELEGATE.isNOTIn(this,els);
+		}
 		@Override
 		public boolean is(final NotifierType el) {
 			return DELEGATE.is(this,el);
+		}
+		public boolean isNOT(final NotifierType el) {
+			return DELEGATE.isNOT(this,el);
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////

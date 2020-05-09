@@ -25,6 +25,8 @@ public class JavaMailSenderNotifierConfig
 						@Override
 						public ContainsConfigData provideConfigUsing(final NotifierImpl impl,
 																	 final XMLPropertiesForAppComponent props) {
+							if (impl == null) throw new IllegalStateException("null mail sender impl! (review notifier properties)");
+							
 							JavaMailSenderImpl springMailSenderImpl = JavaMailSenderImpl.from(impl);
 							JavaMailSenderConfig springMailSenderCfg = JavaMailSenderConfigBuilder.of(springMailSenderImpl)
 																								  .from(props,

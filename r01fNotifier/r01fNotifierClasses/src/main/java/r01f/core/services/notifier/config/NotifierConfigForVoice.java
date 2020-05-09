@@ -47,9 +47,9 @@ public abstract class NotifierConfigForVoice
 			  serviceImplDepConfigProvider,
 			  appDepConfigProvider);
 		Phone fromPhone = props.propertyAt(_xPathBase() + "/from/@phone")
-							   .asPhone("012");
+							   .asPhone("no-from-phone-configured");
 		String fromOwner = props.propertyAt(_xPathBase() + "/from")
-								.asString("Zuzenean");
+								.asString("no-from-owner-configured");
 
 		_from = new OwnedContactMean<Phone>(fromPhone,fromOwner);
 	}
