@@ -1,6 +1,5 @@
 package r01f.core.services.mail.model;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -18,7 +17,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import r01f.types.CanBeRepresentedAsString;
 import r01f.types.contact.ContactMean;
 import r01f.types.contact.EMail;
 import r01f.util.types.collections.CollectionUtils;
@@ -31,9 +29,7 @@ import r01f.util.types.collections.CollectionUtils;
 @Accessors(prefix="_")
 @RequiredArgsConstructor
 public class EMailRFC822Address
-  implements Serializable,
-  			 CanBeRepresentedAsString,
-  			 ContactMean {
+  implements ContactMean {
 
 	private static final long serialVersionUID = -2963399480304370901L;
 /////////////////////////////////////////////////////////////////////////////////////////

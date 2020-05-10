@@ -87,6 +87,7 @@ public class FirebaseNotifierService
 						                                                                       token,
 						                                                                       pushMessage.getTitle(),
 						                                                                       pushMessage.getBody(),
+						                                                                       pushMessage.getNotificationSound(),
 						                                                                       pushMessageDataItems);
 
 				FirebasePushMessageResponse response = _firebaseService.push(pushMessageRequest);

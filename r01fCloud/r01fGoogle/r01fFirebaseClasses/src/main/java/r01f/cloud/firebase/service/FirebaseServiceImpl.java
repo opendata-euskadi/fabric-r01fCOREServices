@@ -123,33 +123,33 @@ public class FirebaseServiceImpl
 	 * @param topic
 	 * @return
 	 */
-	private static AndroidConfig _buildAndroidConfig() {
+	private static AndroidConfig _buildAndroidConfig(final FirebasePushMessageRequest pushMessageRequest) {
 	  	return AndroidConfig.builder()
 						  .setTtl(Duration.ofMinutes(2).toMillis())
 						  .setCollapseKey("collapsekey")//¿?
 						  .setPriority(AndroidConfig.Priority.HIGH)
 						  .setNotification(AndroidNotification.builder()
-															  .setSound("default")
+															  .setSound(pushMessageRequest.hasCustomNotificationSound() ? pushMessageRequest.getNotificationSound() : "default")
 															  .setColor("#FFFF00")
-															  .setTag("collapsekey")//¿?
+															  //.setTag("collapsekey")//¿?
 															  .build())
 						  .build();
 	}
-  	private static Message _buidMessage(final FirebasePushMessageRequest pushMesageRequest) {
+  	private static Message _buidMessage(final FirebasePushMessageRequest pushMessageRequest) {
   		Builder baseMessage  = Message.builder()
 							  		  .setApnsConfig(_buildApnsConfig())
-							  		 .setAndroidConfig(_buildAndroidConfig())
+							  		 .setAndroidConfig(_buildAndroidConfig(pushMessageRequest))
 							  		 .setNotification(Notification.builder()
-							  				 					 		.setBody(pushMesageRequest.getBody())
-								  				 						.setTitle(pushMesageRequest.getTitle())
+							  				 					 		.setBody(pushMessageRequest.getBody())
+								  				 						.setTitle(pushMessageRequest.getTitle())
 																	.build());
-		if (pushMesageRequest.hasToken()) {
-			baseMessage.setToken(pushMesageRequest.getToken().asString());
+		if (pushMessageRequest.hasToken()) {
+			baseMessage.setToken(pushMessageRequest.getToken().asString());
 		} else {
-			baseMessage.setTopic(pushMesageRequest.getTopic().asString());
+			baseMessage.setTopic(pushMessageRequest.getTopic().asString());
 		}
-		if (pushMesageRequest.hasDataItems()) {
-			pushMesageRequest.getDataItems()
+		if (pushMessageRequest.hasDataItems()) {
+			pushMessageRequest.getDataItems()
 						   	 .forEach(i-> {
 							   				baseMessage.putData(i.getId().asString(), i.getValue());
 						   			  });
