@@ -16,7 +16,8 @@ public class AWSSNSSmsSenderID
 		
 		super(id.length() > 11 ? id.substring(0,11) : id);		// not more than 11 characters
 		System.out.println("AWSSNSSmsSenderID=" + id);
-		if (!_isValidId(id)) throw new IllegalArgumentException("SMS sender id can contain up to 11 alphanumeric chars " +
+		if (!_isValidId(id)) throw new IllegalArgumentException("SMS sender id=" + id + " NOT valid: "  + 
+															 	"SMS sender id can contain up to 11 alphanumeric chars " +
 																"including at least one letter and NO spaces " +
 																"(see https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html)");
 	}
