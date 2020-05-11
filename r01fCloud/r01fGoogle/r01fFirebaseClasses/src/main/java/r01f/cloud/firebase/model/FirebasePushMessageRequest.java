@@ -51,6 +51,15 @@ public class FirebasePushMessageRequest
 			 title, body, notificationSound,
 			 Lists.newArrayList(dataItems));
 	}
+	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
+							  		  final String title,
+							  		  final String body,
+							  		  final FirebasePushMessageDataItem... dataItems) {
+		this(null,			// topic
+		token,
+		title, body, null,
+		Lists.newArrayList(dataItems));
+}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
