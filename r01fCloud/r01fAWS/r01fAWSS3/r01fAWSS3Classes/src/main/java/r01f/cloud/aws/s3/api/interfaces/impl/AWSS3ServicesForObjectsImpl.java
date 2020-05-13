@@ -2,22 +2,22 @@ package r01f.cloud.aws.s3.api.interfaces.impl;
 
 import java.io.File;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.collect.Maps;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.aws.s3.api.interfaces.AWSS3ServicesForObjects;
 import r01f.cloud.aws.s3.model.AWSS3Bucket;
-import r01f.cloud.aws.s3.model.AWSS3ObjectKey;
 import r01f.cloud.aws.s3.model.AWSS3ObjectDeleteResult;
 import r01f.cloud.aws.s3.model.AWSS3ObjectGetRequest;
 import r01f.cloud.aws.s3.model.AWSS3ObjectGetResult;
 import r01f.cloud.aws.s3.model.AWSS3ObjectHeadResult;
+import r01f.cloud.aws.s3.model.AWSS3ObjectKey;
 import r01f.cloud.aws.s3.model.AWSS3ObjectMetaDataItem;
 import r01f.cloud.aws.s3.model.AWSS3ObjectPutRequest;
 import r01f.cloud.aws.s3.model.AWSS3ObjectPutResult;
@@ -28,12 +28,6 @@ import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadRequest;
-import software.amazon.awssdk.services.s3.model.CompleteMultipartUploadResponse;
-import software.amazon.awssdk.services.s3.model.CompletedMultipartUpload;
-import software.amazon.awssdk.services.s3.model.CompletedPart;
-import software.amazon.awssdk.services.s3.model.CreateMultipartUploadRequest;
-import software.amazon.awssdk.services.s3.model.CreateMultipartUploadResponse;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -42,7 +36,6 @@ import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
-import software.amazon.awssdk.services.s3.model.UploadPartRequest;
 
 @Slf4j
 public class AWSS3ServicesForObjectsImpl
@@ -64,7 +57,7 @@ public class AWSS3ServicesForObjectsImpl
 				         putRequest.getCustomMetadata());
 	}
 
-	@Override @SneakyThrows
+	/*@Override @SneakyThrows
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
 							   	 	      final InputStream streamToUpload ,
 							   	 	      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
@@ -130,7 +123,16 @@ public class AWSS3ServicesForObjectsImpl
 		// [4] - Return
 		return AWSS3ObjectPutResult.fromPutObjectResponseOn(bucket,key)
 								.with(res);
+	}*/
+
+	@Override @SneakyThrows
+	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
+							   	 	      final InputStream streamToUpload ,
+							   	 	      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
+		return putObject(bucket,key,IOUtils.toByteArray(streamToUpload), customMetadata);
 	}
+
+
 	@Override
 	public AWSS3ObjectPutResult putObject(final AWSS3Bucket bucket, final AWSS3ObjectKey key,final byte[] bytes,
 									      final Collection<AWSS3ObjectMetaDataItem> customMetadata) {
