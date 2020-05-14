@@ -5,7 +5,7 @@
  <modelVersion>4.0.0</modelVersion>
 
 <!-- ====================================================================== -->
-<!-- PARENT                                                                 -->
+<!-- PARENT																 -->
 <!-- ====================================================================== -->
 	<parent>
 		<groupId>r01.r01f.coreservices.cloud.aws.s3</groupId>
@@ -14,13 +14,13 @@
 	</parent>
 
 <!-- ====================================================================== -->
-<!-- ARTIFACT                                                               -->
+<!-- ARTIFACT															   -->
 <!-- ====================================================================== -->
 	<name>r01fAWSS3Classes</name>
 	<artifactId>r01fAWSS3Classes</artifactId>
 
 <!-- ====================================================================== -->
-<!-- DEPENDENCIES                                                           -->
+<!-- DEPENDENCIES														   -->
 <!-- ====================================================================== -->
 	<dependencyManagement>
 		<!-- Reference to the parent project where the AWS POM is defined -->
@@ -36,7 +36,7 @@
 	</dependencyManagement>
 	<dependencies>
 		<!-- ///////////////////////////////////////// -->
-		<!--  Base Classes                             -->
+		<!--  Base Classes							 -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
@@ -45,7 +45,7 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!--  Base Cloud & Core                        -->
+		<!--  Base Cloud & Core						-->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.coreservices.cloud.aws</groupId>
@@ -54,7 +54,7 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!-- IO Classes                                -->
+		<!-- IO Classes								-->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.base</groupId>
@@ -63,7 +63,7 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!--  Http Client                              -->
+		<!--  Http Client							  -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
 			<groupId>r01.r01f.httpclient</groupId>
@@ -72,30 +72,30 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!--  Amazon S3 Client Classes                 -->
+		<!--  Amazon S3 Client Classes				 -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-		    <groupId>software.amazon.awssdk</groupId>
-		    <artifactId>s3</artifactId>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>s3</artifactId>
 			<exclusions> <!-- Note  1.11.442:  Be Careful with Jackson libraries!!! . Amazon S3 works  with 2.6.7 and R01FB with 2.9!!!!   -->
-	        	<exclusion>
-	         		 <groupId>com.fasterxml.jackson.core</groupId>
-	         		 <artifactId>*</artifactId>
-	        	</exclusion>
-	        	<exclusion>
-	         		 <groupId>com.fasterxml.jackson.dataformat</groupId>
-	         		 <artifactId>*</artifactId>
-	        	</exclusion>
-      		</exclusions>
+				<exclusion>
+			 		<groupId>com.fasterxml.jackson.core</groupId>
+			 		<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.dataformat</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
-		     <groupId>software.amazon.awssdk</groupId>
-		     <artifactId>apache-client</artifactId>
-    	</dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>apache-client</artifactId>
+		</dependency>
 	</dependencies>
 
 <!-- ====================================================================== -->
-<!-- BUILD                                                                  -->
+<!-- BUILD																	-->
 <!-- ====================================================================== -->
 	<build>
 		<pluginManagement>
