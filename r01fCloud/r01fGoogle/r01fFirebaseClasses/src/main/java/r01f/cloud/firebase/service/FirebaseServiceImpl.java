@@ -126,12 +126,11 @@ public class FirebaseServiceImpl
 	private static AndroidConfig _buildAndroidConfig(final FirebasePushMessageRequest pushMessageRequest) {
 	  	return AndroidConfig.builder()
 						  .setTtl(Duration.ofMinutes(2).toMillis())
-						  .setCollapseKey("collapsekey")//¿?
+						  .setCollapseKey(pushMessageRequest.getCollapseKey())
 						  .setPriority(AndroidConfig.Priority.HIGH)
 						  .setNotification(AndroidNotification.builder()
 															  .setSound(pushMessageRequest.hasCustomNotificationSound() ? pushMessageRequest.getNotificationSound() : "default")
-															  .setColor("#FFFF00")
-															  //.setTag("collapsekey")//¿?
+															  .setChannelId(pushMessageRequest.hasChannelId() ? pushMessageRequest.getChannelId() : null)
 															  .build())
 						  .build();
 	}

@@ -88,6 +88,8 @@ public class FirebaseNotifierService
 						                                                                       pushMessage.getTitle(),
 						                                                                       pushMessage.getBody(),
 						                                                                       pushMessage.getNotificationSound(),
+						                                                                       pushMessage.getCollapseKey(),
+						                                                                       pushMessage.getChannelId(),
 						                                                                       pushMessageDataItems);
 
 				FirebasePushMessageResponse response = _firebaseService.push(pushMessageRequest);
