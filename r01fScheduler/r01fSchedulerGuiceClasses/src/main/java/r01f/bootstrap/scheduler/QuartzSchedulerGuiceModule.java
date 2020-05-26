@@ -11,7 +11,6 @@ import com.google.inject.PrivateBinder;
 import com.google.inject.name.Names;
 
 import lombok.RequiredArgsConstructor;
-import r01f.bootstrap.services.ServicesBootstrapUtil;
 import r01f.scheduler.QuartzSchedulerJobFactory;
 import r01f.scheduler.QuartzSchedulerProvider;
 import r01f.scheduler.QuartzSchedulerServiceHandler;
@@ -45,14 +44,30 @@ public class QuartzSchedulerGuiceModule
 			  .in(Singleton.class);		
 		
 		// quartz scheduler service handler
-		ServicesBootstrapUtil.bindServiceHandler(binder,
-												 QuartzSchedulerServiceHandler.class,
-												 _schedulerCfg.getSchedulerId().asString());
+		_bindServiceHandler(binder,
+							QuartzSchedulerServiceHandler.class,
+							_schedulerCfg.getSchedulerId().asString());
 		// this is IMPORTANT (and cannot be moved to ServicesBootstrapUtil.bindServiceHandler)		
 		if (binder instanceof PrivateBinder) {
 			PrivateBinder privateBinder = (PrivateBinder)binder;
 			privateBinder.expose(Key.get(ServiceHandler.class,
 										 Names.named(_schedulerCfg.getSchedulerId().asString())));	// expose the binding
 		}
+	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//	
+/////////////////////////////////////////////////////////////////////////////////////////
+	/**
+	 * Binds a service handler type and exposes it if it's a private binder
+	 * @param binder
+	 * @param serviceHandlerType
+	 * @param name
+	 */
+	private static void _bindServiceHandler(final Binder binder,
+										  	final Class<? extends ServiceHandler> serviceHandlerType,final String name) {
+		binder.bind(ServiceHandler.class)
+			  .annotatedWith(Names.named(name))
+			  .to(serviceHandlerType)
+			  .in(Singleton.class);
 	}
 }

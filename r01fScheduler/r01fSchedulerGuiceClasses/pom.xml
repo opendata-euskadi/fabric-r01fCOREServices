@@ -34,11 +34,11 @@
 		</dependency>
 
 		<!-- ///////////////////////////////////////// -->
-		<!-- BusinessServices                          -->
+		<!-- Guice                                     -->
 		<!-- ///////////////////////////////////////// -->
 		<dependency>
-			<groupId>r01.r01f.businessservices.guice</groupId>
-			<artifactId>r01fBusinessServicesGuiceClasses</artifactId>
+			<groupId>r01.r01f.base</groupId>
+			<artifactId>r01fGuiceClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
 	</dependencies>
