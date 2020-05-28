@@ -31,6 +31,7 @@ import software.amazon.awssdk.http.apache.ProxyConfiguration;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3ClientBuilder;
+import software.amazon.awssdk.services.s3.S3Configuration;
 
 
 /**
@@ -113,6 +114,14 @@ public class AWSS3ClientAPI {
 			                                   	 .region(config.getRegion())
 		                                         .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(config.getAccessKey().asString(),
 				                                                                                                                  config.getAccessSecret().asString())));
+		//... Defaut S3 Configuration [see @S3Configuration] to work in all s3 based backends ( minio, ecs, amazon...)
+		//    1. Path style to true [ no all s3 based systems has dns for buckets.
+		//    2. Checksumvlidation  [ See https://stackoverflow.com/questions/59245962/min-io-with-aws-sdk-2-for-java-refuses-to-work-properly]
+		S3Configuration s3Configuration = S3Configuration.builder()
+				                                         .pathStyleAccessEnabled(true)
+				                                         .checksumValidationEnabled(false)
+				                                         .build();
+		clientBuilder.serviceConfiguration(s3Configuration);
 
 		// ...next check endpoint (use the just created clientbuilder)
 		if ( config.getEndPoint() != null) {
@@ -163,7 +172,6 @@ public class AWSS3ClientAPI {
 
 		S3Client client = clientBuilder.build();
 		// now, yes...call to the builder build.
-
 		return client;
 	}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
