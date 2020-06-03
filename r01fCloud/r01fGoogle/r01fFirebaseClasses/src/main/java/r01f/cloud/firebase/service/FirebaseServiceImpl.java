@@ -11,6 +11,7 @@ import com.google.firebase.messaging.AndroidNotification;
 import com.google.firebase.messaging.ApnsConfig;
 import com.google.firebase.messaging.Aps;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Message.Builder;
 import com.google.firebase.messaging.Notification;
@@ -92,19 +93,34 @@ public class FirebaseServiceImpl
 		log.warn(".. push {}",
 							pushMessageRequest.debugInfo());
 		Message message = _buidMessage(pushMessageRequest);
-		return _pushMessage(message);
+		FirebasePushMessageResponse response  = null;
+		if (pushMessageRequest.isAsyncRequest()) {
+			response = _pushMessageAsync(message);
+		} else {
+			response = _pushMessage(message);
+		}		
+		return response;
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	private static FirebasePushMessageResponse _pushMessage(final Message message) {
 	   try {
-		return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
-	   } catch (final InterruptedException | ExecutionException e) {
+		   return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().send(message));
+	   } catch (final  FirebaseMessagingException e) {
 		   e.printStackTrace();
 		   throw new RuntimeException(e.getLocalizedMessage());
 	   }
 	}
+	private static FirebasePushMessageResponse _pushMessageAsync(final Message message) {
+	   try {
+		   return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
+	   } catch (final  InterruptedException | ExecutionException e) {
+		   e.printStackTrace();
+		   throw new RuntimeException(e.getLocalizedMessage());
+	   } 
+	}
+	
 	/**
 	 * Builds APN Config.
 	 * @param topic

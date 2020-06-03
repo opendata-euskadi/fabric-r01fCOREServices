@@ -5,13 +5,11 @@ import java.util.Collection;
 import com.google.common.collect.Lists;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDeviceToken;
 import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDevicesTopic;
 import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.debug.Debuggable;
-import r01f.util.types.Strings;
 import r01f.util.types.collections.CollectionUtils;
 
 @Accessors(prefix="_")
@@ -25,10 +23,8 @@ public class FirebasePushMessageRequest
 	@Getter private final FirebaseRegisteredDeviceToken _token;
 	@Getter private final String _title;
 	@Getter private final String _body;
-//	@Getter private final String _notificationSound;
-//	@Getter private final String _collapseKey;
-//	@Getter private final String _channelId;
-	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;
+	@Getter private final boolean _asyncRequest;
+	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;	
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTORS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -48,6 +44,7 @@ public class FirebasePushMessageRequest
 		_collapseKey = collapseKey;
 		_channelId = channelId;
 		_dataItems = dataItems;
+		_asyncRequest = true;
 	}
 	public FirebasePushMessageRequest(final FirebaseRegisteredDevicesTopic topic,
 									  final String title,
@@ -64,6 +61,7 @@ public class FirebasePushMessageRequest
 		_notificationSound = notificationSound;
 		_collapseKey = collapseKey;
 		_channelId = channelId;
+		
 	}
 	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
 							  		  final String title,
@@ -93,9 +91,9 @@ public class FirebasePushMessageRequest
 							  		  final String body,
 							  		  final FirebasePushMessageDataItem... dataItems) {
 		this(null,			// topic
-		token,
-		title, body,
-		null, null, null,
+		     token,
+		     title, body,
+		     null, null, null,
 		Lists.newArrayList(dataItems));
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
