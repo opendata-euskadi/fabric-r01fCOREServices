@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+		xmlns="http://maven.apache.org/POM/4.0.0"
+			 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+ <modelVersion>4.0.0</modelVersion>
+
+<!-- ====================================================================== -->
+<!-- PARENT                                                                 -->
+<!-- ====================================================================== -->
+	<parent>
+		<groupId>r01.r01f.coreservices.brms.drools</groupId>
+		<artifactId>r01fDrools</artifactId>
+		<version>${revision}</version>
+	</parent>
+
+<!-- ====================================================================== -->
+<!-- DROOLS PROPERTIS                                                            -->
+<!-- ====================================================================== -->	
+	 <properties>
+        <http-component-version>4.4.6</http-component-version>
+        <drools-version>7.4.1.Final</drools-version>
+        <apache-poi-version>3.13</apache-poi-version>
+        <opta-planner-version>7.10.0.Final</opta-planner-version>
+    </properties>
+
+<!-- ====================================================================== -->
+<!-- ARTIFACT                                                               -->
+<!-- ====================================================================== -->
+	<name>r01fDroolsClasses</name>
+	<artifactId>r01fDroolsClasses</artifactId>
+
+<!-- ====================================================================== -->
+<!-- DEPENDENCIES                                                           -->
+<!-- ====================================================================== -->
+	<dependencies>
+		<!-- ///////////////////////////////////////// -->
+		<!--  Base Classes                             -->
+		<!-- ///////////////////////////////////////// -->
+		<dependency>
+			<groupId>r01.r01f.base</groupId>
+			<artifactId>r01fBaseClasses</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>r01.r01f.resourceload</groupId>
+			<artifactId>r01fResourceLoadInterfaceClasses</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<!-- ///////////////////////////////////////// -->
+		<!-- R01f Object Streamer          				   -->
+		<!-- ///////////////////////////////////////// -->		
+		<dependency>
+			<groupId>r01.r01f.objectstreamer</groupId>
+			<artifactId>r01fObjectStreamerClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>
+		<!-- ///////////////////////////////////////// -->
+		<!-- R01f Properties         				   -->
+		<!-- ///////////////////////////////////////// -->		
+		<dependency>
+			<groupId>r01.r01f.properties</groupId>
+			<artifactId>r01fPropertiesClasses</artifactId>
+			<version>${r01f.version}</version>
+		</dependency>		
+
+  		<!-- ///////////////////////////////////////// -->
+		<!-- GoogleAPIs                                -->
+		<!-- ///////////////////////////////////////// -->		
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${http-component-version}</version>
+        </dependency>
+        <!-- ... -->
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>kie-ci</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-decisiontables</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-core</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.drools</groupId>
+            <artifactId>drools-compiler</artifactId>
+            <version>${drools-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${apache-poi-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${apache-poi-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.optaplanner</groupId>
+            <artifactId>optaplanner-core</artifactId>
+            <version>${opta-planner-version}</version>
+        </dependency>
+    </dependencies>
+<!-- ====================================================================== -->
+<!-- BUILD                                                                  -->
+<!-- ====================================================================== -->
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!--
+				ECLIPSE (see main pom.xml for further info) ===================
+				This plugin has NO effects in maven build:
+					m2e ONLY runs some 'standard' goals of the maven pom.xml since the aim of m2e is NOT to be a complete CI tool
+					... in order to include 'non-standard' goals in m2e execution and avoid [plugin execution not covered by the eclipse m2e plugin project build lifecycle mapping]
+						the 'non-standard' plugin MUST be explicitly included in m2e execution
+				-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration> 
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<!-- flatten plugin -->
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>flatten-maven-plugin</artifactId>
+										<versionRange>[1.1.0,)</versionRange>
+										<goals>
+											<goal>flatten</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
