@@ -27,6 +27,7 @@
 		<module>r01fAWS</module>
 		<module>r01fGoogle</module>
 		<module>r01fTwilio</module>
+		<module>r01fNexmo</module>
 	</modules>
 <!-- ====================================================================== -->
 <!-- DEPENDENCIES                                                           -->

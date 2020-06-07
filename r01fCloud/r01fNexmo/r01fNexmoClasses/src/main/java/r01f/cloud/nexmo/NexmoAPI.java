@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
-import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForMessagingApplication;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForSMS;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForVoice;
@@ -17,7 +16,6 @@ import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForSMSImpl;
 import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForVoiceImpl;
 import r01f.guids.CommonOIDs.Password;
 import r01f.guids.OIDBaseImmutable;
-import r01f.httpclient.HttpClientProxySettings;
 import r01f.objectstreamer.Marshaller;
 import r01f.objectstreamer.annotations.MarshallType;
 import r01f.types.contact.Phone;
@@ -29,7 +27,6 @@ import r01f.types.url.Url;
  * <pre class='brush:java'>
 
  */
-
 @Singleton
 @Accessors(prefix="_")
 public class NexmoAPI  {
