@@ -2,28 +2,29 @@ package r01f.cloud.nexmo.model.entities;
 
 import r01f.cloud.nexmo.model.Message;
 import r01f.cloud.nexmo.model.MessageContents.TextMessageContent;
+import r01f.cloud.nexmo.model.NexmoIDS.PeerID;
 import r01f.cloud.nexmo.model.Peer;
 import r01f.cloud.nexmo.model.PeerType;
-import r01f.cloud.nexmo.model.outbound.NexmoOutboundMessage;
+import r01f.cloud.nexmo.model.inbound.NexmoInboundMessage;
 import r01f.internal.R01FAppCodes;
 import r01f.objectstreamer.MarshallerBuilder;
 import r01f.patterns.Factory;
 import r01f.types.contact.Phone;
 
-public class NexmoOutboundMessageFactoryTestFactory
-  implements Factory<NexmoOutboundMessage> {
+public class NexmoInboundMessageFactoryTestFactory2
+  implements Factory<NexmoInboundMessage> {
 	
 	@Override
-	public NexmoOutboundMessage create() {
+	public NexmoInboundMessage create() {
 		return _buildOutboundMessage();
 	}
 	
 	
-	private static NexmoOutboundMessage _buildOutboundMessage() {
-		NexmoOutboundMessage  outboundMessage  = new NexmoOutboundMessage();
-		Peer from = new Peer(PeerType.whatsapp, Phone.create("14157386170"));
+	private static NexmoInboundMessage _buildOutboundMessage() {
+		NexmoInboundMessage  outboundMessage  = new NexmoInboundMessage();
+		Peer from = new Peer(PeerType.whatsapp, Phone.create("14157386170"), PeerID.valueOf("66565665"));
 		outboundMessage.setFrom(from);
-		Peer to =  new Peer(PeerType.whatsapp, Phone.create("34616178858"));
+		Peer to =  new Peer(PeerType.whatsapp, Phone.create("34616178858"),PeerID.valueOf("66565665"));
 		outboundMessage.setTo(to);
 		Message message = new Message();
 		TextMessageContent content = new TextMessageContent("Hola Caracola");
@@ -40,7 +41,15 @@ public class NexmoOutboundMessageFactoryTestFactory
 	    String json = MarshallerBuilder.findTypesToMarshallAt(R01FAppCodes.APP_CODE)
                                      	.build()
                                      .forWriting()
-								     .toJson(new NexmoOutboundMessageFactoryTestFactory().create());
-		System.out.println(json);
+								     .toJson(new NexmoInboundMessageFactoryTestFactory2().create());
+	    
+	    System.out.println(json);
+	    NexmoInboundMessage  re = MarshallerBuilder.findTypesToMarshallAt(R01FAppCodes.APP_CODE)
+										             	.build()
+										             .forReading()
+										             .fromJson(json, NexmoInboundMessage.class);
+	    
+		   
+		
 	}
 }

@@ -1,19 +1,21 @@
 package r01f.cloud.nexmo.model;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import r01f.aspects.interfaces.dirtytrack.ConvertToDirtyStateTrackable;
 import r01f.cloud.nexmo.model.NexmoIDS.PeerID;
 import r01f.model.ModelObject;
 import r01f.objectstreamer.annotations.MarshallField;
+import r01f.objectstreamer.annotations.MarshallFrom;
 import r01f.objectstreamer.annotations.MarshallType;
 import r01f.types.contact.Phone;
 
 @MarshallType(as="peer")
 @ConvertToDirtyStateTrackable			// changes in state are tracked
 @Accessors(prefix="_")
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Peer
      implements ModelObject {
 
@@ -23,19 +25,27 @@ public class Peer
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
 	@MarshallField(as="type")
-	@Getter private final  PeerType _type;
+	@Setter @Getter private    PeerType _type;
 
 	@MarshallField(as="number")
-	@Getter private final  Phone _number;
+	@Setter @Getter private   Phone _number;
 	
-
 	@MarshallField(as="id")
-	@Getter private final  PeerID _id;
+	@Setter @Getter private   PeerID _id;
 /////////////////////////////////////////////////////////////////////////////////////////
 //  METHODS
 /////////////////////////////////////////////////////////////////////////////////////////
 	public Peer(final PeerType type, final Phone number ) {
 		this(type,number,null);
+	}
+	public Peer(@MarshallFrom("type") final PeerType type,
+			    @MarshallFrom("number") final Phone phone,
+			    @MarshallFrom("id") final PeerID id) {
+			                               
+		_number = phone;	
+		_type = type;
+		_id = id;
+		
 	}
 
 }

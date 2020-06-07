@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 public enum MessageContentType {	
 	text,  // lowcase must be
 	image,
+	location,
 	sound
 ;
 /////////////////////////////////////////////////////////////////////////////////////////

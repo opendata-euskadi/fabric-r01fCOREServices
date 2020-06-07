@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.nexmo.NexmoAPI.NexmoAPIData;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForMessagingApplication;
 import r01f.cloud.nexmo.model.Message;
+import r01f.cloud.nexmo.model.MessageContents.TextMessageContent;
 import r01f.cloud.nexmo.model.outbound.NexmoOutboundMessage;
 import r01f.httpclient.HttpRequestHeader;
 import r01f.httpclient.HttpResponse;
@@ -32,6 +33,8 @@ public class NexmoServicesForMessagingApplicationImpl
                      final String text) {
 		NexmoOutboundMessage outboudMesagge = new NexmoOutboundMessage();
 		Message message = new Message();
+		TextMessageContent _content = new TextMessageContent(text);
+		message.setContent(_content);
 		send(outboudMesagge);
 	}
 	

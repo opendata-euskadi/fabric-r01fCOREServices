@@ -1,5 +1,14 @@
 package r01f.cloud.nexmo.model.inbound;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+import r01f.cloud.nexmo.model.Message;
+import r01f.cloud.nexmo.model.NexmoIDS.MessageUUID;
+import r01f.cloud.nexmo.model.Peer;
+import r01f.model.ModelObject;
+import r01f.objectstreamer.annotations.MarshallField;
+
 // https://developer.nexmo.com/api/messages-olympus#inbound-message
 /**
  * {
@@ -47,8 +56,23 @@ package r01f.cloud.nexmo.model.inbound;
  * @author IOLABARO
  *
  */
+@Accessors(prefix="_")
+public class NexmoInboundMessage 
+		implements ModelObject {
 
-
-public class NexmoInboundMessage {
-	//
+	private static final long serialVersionUID = -1909085728711636850L;
+//////////////////////////////////////////////////////////////
+// MEMBERS	
+//////////////////////////////////////////////////////////////
+	@MarshallField(as="message_uuid")
+	@Getter @Setter private MessageUUID _uuid;
+	
+	@MarshallField(as="from")
+	@Getter @Setter private Peer _from;
+	
+	@MarshallField(as="to")
+	@Getter @Setter private Peer _to;
+		
+	@MarshallField(as="message")
+	@Getter @Setter private Message  _message;
 }
