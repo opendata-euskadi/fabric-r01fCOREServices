@@ -1,5 +1,6 @@
 package r01f.cloud.nexmo;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import com.nexmo.client.NexmoClient;
@@ -16,6 +17,7 @@ import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForSMSImpl;
 import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForVoiceImpl;
 import r01f.guids.CommonOIDs.Password;
 import r01f.guids.OIDBaseImmutable;
+import r01f.model.annotations.ModelObjectsMarshaller;
 import r01f.objectstreamer.Marshaller;
 import r01f.objectstreamer.annotations.MarshallType;
 import r01f.types.contact.Phone;
@@ -39,8 +41,9 @@ public class NexmoAPI  {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
-	public NexmoAPI(final NexmoConfig config,
-			        final Marshaller marshaller) {
+	@Inject
+	public NexmoAPI(						final NexmoConfig config,
+			        @ModelObjectsMarshaller final Marshaller marshaller) {
 		this(config.getApiData(),marshaller);		
 	}
 	
