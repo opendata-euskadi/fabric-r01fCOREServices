@@ -19,7 +19,7 @@ public abstract class NexmoIDS {
 	/**
 	 * Base for every oid objects
 	 */
-	@Immutable
+	@Immutable	
 	@NoArgsConstructor
 	public static abstract class NexmoIDBase
 						 extends OIDBaseMutable<String>
@@ -68,11 +68,11 @@ public abstract class NexmoIDS {
 			return this.is(ADMIN);
 		}
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 //	                                                                          
 /////////////////////////////////////////////////////////////////////////////////////////	
 	@Immutable
-	@MarshallType(as="messageUUID")
+	@MarshallType(as="message_uuid") //<== Don't Change must be this
 	@NoArgsConstructor
 	public static final class MessageUUID
 					  extends NexmoIDBase {

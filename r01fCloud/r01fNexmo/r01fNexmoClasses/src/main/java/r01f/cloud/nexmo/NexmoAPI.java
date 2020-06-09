@@ -65,8 +65,10 @@ public class NexmoAPI  {
 	@RequiredArgsConstructor @AllArgsConstructor
 	public static class NexmoAPIData {
 		// Client API
+		
 		@Getter private final NexmoAPIClientID _apiKey;
 		@Getter private final Password _apiSecret;
+		@Getter private final NexmoApplicationtID _applicationId;
 		@Getter private final Password _privateKey;
 		// Used for supapis.
 		@Getter private Phone _voicePhone;			// (a nexmo number) +34518880365
@@ -99,11 +101,23 @@ public class NexmoAPI  {
 			return new NexmoAPIClientID(id);
 		}
 	}
+	@MarshallType(as="applicationID")
+	public static class NexmoApplicationtID 
+				extends OIDBaseImmutable<String> {
+		private static final long serialVersionUID = -5867457273405673410L;
+		private NexmoApplicationtID(final String id) {
+			super(id);
+		}
+		public static NexmoApplicationtID of(final String id) {
+			return new NexmoApplicationtID(id);
+		}
+	}
+	
 /////////////////////////////////////////////////////////////////////////////////////////
 //  
 /////////////////////////////////////////////////////////////////////////////////////////
-	@SuppressWarnings({})
-	private NexmoClient  _createNexmoRESTClient(NexmoAPIData apiData) {
+	
+	private NexmoClient  _createNexmoRESTClient(final NexmoAPIData apiData) {
 		NexmoClient  outClient = 
 		                         NexmoClient.builder()
 		                             .applicationId("z99")

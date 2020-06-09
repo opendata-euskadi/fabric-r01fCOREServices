@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.nexmo.NexmoAPI.NexmoAPIClientID;
 import r01f.cloud.nexmo.NexmoAPI.NexmoAPIData;
+import r01f.cloud.nexmo.NexmoAPI.NexmoApplicationtID;
 import r01f.config.ContainsConfigData;
 import r01f.exceptions.Throwables;
 import r01f.guids.CommonOIDs.Password;
@@ -65,11 +66,15 @@ public class NexmoConfig
 	static NexmoAPIData apiDataFromProperties(final XMLPropertiesForAppComponent props,
 											  final String propsRootNode) {
 		String apiKeyAsString = props.propertyAt(propsRootNode + "/apiKey")
-								 .asString();
+								        .asString();
 		String apiSecretasString  = props.propertyAt(propsRootNode + "/apiSecret")
-								 .asString();
+							              	 .asString();
 		String priavateKeysString  = props.propertyAt(propsRootNode + "/privateKey")
-				 .asString();
+				                           .asString();
+		
+		String applicationIdAsString  = props.propertyAt(propsRootNode + "/applicationId")
+				                               .asString();
+		
 		
 		String voicePhoneNumberAsString = props.propertyAt(propsRootNode + "/voicePhoneNumber")
 											 .asString();
@@ -102,20 +107,11 @@ public class NexmoConfig
 																		propsRootNode + "/twilio/messagingPhoneNumber",props.getAppCode());
 		}
 
-		// Create the NEXMO service :
-		/**
-		 * 		@Getter private final NexmoAPIClientID _apiKey;
-				@Getter private final Password _apiSecret;
-				// Used for supapis.
-				@Getter private Phone _voicePhone;			// (a nexmo number) +34518880365
-				@Getter private Phone _smsPhone;		// (a nexmo number) +34518880365
-				@Getter private Phone _messagingPhone;		// (a nexmo number) +34518880365
-				@Getter private Url   _restResouceURIForMessagingApplicationI
-		 */
-		
+		// Create the NEXMO NexmoAPIData :
 		NexmoAPIData apiData = new NexmoAPIData(NexmoAPIClientID.of(apiKeyAsString),
-				                                Strings.isNOTNullOrEmpty(apiSecretasString) ? Password.forId(apiSecretasString) :null,		
-				                                Strings.isNOTNullOrEmpty(priavateKeysString) ? Password.forId(priavateKeysString) :null,			
+				                                Strings.isNOTNullOrEmpty(apiSecretasString) ? Password.forId(apiSecretasString) :null,	
+				                                 Strings.isNOTNullOrEmpty(applicationIdAsString) ?  NexmoApplicationtID.of(applicationIdAsString) :null,			
+				                                Strings.isNOTNullOrEmpty(priavateKeysString) ? Password.forId(priavateKeysString) :null,				                             
 												Strings.isNOTNullOrEmpty(voicePhoneNumberAsString) ? Phone.of(voicePhoneNumberAsString) : null,
 											    Strings.isNOTNullOrEmpty(smsPhoneNumberAsString) ? Phone.of(smsPhoneNumberAsString) : null,
 											    Strings.isNOTNullOrEmpty(messagePhoneNumberAsString) ? Phone.of(messagePhoneNumberAsString) : null,
