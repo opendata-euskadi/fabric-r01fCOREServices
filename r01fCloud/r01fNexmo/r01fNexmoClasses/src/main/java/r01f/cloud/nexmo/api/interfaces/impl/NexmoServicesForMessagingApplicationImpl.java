@@ -59,6 +59,8 @@ public class NexmoServicesForMessagingApplicationImpl
 		// log & return
 		_logResponse(restResourceUrl,httpResponse);		
 		
+		// To do . Parse 200 OK result JSON to MessageUUID //{"message_uuid":"e670a362-568a-4895-a93e-76ffb78c21f1"}
+		
 	}	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS	
