@@ -89,22 +89,27 @@ public class NexmoConfig
 
 		// Check
 		if (apiKeyAsString == null  || apiSecretasString == null ) {
-			throw new IllegalStateException(Throwables.message("Cannot configure NEXMO API: the properties file does NOT contains a the accountSID / authToken at {} in {} properties file",
-															   propsRootNode + "/twilio/accountSID|authToken",props.getAppCode()));
+			throw new IllegalStateException(Throwables.message("Cannot configure NEXMO API: the properties file does NOT contains a the apiKey / apiSecret at {} in {} properties file",
+															   propsRootNode + "/nexmo/apiKey|apiSecret",props.getAppCode()));
 		}
 		if (Strings.isNullOrEmpty(voicePhoneNumberAsString) && Strings.isNullOrEmpty(smsPhoneNumberAsString)) {
-			throw new IllegalStateException(Throwables.message("Cannot configure NEXMO API: there's neither a voice-enabled twilio phone number nor a messaging-enabled twilio phone number configured at {} in {} properties file",
-															   propsRootNode + "/twilio/voicePhoneNumber|messagingPhoneNumber",props.getAppCode()));
+			throw new IllegalStateException(Throwables.message("Cannot configure NEXMO API: there's neither a voice-enabled nexmo phone number nor a messaging-enabled twilio phone number configured at {} in {} properties file",
+															   propsRootNode + "/nexmo/voicePhoneNumber",props.getAppCode()));
 		}
 		if (Strings.isNullOrEmpty(voicePhoneNumberAsString)) {
 			log.warn("There's NO voice-enabled NEXMO phone number configured at {} in {} properties file: VOICE CALLS ARE NOT ENABLED!",
 		
-																	propsRootNode + "/twilio/voicePhoneNumber",props.getAppCode());
+																	propsRootNode + "/nexmo/voicePhoneNumber",props.getAppCode());
 		}
 		
 		if (Strings.isNullOrEmpty(smsPhoneNumberAsString)) {
 			log.warn("There's NO messaging-enabled NEXMO phone number configured at {} in {} properties file: MESSAGING IS NOT ENABLED!",		
-																		propsRootNode + "/twilio/messagingPhoneNumber",props.getAppCode());
+																		propsRootNode + "/nexmo/messagingPhoneNumber",props.getAppCode());
+		}
+		
+		if (Strings.isNullOrEmpty(applicationIdAsString)) {
+			log.warn("There's NO ApplicationID configured at {} in {} properties file: MESSAGING IS NOT ENABLED!",		
+																		propsRootNode + "/nexmo/applicationId",props.getAppCode());
 		}
 
 		// Create the NEXMO NexmoAPIData :
