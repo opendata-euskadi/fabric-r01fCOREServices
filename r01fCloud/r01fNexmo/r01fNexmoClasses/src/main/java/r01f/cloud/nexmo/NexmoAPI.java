@@ -111,8 +111,7 @@ public class NexmoAPI  {
 		public static NexmoApplicationtID of(final String id) {
 			return new NexmoApplicationtID(id);
 		}
-	}
-	
+	}	
 /////////////////////////////////////////////////////////////////////////////////////////
 //  
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +119,7 @@ public class NexmoAPI  {
 	private NexmoClient  _createNexmoRESTClient(final NexmoAPIData apiData) {
 		NexmoClient  outClient = 
 		                         NexmoClient.builder()
-		                             .applicationId("z99")
+		                             .applicationId(apiData.getApplicationId().asString())
 		                             .apiKey(apiData.getApiKey().asString())
 		                             .apiSecret(apiData.getApiSecret().asString())		                             
 		                             .privateKeyContents(apiData.getPrivateKey().asString())
