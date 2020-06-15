@@ -32,7 +32,7 @@ public class NexmoServiceTest {
 		NexmoOutboundMessage out = new NexmoOutboundMessageFactoryTestFactory().create();
 				
 		nexmoAPI.getForMessageApplication()
-		        .send(out);
+		        .send(out.getTo(), out.getMessage());
 		
 	}
 

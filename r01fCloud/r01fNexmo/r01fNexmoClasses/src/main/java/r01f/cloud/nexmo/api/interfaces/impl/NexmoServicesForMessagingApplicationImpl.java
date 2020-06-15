@@ -3,11 +3,13 @@ package r01f.cloud.nexmo.api.interfaces.impl;
 import com.nexmo.client.NexmoClient;
 
 import lombok.extern.slf4j.Slf4j;
+import r01f.cloud.nexmo.NexmoAPI.MessagingService;
 import r01f.cloud.nexmo.NexmoAPI.NexmoAPIData;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForMessagingApplication;
 import r01f.cloud.nexmo.model.Message;
 import r01f.cloud.nexmo.model.MessageContents.TextMessageContent;
 import r01f.cloud.nexmo.model.NexmoIDS.MessageUUID;
+import r01f.cloud.nexmo.model.Peer;
 import r01f.cloud.nexmo.model.outbound.NexmoOutboundMessage;
 import r01f.httpclient.HttpRequestHeader;
 import r01f.httpclient.HttpResponse;
@@ -30,22 +32,29 @@ public class NexmoServicesForMessagingApplicationImpl
 			                                        final Marshaller marshaller) {
 		super(apiData,nexmoClient,marshaller);	
 	}	
-	public void send(final Phone toPhone,
+	
+	public void send(final Phone toPhone, MessagingService service,
                      final String text) {
-		NexmoOutboundMessage outboudMesagge = new NexmoOutboundMessage();
 		Message message = new Message();
-		TextMessageContent _content = new TextMessageContent(text);
-		message.setContent(_content);
-		send(outboudMesagge);
+		TextMessageContent messageContent = new TextMessageContent(text);
+		message.setContent(messageContent);
+		Peer to = new Peer(service, toPhone);
+		send(to, message);
 	}
 
 	@Override
-	public MessageUUID send( final NexmoOutboundMessage out ) {		
+	public NexmoOutboundMessage send(final Peer to, final Message message) {
+		//Configure out message
+		NexmoOutboundMessage  outboundMessage  = new NexmoOutboundMessage();
+		outboundMessage.setFrom(new Peer(_apiData.getMessagingService(), _apiData.getMessagingPhone()));
+		outboundMessage.setTo(to);
+		outboundMessage.setMessage(message);
+		
 		// do the http call
 		Url restResourceUrl = _apiData.getRestResouceURIForMessagingApplicationImpl();
 		log.warn(" Create REST Resource Url {}", restResourceUrl);
 	    //0. Marshall.
-		String entityAsStringJson = _marshaller.forWriting().toJson(out);
+		String entityAsStringJson = _marshaller.forWriting().toJson(outboundMessage);
 		//1. Generare JWT based on Nexmo Client.
 		String jwtAsString = _nexmoClient.generateJwt();	
 		//2. POST.
@@ -62,8 +71,9 @@ public class NexmoServicesForMessagingApplicationImpl
 			 log.warn( "json response {}", jsonAsString);
 			 MessageUUID uuid = _marshaller.forReading()
 			                                 .fromJson(jsonAsString, MessageUUID.class);
+			 outboundMessage.setUuid(uuid);
 			 log.warn(" post message uuid {}", uuid.asString());
-			 return uuid;
+			 return outboundMessage;
 		 } else {
 			// IllegalStateException			
 			throw new IllegalStateException( Strings.customized(" error posting  outbound message {}",httpResponse.loadAsString()));

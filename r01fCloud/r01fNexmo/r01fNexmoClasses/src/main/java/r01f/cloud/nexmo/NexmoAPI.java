@@ -74,6 +74,7 @@ public class NexmoAPI  {
 		@Getter private Phone _voicePhone;			// (a nexmo number) +34518880365
 		@Getter private Phone _smsPhone;		// (a nexmo number) +34518880365
 		@Getter private Phone _messagingPhone;		// (a nexmo number) +34518880365
+		@Getter private MessagingService _messagingService;
 		@Getter private Url   _restResouceURIForMessagingApplicationImpl;  
 		
 		
@@ -112,6 +113,19 @@ public class NexmoAPI  {
 			return new NexmoApplicationtID(id);
 		}
 	}
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+/////////////////////////////////////////////////////////////////////////////////////////
+	@Accessors(prefix="_")
+	@RequiredArgsConstructor
+	public static enum MessagingService {	
+		whatsapp,  // lowcase must be
+		messenger;
+	/////////////////////////////////////////////////////////////////////////////////////////
+//		FROM OID & ID TYPES
+	/////////////////////////////////////////////////////////////////////////////////////////
+
+	}
 	
 /////////////////////////////////////////////////////////////////////////////////////////
 //  
@@ -120,7 +134,7 @@ public class NexmoAPI  {
 	private NexmoClient  _createNexmoRESTClient(final NexmoAPIData apiData) {
 		NexmoClient  outClient = 
 		                         NexmoClient.builder()
-		                             .applicationId("z99")
+		                             .applicationId(apiData.getApplicationId().asString())
 		                             .apiKey(apiData.getApiKey().asString())
 		                             .apiSecret(apiData.getApiSecret().asString())		                             
 		                             .privateKeyContents(apiData.getPrivateKey().asString())

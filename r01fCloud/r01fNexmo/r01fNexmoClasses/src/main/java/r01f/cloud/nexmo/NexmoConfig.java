@@ -81,6 +81,9 @@ public class NexmoConfig
 		String smsPhoneNumberAsString = props.propertyAt(propsRootNode + "/smsPhoneNumber")
 										    	 .asString();
 		
+		String messagingServiceAsString = props.propertyAt(propsRootNode + "/messagingService")
+                .asString();
+		
 		String messagePhoneNumberAsString = props.propertyAt(propsRootNode + "/messagingPhoneNumber")
 		    	                                      .asString();
 		
@@ -115,6 +118,7 @@ public class NexmoConfig
 												Strings.isNOTNullOrEmpty(voicePhoneNumberAsString) ? Phone.of(voicePhoneNumberAsString) : null,
 											    Strings.isNOTNullOrEmpty(smsPhoneNumberAsString) ? Phone.of(smsPhoneNumberAsString) : null,
 											    Strings.isNOTNullOrEmpty(messagePhoneNumberAsString) ? Phone.of(messagePhoneNumberAsString) : null,
+											    Strings.isNOTNullOrEmpty(messagingServiceAsString) ? NexmoAPI.MessagingService.valueOf(messagingServiceAsString) : null,
 											    Strings.isNOTNullOrEmpty(restResouceURIForMessagingApplicationImplAsString) ? Url.from(restResouceURIForMessagingApplicationImplAsString) : null);
 													  
 														  

@@ -1,9 +1,10 @@
 package r01f.cloud.nexmo.api.interfaces;
 
-import r01f.cloud.nexmo.model.NexmoIDS.MessageUUID;
+import r01f.cloud.nexmo.model.Message;
+import r01f.cloud.nexmo.model.Peer;
 import r01f.cloud.nexmo.model.outbound.NexmoOutboundMessage;
 
 public interface NexmoServicesForMessagingApplication {
 	
-	public MessageUUID send(final NexmoOutboundMessage out);
+	public NexmoOutboundMessage send(final Peer to, final Message message);
 }

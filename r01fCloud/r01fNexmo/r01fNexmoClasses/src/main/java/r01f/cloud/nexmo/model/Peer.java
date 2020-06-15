@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import r01f.aspects.interfaces.dirtytrack.ConvertToDirtyStateTrackable;
+import r01f.cloud.nexmo.NexmoAPI.MessagingService;
 import r01f.cloud.nexmo.model.NexmoIDS.PeerID;
 import r01f.model.ModelObject;
 import r01f.objectstreamer.annotations.MarshallField;
@@ -25,7 +26,7 @@ public class Peer
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
 	@MarshallField(as="type")
-	@Setter @Getter private    PeerType _type;
+	@Setter @Getter private    MessagingService _type;
 
 	@MarshallField(as="number")
 	@Setter @Getter private   Phone _number;
@@ -35,10 +36,10 @@ public class Peer
 /////////////////////////////////////////////////////////////////////////////////////////
 //  METHODS
 /////////////////////////////////////////////////////////////////////////////////////////
-	public Peer(final PeerType type, final Phone number ) {
+	public Peer(final MessagingService type, final Phone number ) {
 		this(type,number,null);
 	}
-	public Peer(@MarshallFrom("type") final PeerType type,
+	public Peer(@MarshallFrom("type") final MessagingService type,
 			    @MarshallFrom("number") final Phone phone,
 			    @MarshallFrom("id") final PeerID id) {
 			                               
