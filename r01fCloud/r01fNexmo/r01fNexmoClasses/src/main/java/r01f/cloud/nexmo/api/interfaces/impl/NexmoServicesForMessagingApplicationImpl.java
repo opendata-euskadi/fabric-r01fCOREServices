@@ -3,11 +3,9 @@ package r01f.cloud.nexmo.api.interfaces.impl;
 import com.nexmo.client.NexmoClient;
 
 import lombok.extern.slf4j.Slf4j;
-import r01f.cloud.nexmo.NexmoAPI.MessagingService;
 import r01f.cloud.nexmo.NexmoAPI.NexmoAPIData;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForMessagingApplication;
 import r01f.cloud.nexmo.model.Message;
-import r01f.cloud.nexmo.model.MessageContents.TextMessageContent;
 import r01f.cloud.nexmo.model.NexmoIDS.MessageUUID;
 import r01f.cloud.nexmo.model.Peer;
 import r01f.cloud.nexmo.model.outbound.NexmoOutboundMessage;
@@ -32,14 +30,14 @@ public class NexmoServicesForMessagingApplicationImpl
 			                                        final Marshaller marshaller) {
 		super(apiData,nexmoClient,marshaller);	
 	}	
-	
-	public void send(final Phone toPhone, MessagingService service,
-                     final String text) {
+	public void send(final Phone toPhone,  final String text) {
+		/*NexmoOutboundMessage outboudMesagge = new NexmoOutboundMessage();
 		Message message = new Message();
-		TextMessageContent messageContent = new TextMessageContent(text);
-		message.setContent(messageContent);
-		Peer to = new Peer(service, toPhone);
-		send(to, message);
+		TextMessageContent _content = new TextMessageContent(text);
+		message.setContent(_content);
+		send(outboudMesagge);*/
+		throw new UnsupportedOperationException(" Not implemented. Use : public MessageUUID send( final NexmoOutboundMessage out ) ");
+		
 	}
 
 	@Override

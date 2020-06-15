@@ -52,6 +52,7 @@ public class NexmoMessageStatusFactoryTest
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
+	@SuppressWarnings("unused")
 	public static void main(final String[] argv) {
 	    String json = MarshallerBuilder.findTypesToMarshallAt(R01FAppCodes.APP_CODE)
                                      	.build()
