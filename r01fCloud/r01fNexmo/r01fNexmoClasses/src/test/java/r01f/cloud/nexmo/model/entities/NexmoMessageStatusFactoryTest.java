@@ -18,13 +18,13 @@ public class NexmoMessageStatusFactoryTest
 	
 	@Override
 	public NexmoMessageStatus create() {
-		return _buildMessageStatux();
+		return _buildMessageStatus();
 	}
 	
 	
-	private static NexmoMessageStatus _buildMessageStatux() {
+	private static NexmoMessageStatus _buildMessageStatus() {
 		NexmoMessageStatus  messageStatus  = new NexmoMessageStatus();
-		Peer from = new Peer(PeerType.whatsapp, Phone.create("14157386170"), PeerID.valueOf("66565665"));
+		Peer from = new Peer(PeerType.whatsapp, Phone.create("34688671414"), PeerID.valueOf("66565665"));
 		messageStatus.setFrom(from);
 		
 		Peer to =  new Peer(PeerType.whatsapp, Phone.create("34616178858"),PeerID.valueOf("66565665"));

@@ -20,12 +20,12 @@ public class NexmoOutboundMessageFactoryTestFactory
 	
 	private static NexmoOutboundMessage _buildOutboundMessage() {
 		NexmoOutboundMessage  outboundMessage  = new NexmoOutboundMessage();
-		Peer from = new Peer(PeerType.whatsapp, Phone.create("14157386170"));
+		Peer from = new Peer(PeerType.whatsapp, Phone.create("34688671414"));
 		outboundMessage.setFrom(from);
 		Peer to =  new Peer(PeerType.whatsapp, Phone.create("34616178858"));
 		outboundMessage.setTo(to);
 		Message message = new Message();
-		TextMessageContent content = new TextMessageContent("Hola Caracola");
+		TextMessageContent content = new TextMessageContent("Hola Caracola de Mar");
 		message.setContent(content);
 		outboundMessage.setMessage(message);	
 		return outboundMessage;		

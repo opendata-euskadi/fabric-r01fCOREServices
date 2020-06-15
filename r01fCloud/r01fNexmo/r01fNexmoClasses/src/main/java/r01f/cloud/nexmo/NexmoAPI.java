@@ -35,6 +35,7 @@ public class NexmoAPI  {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
+	@Getter final NexmoAPIData _apiData;
 	@Getter private NexmoServicesForSMS _forSMS;
 	@Getter private NexmoServicesForVoice _forVoice;
 	@Getter private NexmoServicesForMessagingApplication _forMessageApplication;	
@@ -49,6 +50,8 @@ public class NexmoAPI  {
 	
 	public NexmoAPI(final NexmoAPIData apiData,
 			        final Marshaller marshaller) {
+		// Nexmo API Data.
+		_apiData = apiData;
 	
 		// Nexmo Client 		
 		 NexmoClient  nexmoClient =  _createNexmoRESTClient(apiData) ;

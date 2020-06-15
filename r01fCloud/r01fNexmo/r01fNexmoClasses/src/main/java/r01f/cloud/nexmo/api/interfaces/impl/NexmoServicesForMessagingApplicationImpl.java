@@ -37,37 +37,42 @@ public class NexmoServicesForMessagingApplicationImpl
 		throw new UnsupportedOperationException(" Not implemented. Use : public MessageUUID send( final NexmoOutboundMessage out ) ");
 		
 	}
-
 	@Override
 	public MessageUUID send( final NexmoOutboundMessage out ) {		
+	   return _doSend(out);	
+	}
+////////////////////////////////////////////////////
+// PRIVATE METHODS
+////////////////////////////////////////////////////
+	private  MessageUUID _doSend( final NexmoOutboundMessage out ) {		
 		// do the http call
 		Url restResourceUrl = _apiData.getRestResouceURIForMessagingApplicationImpl();
 		log.warn(" Create REST Resource Url {}", restResourceUrl);
 	    //0. Marshall.
 		String entityAsStringJson = _marshaller.forWriting().toJson(out);
 		//1. Generare JWT based on Nexmo Client.
-		String jwtAsString = _nexmoClient.generateJwt();	
+		String jwtAsString = _nexmoClient.generateJwt();			 
+	    log.warn(" \n \n Generated JWT  {} \n" , jwtAsString);
 		//2. POST.
 		HttpResponse httpResponse = DelegateForRawREST.POST(restResourceUrl, 									                        // REST Resource URI
 				                                            MimeTypes.APPLICATION_JSON,                                                 // Mime Type JSON
-										  					new HttpRequestHeader("bearer",jwtAsString),     						    // JWT bearer
+										  					new HttpRequestHeader("Authorization","Bearer " + jwtAsString),     						    // JWT bearer
 										  					entityAsStringJson,                              						    // Posted JSON as String
 										  					new HttpRequestHeader("accept",MimeTypes.APPLICATION_JSON.asString()));    // Accept Header, to obtain CRUDResult based response ( otherwise model object will be returned)
 	
-		 //Parse Result
+	 
+	    //Parse Result
 		 if (httpResponse.isSuccess()) {
 			// Parse 200 OK result JSON to MessageUUID //{"message_uuid":"e670a362-568a-4895-a93e-76ffb78c21f1"}
-			 String jsonAsString = httpResponse.loadAsString();
+			 String jsonAsString = httpResponse.loadAsString();//StringPersistenceUtils.load(response.getEntity().getContent());
 			 log.warn( "json response {}", jsonAsString);
 			 MessageUUID uuid = _marshaller.forReading()
 			                                 .fromJson(jsonAsString, MessageUUID.class);
 			 log.warn(" post message uuid {}", uuid.asString());
 			 return uuid;
-		 } else {
-			// IllegalStateException			
+		 } else {			
 			throw new IllegalStateException( Strings.customized(" error posting  outbound message {}",httpResponse.loadAsString()));
-		 }
-		
+		 }		
 	}	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS	
