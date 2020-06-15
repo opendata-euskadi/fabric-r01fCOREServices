@@ -134,7 +134,7 @@ public class NexmoAPI  {
 	private NexmoClient  _createNexmoRESTClient(final NexmoAPIData apiData) {
 		NexmoClient  outClient = 
 		                         NexmoClient.builder()
-		                             .applicationId(apiData.getApplicationId().asString())
+		                             .applicationId("z99")
 		                             .apiKey(apiData.getApiKey().asString())
 		                             .apiSecret(apiData.getApiSecret().asString())		                             
 		                             .privateKeyContents(apiData.getPrivateKey().asString())
