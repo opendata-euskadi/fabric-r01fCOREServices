@@ -5,7 +5,9 @@ import com.nexmo.client.NexmoClient;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.nexmo.NexmoAPI.NexmoAPIData;
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForMessagingApplication;
+import r01f.cloud.nexmo.model.Message;
 import r01f.cloud.nexmo.model.NexmoIDS.MessageUUID;
+import r01f.cloud.nexmo.model.Peer;
 import r01f.cloud.nexmo.model.outbound.NexmoOutboundMessage;
 import r01f.httpclient.HttpRequestHeader;
 import r01f.httpclient.HttpResponse;
@@ -38,13 +40,18 @@ public class NexmoServicesForMessagingApplicationImpl
 		
 	}
 	@Override
-	public MessageUUID send( final NexmoOutboundMessage out ) {		
-	   return _doSend(out);	
+	public NexmoOutboundMessage send(final Peer to, final Message message) {		
+	   return _doSend(to, message);	
 	}
 ////////////////////////////////////////////////////
 // PRIVATE METHODS
 ////////////////////////////////////////////////////
-	private  MessageUUID _doSend( final NexmoOutboundMessage out ) {		
+	private  NexmoOutboundMessage _doSend(final Peer to, final Message message) {
+		NexmoOutboundMessage out = new NexmoOutboundMessage();
+		Peer from = new Peer(_apiData.getMessagingService(), _apiData.getMessagingPhone());
+		out.setFrom(from);
+		out.setTo(to);
+		out.setMessage(message);
 		// do the http call
 		Url restResourceUrl = _apiData.getRestResouceURIForMessagingApplicationImpl();
 		log.warn(" Create REST Resource Url {}", restResourceUrl);
@@ -69,7 +76,8 @@ public class NexmoServicesForMessagingApplicationImpl
 			 MessageUUID uuid = _marshaller.forReading()
 			                                 .fromJson(jsonAsString, MessageUUID.class);
 			 log.warn(" post message uuid {}", uuid.asString());
-			 return uuid;
+			 out.setUuid(uuid);
+			 return out;
 		 } else {			
 			throw new IllegalStateException( Strings.customized(" error posting  outbound message {}",httpResponse.loadAsString()));
 		 }		

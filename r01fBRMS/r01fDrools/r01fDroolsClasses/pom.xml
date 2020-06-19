@@ -43,6 +43,11 @@
 			<artifactId>r01fResourceLoadInterfaceClasses</artifactId>
 			<version>${revision}</version>
 		</dependency>
+		<dependency>
+			<groupId>r01.r01f.businessservices</groupId>
+			<artifactId>r01fBusinessServicesClasses</artifactId>
+			<version>${revision}</version>
+		</dependency>
 		<!-- ///////////////////////////////////////// -->
 		<!-- R01f Object Streamer          				   -->
 		<!-- ///////////////////////////////////////// -->		
