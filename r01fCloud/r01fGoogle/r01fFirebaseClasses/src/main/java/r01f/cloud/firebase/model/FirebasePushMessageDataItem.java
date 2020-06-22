@@ -9,7 +9,7 @@ import r01f.cloud.firebase.model.FirebaseIds.FirebasePushMessageDataItemID;
 @RequiredArgsConstructor
 public class FirebasePushMessageDataItem {
 /////////////////////////////////////////////////////////////////////////////////////////
-//	FIELDS . León Guzmán
+//	FIELDS 
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Getter private final FirebasePushMessageDataItemID _id;
     @Getter private final String _value;
