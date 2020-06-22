@@ -10,10 +10,13 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.firebase.service.FirebaseServiceImpl.FirebaseAPIData;
 import r01f.config.ContainsConfigData;
+import r01f.guids.CommonOIDs.Environment;
 import r01f.httpclient.HttpClientProxySettings;
 import r01f.httpclient.HttpClientProxySettingsBuilder;
 import r01f.io.util.StreamEncrypterDecrypter;
+import r01f.types.Path;
 import r01f.util.types.Strings;
+import r01f.xmlproperties.XMLPropertiesEnv;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
 @Slf4j
@@ -75,12 +78,18 @@ public class FirebaseConfig
 		try {			
 			InputStream  stream  = Thread.currentThread().getContextClassLoader().getResourceAsStream(credentialsPath);
 			if (stream == null) {
+				Environment env = XMLPropertiesEnv.guessEnvironmentFromSystemEnvProp();
+				Path credentialPAthByEnv = Path.from( env.getId(),credentialsPath);
+				log.warn("Try to read by env {} , as relative path {} " , env.getId(),  credentialPAthByEnv.asRelativeString());				
+				stream  = Thread.currentThread().getContextClassLoader().getResourceAsStream(credentialPAthByEnv.asRelativeString());
+			}
+			
+			if (stream == null) {
 				throw new IllegalStateException(Strings.customized("Cannot find firebase credentials at {}", credentialsPath)) ;
 			}
 			if (keyAsString == null ){			
 				googleCredentials = GoogleCredentials.fromStream(stream);			
-			} else {
-				System.out.println("key=" + keyAsString);
+			} else {				
 				StreamEncrypterDecrypter encdec = new StreamEncrypterDecrypter(keyAsString.trim().toCharArray());
 				googleCredentials = GoogleCredentials.fromStream(encdec.decrypt(stream));
 			}			
