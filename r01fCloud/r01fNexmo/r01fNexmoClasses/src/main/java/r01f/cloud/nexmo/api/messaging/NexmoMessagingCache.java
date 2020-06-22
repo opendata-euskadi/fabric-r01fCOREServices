@@ -14,6 +14,8 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.nexmo.model.state.NexmoMessagingState;
 
+//[ TODO: THIS SHOULd BE AT BUSSINNESS APPLCIATION
+//]>
 @Singleton
 @Accessors(prefix = "_")
 @Slf4j
