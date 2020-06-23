@@ -1,6 +1,7 @@
 package r01f.cloud.nexmo.api.messaging;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -29,6 +30,7 @@ public abstract class NexmoMessagingCache<K, S extends NexmoMessagingState> {
 /////////////////////////////////////////////////////////////////////////////////////////
 	public NexmoMessagingCache(CacheLoader<K, S> loader) {
 		_messagingCache = CacheBuilder.newBuilder()
+									  .expireAfterAccess(5, TimeUnit.MINUTES)
 									  .build(loader);
 	}
 	
