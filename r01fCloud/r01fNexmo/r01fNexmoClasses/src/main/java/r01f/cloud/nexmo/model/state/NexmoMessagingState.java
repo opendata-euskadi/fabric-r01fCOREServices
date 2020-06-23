@@ -10,6 +10,8 @@ import r01f.objectstreamer.annotations.MarshallField;
 import r01f.objectstreamer.annotations.MarshallType;
 import r01f.types.contact.Phone;
 
+//[ TODO: THIS SHOULd BE AT BUSSINNESS APPLCIATION
+//]>
 @MarshallType(as="messagingState")
 @ConvertToDirtyStateTrackable			// changes in state are tracked
 @RequiredArgsConstructor
