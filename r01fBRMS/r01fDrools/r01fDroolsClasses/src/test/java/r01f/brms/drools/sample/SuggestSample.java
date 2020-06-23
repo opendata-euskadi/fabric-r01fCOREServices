@@ -25,7 +25,7 @@ public class SuggestSample {
 	
 	public static void main(String[] argv) {
 		DroolsKIESessionService kieSessionService =  buildKIEService() ;
-		SuggestService suggestService = new SuggestService(kieSessionService.getKieSession());
+		SuggestService suggestService = new SuggestService(kieSessionService.newKieSession());
 	
 		OutboundSuggest outBound = suggestService.suggest(new InboundInput("Ayudas"));
 		System.out.println("....outbound: " + outBound.getText());

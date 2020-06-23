@@ -7,5 +7,5 @@ import r01f.services.interfaces.ExposedServiceInterface;
 @ExposedServiceInterface
 public interface DroolsKIESessionService {
 	
-	 public KieSession getKieSession();
+	 public KieSession newKieSession();
 }

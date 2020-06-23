@@ -16,19 +16,23 @@ public abstract class DroolsKIESessionServiceBase
 ////////////////////////////////////////////////////////////////
 // MEMBERS
 ///////////////////////////////////////////////////////////////    
-    protected final  KieServices _kieServices;
-    protected final  DroolsKIEConfig _kieConfig;
+    protected final KieServices _kieServices;
+    protected final DroolsKIEConfig _kieConfig;
+    protected KieModule _kieModule;
+    protected KieContainer _kieContainer;
 ////////////////////////////////////////////////////////////////
 // CONSTRUCTOR
 ///////////////////////////////////////////////////////////////    
 	public DroolsKIESessionServiceBase (final DroolsKIEConfig kieConfig) {		
 		_kieServices = KieServices.Factory.get();
 		_kieConfig = kieConfig;
+		_init();
 	}	
 	public DroolsKIESessionServiceBase (final DroolsKIEConfig kieConfig,
 			                            final KieServices kieServices) {		
 		_kieServices = kieServices;
 		_kieConfig = kieConfig;
+		_init();
 	}	
 ////////////////////////////////////////////////////////////////
 // METHODS TO IMPLEMENT
@@ -39,10 +43,8 @@ public abstract class DroolsKIESessionServiceBase
 //  MAIN METHODS.
 ///////////////////////////////////////////////////////////////    
 	@Override
-	public KieSession getKieSession() {			
-	    KieModule kieModule = buildKieModule();
-	    KieContainer kContainer = buildKieContainer(kieModule);
-        return kContainer.newKieSession();
+	public KieSession newKieSession() {
+        return _kieContainer.newKieSession();
 	}		
 ////////////////////////////////////////////////////////////////
 // PROTECTED METHODS
@@ -56,4 +58,11 @@ public abstract class DroolsKIESessionServiceBase
           	 }
         });
 	 }
+////////////////////////////////////////////////////////////////
+//PRIVATE METHODS
+///////////////////////////////////////////////////////////////
+     private void _init() {
+    	 _kieModule = buildKieModule();
+    	 _kieContainer = buildKieContainer(_kieModule);
+     }
 }
