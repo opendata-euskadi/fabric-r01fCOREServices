@@ -9,7 +9,7 @@ public enum MessageContentType {
 	text,  // lowcase must be
 	image,
 	location,
-	sound
+	audio
 ;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FROM OID & ID TYPES

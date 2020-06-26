@@ -10,5 +10,5 @@ import r01f.objectstreamer.annotations.MarshallPolymorphicTypeInfo.MarshallTypeI
 @MarshallPolymorphicTypeInfo(typeIdPropertyName="type",
                              includeTypeInfo=@MarshallTypeInfoInclude(type=MarshalTypeInfoIncludeCase.ALWAYS))
 public interface MessageContent {
- //
+	public MessageContentType getType();
 }
