@@ -38,28 +38,27 @@ public class NexmoAPI  {
 	@Getter final NexmoAPIData _apiData;
 	@Getter private NexmoServicesForSMS _forSMS;
 	@Getter private NexmoServicesForVoice _forVoice;
-	@Getter private NexmoServicesForMessagingApplication _forMessageApplication;	
+	@Getter private NexmoServicesForMessagingApplication _forMessageApplication;
 /////////////////////////////////////////////////////////////////////////////////////////
 //  CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Inject
 	public NexmoAPI(						final NexmoConfig config,
 			        @ModelObjectsMarshaller final Marshaller marshaller) {
-		this(config.getApiData(),marshaller);		
+		this(config.getApiData(),marshaller);
 	}
-	
+
 	public NexmoAPI(final NexmoAPIData apiData,
 			        final Marshaller marshaller) {
 		// Nexmo API Data.
 		_apiData = apiData;
-	
-		// Nexmo Client 		
+		// Nexmo Client
 		 NexmoClient  nexmoClient =  _createNexmoRESTClient(apiData) ;
 		//... the subapis.
 		_forSMS = new NexmoServicesForSMSImpl(apiData,nexmoClient,marshaller);
 		_forVoice = new  NexmoServicesForVoiceImpl(apiData,nexmoClient,marshaller);
 		_forMessageApplication = new NexmoServicesForMessagingApplicationImpl(apiData,nexmoClient,marshaller);
-				
+
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  API DATA
@@ -68,19 +67,19 @@ public class NexmoAPI  {
 	@RequiredArgsConstructor @AllArgsConstructor
 	public static class NexmoAPIData {
 		// Client API
-		
+
 		@Getter private final NexmoAPIClientID _apiKey;
 		@Getter private final Password _apiSecret;
 		@Getter private final NexmoApplicationtID _applicationId;
 		@Getter private final Password _privateKey;
 		// Used for supapis.
 		@Getter private Phone _voicePhone;			// (a nexmo number) +34518880365
-		@Getter private Phone _smsPhone;		// (a nexmo number) +34518880365
+		@Getter private Phone _smsPhone;	    	// (a nexmo number) +34518880365
 		@Getter private Phone _messagingPhone;		// (a nexmo number) +34518880365
 		@Getter private MessagingService _messagingService;
-		@Getter private Url   _restResouceURIForMessagingApplicationImpl;  
-		
-		
+		@Getter private Url   _restResouceURIForMessagingApplicationImpl;
+
+
 		public boolean existsAccountData() {
 			return _apiKey != null && _apiSecret != null;
 		}
@@ -92,10 +91,10 @@ public class NexmoAPI  {
 		}
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
-//  
+//
 /////////////////////////////////////////////////////////////////////////////////////////
 	@MarshallType(as="apiClientID")
-	public static class NexmoAPIClientID 
+	public static class NexmoAPIClientID
 				extends OIDBaseImmutable<String> {
 		private static final long serialVersionUID = -5867457273405673410L;
 		private NexmoAPIClientID(final String id) {
@@ -106,7 +105,7 @@ public class NexmoAPI  {
 		}
 	}
 	@MarshallType(as="applicationID")
-	public static class NexmoApplicationtID 
+	public static class NexmoApplicationtID
 				extends OIDBaseImmutable<String> {
 		private static final long serialVersionUID = -5867457273405673410L;
 		private NexmoApplicationtID(final String id) {
@@ -121,30 +120,30 @@ public class NexmoAPI  {
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Accessors(prefix="_")
 	@RequiredArgsConstructor
-	public static enum MessagingService {	
+	public static enum MessagingService {
 		whatsapp,  // lowcase must be
 		messenger;
 	/////////////////////////////////////////////////////////////////////////////////////////
-//		FROM OID & ID TYPES
+    //		FROM OID & ID TYPES
 	/////////////////////////////////////////////////////////////////////////////////////////
 
 	}
-	
+
 /////////////////////////////////////////////////////////////////////////////////////////
-//  
+//
 /////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	private NexmoClient  _createNexmoRESTClient(final NexmoAPIData apiData) {
-		NexmoClient  outClient = 
+		NexmoClient  outClient =
 		                         NexmoClient.builder()
 		                             .applicationId(apiData.getApplicationId().asString())
 		                             .apiKey(apiData.getApiKey().asString())
-		                             .apiSecret(apiData.getApiSecret().asString())		                             
+		                             .apiSecret(apiData.getApiSecret().asString())
 		                             .privateKeyContents(apiData.getPrivateKey().asString())
 		                             .build();
-		
+
 		return outClient;
 	}
-	
-	
+
+
 }
