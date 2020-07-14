@@ -16,6 +16,8 @@ public abstract class DroolsOutputBase<T>
 		_content = content;
 	}
 	
+	@Override
 	public abstract T getContent();
+	@Override
 	public abstract void setContent(T content);
 }
