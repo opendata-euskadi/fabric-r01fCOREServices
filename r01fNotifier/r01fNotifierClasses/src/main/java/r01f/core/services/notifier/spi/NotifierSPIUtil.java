@@ -70,8 +70,13 @@ public abstract class NotifierSPIUtil {
 							public void accept(final NotifierSPIProviderForSMS prov) {
 								log.info("\t...found sms notifier provided by {}",
 										 prov.getClass());
-								cfgs.add(prov.provideSMSNotifierConfig(props,
-																	   appDepConfigProvider));
+								try {
+									cfgs.add(prov.provideSMSNotifierConfig(props,
+																		   appDepConfigProvider));
+								} catch (IllegalStateException ise) {
+									log.info("\tSMS notifier provided by {} not accepted : {}",
+											 prov.getClass(), ise.getMessage());
+								}
 							}
 					  });
 		// Get the config for the selected service impl
