@@ -39,8 +39,13 @@ public abstract class NotifierSPIUtil {
 							public void accept(final NotifierSPIProviderForEMail prov) {
 								log.info("\t...found email notifier provided by {}",
 										 prov.getClass());
-								cfgs.add(prov.provideEMailNotifierConfig(props,
-																	     appDepConfigProvider));
+								try {
+									cfgs.add(prov.provideEMailNotifierConfig(props,
+																			 appDepConfigProvider));
+								} catch (IllegalStateException ise) {
+									log.warn("\tEmail notifier provided by {} not accepted : {}",
+											  prov.getClass(), ise.getMessage());
+								}
 							}
 					  });
 		// Get the config for the selected service impl
@@ -51,7 +56,7 @@ public abstract class NotifierSPIUtil {
 																			return cfg.isSelectedImpl();
 																		}
 																})
-													    .first().orNull();
+														.first().orNull();
 		if (selectedImplConfig == null) {
 			throw new IllegalStateException("Could NOT find email config for selected impl (check there exists an email notifier dependency)!");
 		}
@@ -74,7 +79,7 @@ public abstract class NotifierSPIUtil {
 									cfgs.add(prov.provideSMSNotifierConfig(props,
 																		   appDepConfigProvider));
 								} catch (IllegalStateException ise) {
-									log.info("\tSMS notifier provided by {} not accepted : {}",
+									log.warn("\tSMS notifier provided by {} not accepted : {}",
 											 prov.getClass(), ise.getMessage());
 								}
 							}
@@ -87,7 +92,7 @@ public abstract class NotifierSPIUtil {
 																			return cfg.isSelectedImpl();
 																		}
 																})
-													    .first().orNull();
+														.first().orNull();
 		if (selectedImplConfig == null) {
 			throw new IllegalStateException("Could NOT find sms config for selected impl (check there exists a sms notifier dependency)!");
 		}
@@ -106,8 +111,13 @@ public abstract class NotifierSPIUtil {
 							public void accept(final NotifierSPIProviderForVoice prov) {
 								log.info("\t...found voice notifier provided by {}",
 										 prov.getClass());
-								cfgs.add(prov.provideVoiceNotifierConfig(props,
+								try {
+									cfgs.add(prov.provideVoiceNotifierConfig(props,
 																	     appDepConfigProvider));
+								} catch (IllegalStateException ise) {
+									log.warn("\tVoice notifier provided by {} not accepted : {}",
+											 prov.getClass(), ise.getMessage());
+								}
 							}
 					  });
 		// Get the config for the selected service impl
@@ -118,7 +128,7 @@ public abstract class NotifierSPIUtil {
 																			return cfg.isSelectedImpl();
 																		}
 																})
-													    .first().orNull();
+														.first().orNull();
 		if (selectedImplConfig == null) {
 			throw new IllegalStateException("Could NOT find voice call config for selected impl (check there exists a voice notifier dependency)!");
 		}
@@ -126,7 +136,7 @@ public abstract class NotifierSPIUtil {
 		return selectedImplConfig;
 	}
 	public static NotifierConfigForPushMessage pushMessageNotifierConfigFrom(final XMLPropertiesForAppComponent props,
-			                                                            	 final NotifierAppDependentConfigProviderFromProperties appDepConfigProvider) {
+																			 final NotifierAppDependentConfigProviderFromProperties appDepConfigProvider) {
 		log.warn("[Notifier] discovering push message notifiers");
 
 		// Use java's SPI to get the available configs
@@ -135,10 +145,15 @@ public abstract class NotifierSPIUtil {
 						.forEach(new Consumer<NotifierSPIProviderForPushMessage>() {
 									@Override
 									public void accept(final NotifierSPIProviderForPushMessage prov) {
-										log.warn("\t...found push message notifier provided by {}",
-										prov.getClass());
+										log.info("\t...found push message notifier provided by {}",
+												 prov.getClass());
+										try {
 										cfgs.add(prov.providePushMessageNotifierConfig(props,
-												                                       appDepConfigProvider));
+																					   appDepConfigProvider));
+										} catch (IllegalStateException ise) {
+											log.warn("\tPush notifier provided by {} not accepted : {}",
+													 prov.getClass(), ise.getMessage());
+										}
 									}
 						});
 		// Get the config for the selected service impl
@@ -149,11 +164,12 @@ public abstract class NotifierSPIUtil {
 																							return cfg.isSelectedImpl();
 																						}
 																				})
-																	   .first().orNull();
+																		.first().orNull();
 		if (selectedImplConfig == null) {
 			throw new IllegalStateException("Could NOT find push message config for selected impl (check there exists a push message notifier dependency)!");
 		}
 		log.info("\t > The selected push message notifier impl is {}",selectedImplConfig.getImpl());
 		return selectedImplConfig;
 	}
+	
 }
