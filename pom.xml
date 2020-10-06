@@ -18,7 +18,6 @@
 				> mvn -Drevision={new revision} clean package
 		-->
 		<revision>0.0.1-SNAPSHOT</revision>
-		<r01f.version>0.0.1-SNAPSHOT</r01f.version>
 
 		<!-- Dependencies versions -->
 		<guice.version>4.2.1</guice.version>	<!-- TODO 4.2.2 version exists BUT somehow it cannot be loaded! -->
