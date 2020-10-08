@@ -54,7 +54,7 @@
 		<dependency>
 			<groupId>r01.r01f.objectstreamer</groupId>
 			<artifactId>r01fObjectStreamerClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>
 		<!-- ///////////////////////////////////////// -->
 		<!-- R01f Properties         				   -->
@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>r01.r01f.properties</groupId>
 			<artifactId>r01fPropertiesClasses</artifactId>
-			<version>${r01f.version}</version>
+			<version>${revision}</version>
 		</dependency>		
 
   		<!-- ///////////////////////////////////////// -->
