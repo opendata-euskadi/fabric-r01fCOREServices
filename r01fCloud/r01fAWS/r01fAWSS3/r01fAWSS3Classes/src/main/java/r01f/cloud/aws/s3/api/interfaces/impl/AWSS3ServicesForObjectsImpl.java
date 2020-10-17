@@ -184,15 +184,15 @@ public class AWSS3ServicesForObjectsImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public AWSS3ObjectHeadResult headObject(final AWSS3Bucket bucket, final AWSS3ObjectKey key) {
-		log.info("HEAD on object at bucket/key={}/{}",
-				 bucket,key);
+		log.warn("HEAD on object at bucket/key={}/{}",
+				                                    bucket,key);
 		HeadObjectRequest headReq = HeadObjectRequest.builder()
 												 .bucket(bucket.asString())
 												 .key(key.asString())
 												 .build();
 		HeadObjectResponse headRes = _s3Client.headObject(headReq);
 		return AWSS3ObjectHeadResult.fromHeadResponseOn(bucket,key)
-								 .with(headRes);
+								      .with(headRes);
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 // 	GET
@@ -209,11 +209,15 @@ public class AWSS3ServicesForObjectsImpl
 												.bucket(bucket.asString())
 												.key(key.asString())
 												.build();
+
 		ResponseInputStream<GetObjectResponse> resIs = _s3Client.getObject(req,
 																		   ResponseTransformer.toInputStream());
+
 		return AWSS3ObjectGetResult.fromGetObjectResponseOn(bucket,key)
 								   .returning(resIs);
 	}
+
+
 	@Override
 	public void getHugeObject(final AWSS3Bucket bucket,final AWSS3ObjectKey key,
 							  final AWSS3OperationSettings operationSettings) {
