@@ -186,10 +186,14 @@ public class AWSS3ServicesForObjectsImpl
 	public AWSS3ObjectHeadResult headObject(final AWSS3Bucket bucket, final AWSS3ObjectKey key) {
 		log.warn("HEAD on object at bucket/key={}/{}",
 				                                    bucket,key);
+	  //The HEAD operation retrieves metadata from an object without returning the object itself. T
+	  //This operation isuseful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object.
+	  //A HEAD request has the same options as a GET operation on an object.
+	  //The response isidentical to the GET response except that there is no response body.
 		HeadObjectRequest headReq = HeadObjectRequest.builder()
-												 .bucket(bucket.asString())
-												 .key(key.asString())
-												 .build();
+														 .bucket(bucket.asString())
+														 .key(key.asString())
+													 .build();
 		HeadObjectResponse headRes = _s3Client.headObject(headReq);
 		return AWSS3ObjectHeadResult.fromHeadResponseOn(bucket,key)
 								      .with(headRes);
