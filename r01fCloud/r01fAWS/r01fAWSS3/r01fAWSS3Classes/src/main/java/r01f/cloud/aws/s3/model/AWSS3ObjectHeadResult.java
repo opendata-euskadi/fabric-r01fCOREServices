@@ -50,15 +50,29 @@ public class AWSS3ObjectHeadResult
 
 		public AWSS3ObjectHeadResult with(final HeadObjectResponse headRes) {
 			_contentLength = headRes.contentLength();
-			if (headRes.expires() != null) _expiresAt = Date.from(headRes.expires());
-			if (headRes.lastModified() != null) _lastModified = Date.from(headRes.lastModified());
+			if (headRes.expires() != null) {
+				_expiresAt = Date.from(headRes.expires());
+			}
+			if (headRes.lastModified() != null) {
+				_lastModified = Date.from(headRes.lastModified());
+			}
 
-			if (Strings.isNOTNullOrEmpty(headRes.contentType())) _mimeType = MimeTypes.forName(headRes.contentType());
-			if (Strings.isNOTNullOrEmpty(headRes.contentEncoding())) _charset = Charset.forName(headRes.contentEncoding());
+			if (Strings.isNOTNullOrEmpty(headRes.contentType())) {
+				_mimeType = MimeTypes.forName(headRes.contentType());
+			}
+			if (Strings.isNOTNullOrEmpty(headRes.contentEncoding())) {
+				_charset = Charset.forName(headRes.contentEncoding());
+			}
 
-			if (Strings.isNOTNullOrEmpty(headRes.versionId())) _versionId = AWSS3ObjectVersionID.forId(headRes.versionId());
-			if (Strings.isNOTNullOrEmpty(headRes.eTag())) _eTag = AWSS3ObjectETag.forId(headRes.eTag());
-			_deleteMarker = headRes.deleteMarker();
+			if (Strings.isNOTNullOrEmpty(headRes.versionId())) {
+				_versionId = AWSS3ObjectVersionID.forId(headRes.versionId());
+			}
+			if (Strings.isNOTNullOrEmpty(headRes.eTag())) {
+				_eTag = AWSS3ObjectETag.forId(headRes.eTag());
+			}
+			if (headRes.deleteMarker() != null ) {
+		 	 _deleteMarker = headRes.deleteMarker();
+			}
 
 			// custom items
 			if (CollectionUtils.hasData(headRes.metadata())) {

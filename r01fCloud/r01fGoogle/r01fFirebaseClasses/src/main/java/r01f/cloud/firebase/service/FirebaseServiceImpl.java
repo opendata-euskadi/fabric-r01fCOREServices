@@ -147,16 +147,19 @@ public class FirebaseServiceImpl
 						  .setNotification(AndroidNotification.builder()
 															  .setSound(pushMessageRequest.hasCustomNotificationSound() ? pushMessageRequest.getNotificationSound() : "default")
 															  .setChannelId(pushMessageRequest.hasChannelId() ? pushMessageRequest.getChannelId() : null)
+															  .setDefaultVibrateTimings(true)															  
+															  //.setClickAction("MAINACTIVITY")
 															  .build())
+						  
 						  .build();
 	}
   	private static Message _buidMessage(final FirebasePushMessageRequest pushMessageRequest) {
   		Builder baseMessage  = Message.builder()
 							  		  .setApnsConfig(_buildApnsConfig())
-							  		 .setAndroidConfig(_buildAndroidConfig(pushMessageRequest))
-							  		 .setNotification(Notification.builder()
+							  		  .setAndroidConfig(_buildAndroidConfig(pushMessageRequest))
+							  		  .setNotification(Notification.builder()
 							  				 					 		.setBody(pushMessageRequest.getBody())
-								  				 						.setTitle(pushMessageRequest.getTitle())
+								  				 						.setTitle(pushMessageRequest.getTitle())								  				 						
 																	.build());
 		if (pushMessageRequest.hasToken()) {
 			baseMessage.setToken(pushMessageRequest.getToken().asString());
@@ -165,7 +168,7 @@ public class FirebaseServiceImpl
 		}
 		if (pushMessageRequest.hasDataItems()) {
 			pushMessageRequest.getDataItems()
-						   	 .forEach(i-> {
+						   	  .forEach(i-> {
 							   				baseMessage.putData(i.getId().asString(), i.getValue());
 						   			  });
   		}
