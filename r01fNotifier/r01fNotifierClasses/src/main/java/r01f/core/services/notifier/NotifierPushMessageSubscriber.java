@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import r01f.core.services.notifier.NotifierOIDs.NotifierPushTopic;
-import r01f.guids.CommonOIDs.SecurityToken;
+import r01f.securitycontext.SecurityIDS.SecurityToken;
 
 /***
  * The receptor ( or receptors of )a Push Message are identified by a Topic or a token, or both.. *

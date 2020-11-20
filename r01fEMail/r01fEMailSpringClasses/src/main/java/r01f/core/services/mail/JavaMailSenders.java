@@ -14,7 +14,6 @@ import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import r01f.core.services.mail.EMailMimeMessages;
 import r01f.core.services.mail.model.EMailMessage;
 import r01f.core.services.mail.model.EMailMessageAttachment;
 import r01f.core.services.mail.model.EMailRFC822Address;

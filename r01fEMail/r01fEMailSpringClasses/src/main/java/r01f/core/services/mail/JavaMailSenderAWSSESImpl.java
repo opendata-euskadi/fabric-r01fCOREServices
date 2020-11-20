@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.aws.ses.AWSSESClient;
 import r01f.cloud.aws.ses.AWSSESClientConfig;
-import r01f.core.services.mail.EMailMimeMessages;
 import r01f.core.services.mail.config.JavaMailSenderConfigForAWSSES;
 import r01f.core.services.mail.model.EMailDestinations;
 import r01f.core.services.mail.model.EMailMessage;

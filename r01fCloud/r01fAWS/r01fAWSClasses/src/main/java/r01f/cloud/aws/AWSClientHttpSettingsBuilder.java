@@ -3,10 +3,10 @@ package r01f.cloud.aws;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import r01f.guids.CommonOIDs.Password;
-import r01f.guids.CommonOIDs.UserCode;
 import r01f.httpclient.HttpClientProxySettings;
 import r01f.patterns.FactoryFrom;
+import r01f.securitycontext.SecurityIDS.LoginID;
+import r01f.securitycontext.SecurityIDS.Password;
 import r01f.types.url.Host;
 import r01f.xmlproperties.XMLPropertiesForAppComponent;
 
@@ -39,15 +39,14 @@ public abstract class AWSClientHttpSettingsBuilder {
 												}
 										  },
 								      null);
-		 UserCode userCode =    props.propertyAt(propsRootNode + "/aws/" + AWSService.S3.nameLowerCase() + "/httpSettings/proxySettings/user")
-											.asObjectFromString(new FactoryFrom<String,UserCode>() {
-												@Override
-												public  UserCode from(final String value) {
-													return UserCode.forId(value);
-												}
-										  },
+		 LoginID loginId =    props.propertyAt(propsRootNode + "/aws/" + AWSService.S3.nameLowerCase() + "/httpSettings/proxySettings/user")
+											.asObjectFromString(new FactoryFrom<String,LoginID>() {
+																		@Override
+																		public  LoginID from(final String value) {
+																			return LoginID.forId(value);
+																		}
+																 },
 								      null);
-
 		 Password password =   props.propertyAt(propsRootNode + "/aws/" + AWSService.S3.nameLowerCase() + "/httpSettings/proxySettings/password")
 										.asObjectFromString(new FactoryFrom<String,Password>() {
 											@Override
@@ -57,7 +56,7 @@ public abstract class AWSClientHttpSettingsBuilder {
 									  },
 							      null);
 
-		 HttpClientProxySettings proxye = new HttpClientProxySettings(host,port, userCode, password,enabled);
+		 HttpClientProxySettings proxye = new HttpClientProxySettings(host,port, loginId, password,enabled);
 		 log.warn( "Proxy Info {}",proxye.debugInfo());
 		 return new AWSClientHttpSettings(disableCertChecking,proxye);
 	}

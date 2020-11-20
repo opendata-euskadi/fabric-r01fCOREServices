@@ -9,12 +9,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.nexmo.client.voice.CallEvent;
 
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
-
 import r01f.cloud.nexmo.api.interfaces.NexmoServicesForVoice;
+import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierResponse;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
 import r01f.patterns.Factory;
