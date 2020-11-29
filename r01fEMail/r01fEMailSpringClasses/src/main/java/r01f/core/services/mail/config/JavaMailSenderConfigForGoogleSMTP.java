@@ -37,7 +37,7 @@ public class JavaMailSenderConfigForGoogleSMTP
 /////////////////////////////////////////////////////////////////////////////////////////
 	private static final String GOOGLE_SMTP_PROPS_XPATH = "/google/smtp";
 	static LoginAndPassword googleSMTPServiceUserAndPassword(final XMLPropertiesForAppComponent xmlProps,
-											 				final String propsRootNode) {
+											 				 final String propsRootNode) {
 		LoginID user = xmlProps.propertyAt(propsRootNode + GOOGLE_SMTP_PROPS_XPATH + "/user")
 							 		.asLoginId();
 		Password password = xmlProps.propertyAt(propsRootNode + GOOGLE_SMTP_PROPS_XPATH + "/password")
