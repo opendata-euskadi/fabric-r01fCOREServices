@@ -119,7 +119,7 @@ public class JavaMailSenderProvider
 		// ==== GOOGLE GMAIL SMTP
 		else if (impl == JavaMailSenderImpl.GOOGLE_SMTP) {
 			JavaMailSenderConfigForGoogleSMTP gSMTPCfg = _config.as(JavaMailSenderConfigForGoogleSMTP.class);
-			outJavaMailSender = JavaMailSenderGMailSMTPImpl.create(gSMTPCfg.getUserAndPassword().getUser(),
+			outJavaMailSender = JavaMailSenderGMailSMTPImpl.create(gSMTPCfg.getUserAndPassword().getLoginId(),
 														   		   gSMTPCfg.getUserAndPassword().getPassword());
 
 		} else {

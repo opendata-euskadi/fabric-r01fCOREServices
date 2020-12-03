@@ -2,10 +2,10 @@ package r01f.cloud.nexmo.model;
 
 import lombok.NoArgsConstructor;
 import r01f.annotations.Immutable;
-import r01f.guids.CommonOIDs.UserCode;
 import r01f.guids.OIDBaseMutable;
 import r01f.guids.OIDTyped;
 import r01f.objectstreamer.annotations.MarshallType;
+import r01f.securitycontext.SecurityIDS.LoginID;
 
 public abstract class NexmoIDS {
 
@@ -43,8 +43,8 @@ public abstract class NexmoIDS {
 		public PeerID(final String oid) {
 			super(oid);
 		}
-		public UserCode toUserCode() {
-			return new UserCode(this.getId());
+		public LoginID toLoginId() {
+			return new LoginID(this.getId());
 		}
 		public static PeerID forId(final String id) {
 			return new PeerID(id);
