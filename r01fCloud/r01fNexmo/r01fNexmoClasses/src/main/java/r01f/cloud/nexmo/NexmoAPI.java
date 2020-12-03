@@ -15,11 +15,11 @@ import r01f.cloud.nexmo.api.interfaces.NexmoServicesForVoice;
 import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForMessagingApplicationImpl;
 import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForSMSImpl;
 import r01f.cloud.nexmo.api.interfaces.impl.NexmoServicesForVoiceImpl;
-import r01f.guids.CommonOIDs.Password;
 import r01f.guids.OIDBaseImmutable;
 import r01f.model.annotations.ModelObjectsMarshaller;
 import r01f.objectstreamer.Marshaller;
 import r01f.objectstreamer.annotations.MarshallType;
+import r01f.securitycontext.SecurityIDS.Password;
 import r01f.types.contact.Phone;
 import r01f.types.url.Url;
 
