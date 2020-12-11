@@ -140,7 +140,8 @@ public class JavaMailSenderRESTServiceImpl
 //	MIME
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	protected void doSend(final MimeMessage[] mimeMessages, @Nullable final Object[] originalMessages) throws MailException {
+	protected void doSend(			final MimeMessage[] mimeMessages, 
+						  @Nullable final Object[] originalMessages) throws MailException {
 		for (MimeMessage mimeMessage : mimeMessages) {
 			try {
 				_doSendMimeMessage(mimeMessage);
