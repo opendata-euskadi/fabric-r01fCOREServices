@@ -102,21 +102,21 @@ public class NotifiersConfigs
 	public CharSequence debugInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Notifiers config:\n");
-		sb.append(Strings.customized("\t\t-      EMail: {}",_forEMail != null
-															? _forEMail.isEnabled() ? "ENABLED" : "DISABLED"
-															: "NULL"));
-		sb.append(Strings.customized("\t\t-        SMS: {}",_forSMS != null
-															? _forSMS.isEnabled() ? "ENABLED" : "DISABLED"
-															: "NULL"));
-		sb.append(Strings.customized("\t\t-      Voice: {}",_forVoice != null
-															? _forVoice.isEnabled() ? "ENABLED" : "DISABLED"
-															: "NULL"));
-		sb.append(Strings.customized("\t\t-        Log: {}",_forLog != null
-															? _forLog.isEnabled() ? "ENABLED" : "DISABLED"
-															: "NULL"));
-		sb.append(Strings.customized("\t\t-PushMessage: {}",_forPushMessage != null
-															? _forPushMessage.isEnabled() ? "ENABLED" : "DISABLED"
-															: "NULL"));
+		sb.append(Strings.customized("\t\t-      EMail: {}\n",
+									 _forEMail != null ? _forEMail.isEnabled() ? "ENABLED" : "DISABLED"
+													   : "NULL"));
+		sb.append(Strings.customized("\t\t-        SMS: {}\n",
+									 _forSMS != null ? _forSMS.isEnabled() ? "ENABLED" : "DISABLED"
+													 : "NULL"));
+		sb.append(Strings.customized("\t\t-      Voice: {}\n",
+									 _forVoice != null ? _forVoice.isEnabled() ? "ENABLED" : "DISABLED"
+													   : "NULL"));
+		sb.append(Strings.customized("\t\t-        Log: {}\n",
+									 _forLog != null ? _forLog.isEnabled() ? "ENABLED" : "DISABLED"
+													 : "NULL"));
+		sb.append(Strings.customized("\t\t-PushMessage: {}\n",
+									 _forPushMessage != null ? _forPushMessage.isEnabled() ? "ENABLED" : "DISABLED"
+															 : "NULL"));
 		return sb;
 	}
 }
