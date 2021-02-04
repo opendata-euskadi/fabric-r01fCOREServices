@@ -16,7 +16,7 @@ public abstract class NotifierEnums {
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	public static enum NotifierType
- 			 implements EnumExtended<NotifierType> {
+ 		    implements EnumExtended<NotifierType> {
 		EMAIL,
 		SMS,
 		VOICE,
