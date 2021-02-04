@@ -6,8 +6,10 @@ import java.util.ServiceLoader;
 import com.google.inject.Binder;
 import com.google.inject.Exposed;
 import com.google.inject.Module;
+import com.google.inject.PrivateBinder;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.util.Providers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,42 +42,61 @@ public class NotifierGuiceModule
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public void configure(final Binder binder) {
-		if (  _notifiersConfig == null ) {
+		if (_notifiersConfig == null) {
 			throw new IllegalStateException(" Cannot use NotifierGuiceModule  without providing a NotifiersConfigs ,"
 											+ " check your properties.");
 		}
 				
-		// Bind configs
+		// Bind configs (and expose them if using a private binder)
 		if (_notifiersConfig.getForLog() != null) {
 			binder.bind(NotifierConfigForLog.class)
 				  .toInstance(_notifiersConfig.getForLog());
 		} else {
+			binder.bind(NotifierConfigForLog.class)
+				  .toProvider(Providers.<NotifierConfigForLog>of(null));
 			log.warn("The notifier LOG config is null > any bind will be made");
 		}
+		if (binder instanceof PrivateBinder) ((PrivateBinder)binder).expose(NotifierConfigForLog.class);
+		
 		if (_notifiersConfig.getForEMail() != null) {
 			binder.bind(NotifierConfigForEMail.class)
 				  .toInstance(_notifiersConfig.getForEMail());
 		} else {
+			binder.bind(NotifierConfigForEMail.class)
+				  .toProvider(Providers.<NotifierConfigForEMail>of(null));
 			log.warn("The notifier EMAIL config is null > any bind will be made");
 		}
+		if (binder instanceof PrivateBinder) ((PrivateBinder)binder).expose(NotifierConfigForEMail.class);
+		
 		if (_notifiersConfig.getForSMS() != null) {
 			binder.bind(NotifierConfigForSMS.class)
 				  .toInstance(_notifiersConfig.getForSMS());
 		} else {
+			binder.bind(NotifierConfigForSMS.class)
+				  .toProvider(Providers.<NotifierConfigForSMS>of(null));
 			log.warn("The notifier SMS config is null > any bind will be made");
 		}
+		if (binder instanceof PrivateBinder) ((PrivateBinder)binder).expose(NotifierConfigForSMS.class);
+		
 		if (_notifiersConfig.getForVoice() != null) {
 			binder.bind(NotifierConfigForVoice.class)
 				  .toInstance(_notifiersConfig.getForVoice());
 		} else {
+			binder.bind(NotifierConfigForVoice.class)
+				  .toProvider(Providers.<NotifierConfigForVoice>of(null));
 			log.warn("The notifier VOICE config is null > any bind will be made");
 		}
+		if (binder instanceof PrivateBinder) ((PrivateBinder)binder).expose(NotifierConfigForVoice.class);
+		
 		if (_notifiersConfig.getForPushMessage() != null) {
 			binder.bind(NotifierConfigForPushMessage.class)
 				  .toInstance(_notifiersConfig.getForPushMessage());
 		} else {
+			binder.bind(NotifierConfigForPushMessage.class)
+				  .toProvider(Providers.<NotifierConfigForPushMessage>of(null));
 			log.warn("The notifier Push Message config is null > any bind will be made");
 		}
+		if (binder instanceof PrivateBinder) ((PrivateBinder)binder).expose(NotifierConfigForPushMessage.class);
 	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  NOTIFIER SERVICE PROVIDER
@@ -85,7 +106,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton @Exposed	// creates a single instance of the java mail sender
+	@Provides @Singleton @Exposed	
 	NotifierServiceForEMail _provideEMailNotifier() {
 		if (_notifiersConfig.getForEMail() == null) throw new IllegalStateException("NO EMail notifier configured!");
 
@@ -107,7 +128,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton @Exposed	// creates a single instance of the java mail sender
+	@Provides @Singleton @Exposed	
 	NotifierServiceForSMS _provideSMSNotifier() {
 		if (_notifiersConfig.getForSMS() == null) throw new IllegalStateException("NO SMS notifier configured!");
 
@@ -136,7 +157,7 @@ public class NotifierGuiceModule
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton @Exposed	// creates a single instance of the twilio service
+	@Provides @Singleton @Exposed	
 	NotifierServiceForVoicePhoneCall _provideVoiceNotifier() {
 		if (_notifiersConfig.getForVoice() == null) throw new IllegalStateException("NO Voice notifier configured!");
 
@@ -160,14 +181,12 @@ public class NotifierGuiceModule
 		if (outSrvc == null) throw new IllegalStateException("Could NOT find any Voice notifier implementation!");
 		return outSrvc;
 	}
-	
-	
 	/**
 	 * Provides a {@link NotifierServicesForPush} implementation
 	 * @param props
 	 * @return
 	 */
-	@Provides @Singleton @Exposed	// creates a single instance of the push service (firebase)
+	@Provides @Singleton @Exposed	
 	NotifierServiceForPushMessage _providePushNotifier() {
 		if (_notifiersConfig.getForPushMessage() == null) throw new IllegalStateException("NO push notifier configured!");
 
