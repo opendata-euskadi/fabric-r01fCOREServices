@@ -69,25 +69,32 @@ public class FirebaseConfig
 	 static FirebaseAPIData apiDataFromProperties(final XMLPropertiesForAppComponent props,
 											      final String propsRootNode) {
 		String credentialsPath = props.propertyAt(propsRootNode + "/credentials")
-								 .asString();		
-		String keyAsString = props.propertyAt(propsRootNode + "/credentials/@key")
-				                    .asString();	
+								 	  .asString();
+		if (Strings.isNullOrEmpty(credentialsPath)) throw new IllegalStateException("Could NOT found firebase credentials file path at " + credentialsPath);
 		log.warn("Loading Google Firebase Credentials from {}",
-				                                             credentialsPath);
+				 credentialsPath);
+		
 		GoogleCredentials googleCredentials;
 		try {			
-			InputStream  stream  = Thread.currentThread().getContextClassLoader().getResourceAsStream(credentialsPath);
+			InputStream  stream  = Thread.currentThread()
+										 .getContextClassLoader()
+										 .getResourceAsStream(credentialsPath);
 			if (stream == null) {
 				Environment env = XMLPropertiesEnv.guessEnvironmentFromSystemEnvProp();
-				Path credentialPAthByEnv = Path.from( env.getId(),credentialsPath);
-				log.warn("Try to read by env {} , as relative path {} " , env.getId(),  credentialPAthByEnv.asRelativeString());				
-				stream  = Thread.currentThread().getContextClassLoader().getResourceAsStream(credentialPAthByEnv.asRelativeString());
+				Path credentialPathByEnv = Path.from(env.getId(),credentialsPath);
+				log.warn("... could NOT find firebase credentials file at {}: try to find it at the env-dependent path {}",
+						 credentialsPath,credentialPathByEnv.asRelativeString());				
+				stream = Thread.currentThread()
+							   .getContextClassLoader()
+							   .getResourceAsStream(credentialPathByEnv.asRelativeString());
+				if (stream == null) throw new IllegalStateException(Strings.customized("Could NOT find firebase credentials at {}, neither at {}",
+																				   	   credentialsPath,credentialPathByEnv)) ;
 			}
 			
-			if (stream == null) {
-				throw new IllegalStateException(Strings.customized("Cannot find firebase credentials at {}", credentialsPath)) ;
-			}
-			if (keyAsString == null ){			
+			
+			String keyAsString = props.propertyAt(propsRootNode + "/credentials/@key")
+				                  	  .asString();
+			if (keyAsString == null) {			
 				googleCredentials = GoogleCredentials.fromStream(stream);			
 			} else {				
 				StreamEncrypterDecrypter encdec = new StreamEncrypterDecrypter(keyAsString.trim().toCharArray());
@@ -101,7 +108,6 @@ public class FirebaseConfig
 			throw new IllegalStateException(e.getLocalizedMessage());
 		}
 	}
-	 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 	 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
