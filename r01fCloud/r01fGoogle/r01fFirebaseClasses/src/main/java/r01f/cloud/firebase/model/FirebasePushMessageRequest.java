@@ -16,6 +16,9 @@ import r01f.util.types.collections.CollectionUtils;
 public class FirebasePushMessageRequest
      extends NotifierPushMessage
   implements Debuggable {
+
+	private static final long serialVersionUID = 1546350024120784015L;
+	
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +27,7 @@ public class FirebasePushMessageRequest
 	@Getter private final String _title;
 	@Getter private final String _body;
 	@Getter private final boolean _asyncRequest;
-	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;	
+	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTORS
 /////////////////////////////////////////////////////////////////////////////////////////
