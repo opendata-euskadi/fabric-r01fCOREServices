@@ -94,15 +94,16 @@ public class FirebasePushMessageRequest
 	}
 	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
 							  		  final String title,
-							  		  final String body,
+							  		  final String body,final  Url image,
 							  		  final FirebasePushMessageDataItem... dataItems) {
 		this(null,			// topic
 		     token,
-		     title, body,null,
+		     title, body,image,
 		     null, null, null,
 		Lists.newArrayList(dataItems));
 	}
-/////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	public boolean hasToken() {

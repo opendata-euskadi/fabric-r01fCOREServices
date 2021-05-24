@@ -149,6 +149,7 @@ public class FirebaseServiceImpl
 															  .setChannelId(pushMessageRequest.hasChannelId() ? pushMessageRequest.getChannelId() : null)
 															  .setDefaultVibrateTimings(true)															  
 															  //.setClickAction("MAINACTIVITY")
+															  .setImage(pushMessageRequest.getImage().asString())
 															  .build())
 						  
 						  .build();
@@ -170,7 +171,9 @@ public class FirebaseServiceImpl
 		}
 		if ( pushMessageRequest.hasImage()  ) {
 			notificationBuilder.setImage(pushMessageRequest.getImage().asString());
-		}		
+		}	
+	
+		
 		return notificationBuilder.build();
 	}
 	
@@ -193,6 +196,4 @@ public class FirebaseServiceImpl
   		}		
   		return baseMessage.build();
   	}
-  	
-	
 }
