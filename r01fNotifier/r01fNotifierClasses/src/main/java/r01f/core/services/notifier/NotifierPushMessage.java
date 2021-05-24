@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
+import r01f.types.url.Url;
 import r01f.util.types.Strings;
 
 
@@ -21,6 +22,7 @@ public class NotifierPushMessage
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Getter private String _title;
 	@Getter private String _body;
+	@Getter private Url _image;
 	@Getter private Map<String,String> _keyValueData; // will be transformed to provider (firebase, etc..), key value format.
 	@Getter protected String _notificationSound;
 	@Getter protected String _collapseKey;
@@ -57,7 +59,7 @@ public class NotifierPushMessage
 		_collapseKey = collapseKey;
 		_keyValueData = keyValueData != null ? keyValueData : new HashMap<String,String>();
 	}
-	public NotifierPushMessage(final String title,final String body,
+	public NotifierPushMessage(final String title,final String body, final Url image,
 							   final String notificationSound,
 							   final String collapseKey,
 							   final String channelId, 
@@ -80,5 +82,8 @@ public class NotifierPushMessage
 	}
 	public boolean hasChannelId() {
 		return Strings.isNOTNullOrEmpty(_channelId);
+	}
+	public boolean hasImage() {
+		return _image != null;
 	}
 }

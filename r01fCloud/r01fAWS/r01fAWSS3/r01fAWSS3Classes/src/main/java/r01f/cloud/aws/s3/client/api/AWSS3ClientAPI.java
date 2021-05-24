@@ -8,6 +8,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.time.Duration;
 
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -170,6 +171,11 @@ public class AWSS3ClientAPI {
 		    clientBuilder = clientBuilder.httpClient(httpClientBuilder.build());
 		}
 
+		System.out.println(">>>>>>>Sets con");
+		ApacheHttpClient.Builder httpClientBuilder = ApacheHttpClient.builder().connectionMaxIdleTime(Duration.ofHours(1))
+				                                                                .socketTimeout(Duration.ZERO)
+				                                                                .connectionTimeout(Duration.ZERO);
+		 clientBuilder = clientBuilder.httpClient(httpClientBuilder.build());
 		S3Client client = clientBuilder.build();
 		// now, yes...call to the builder build.
 		return client;
