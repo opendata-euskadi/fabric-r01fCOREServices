@@ -66,6 +66,7 @@ public class NotifierPushMessage
 							   final Map<String, String> keyValueData) {
 		_title = title;
 		_body = body;
+		_image = image;
 		_notificationSound = notificationSound;
 		_collapseKey = collapseKey;
 		_channelId = channelId;
