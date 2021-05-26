@@ -46,8 +46,8 @@ public class FirebaseNotifierService
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
 	public NotifierResponse<NotifierPushMessageSubscriber> notify(final AppCode from,
-																 final NotifierPushMessageSubscriber to,
-														         final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
+																  final NotifierPushMessageSubscriber to,
+														          final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
 
 		Collection<NotifierResponse<NotifierPushMessageSubscriber>> res = this.notifyAll(from,
 																						 Lists.newArrayList(to),
@@ -87,6 +87,7 @@ public class FirebaseNotifierService
 						                                                                       token,
 						                                                                       pushMessage.getTitle(),
 						                                                                       pushMessage.getBody(),
+						                                                                       pushMessage.getImage(),
 						                                                                       pushMessage.getNotificationSound(),
 						                                                                       pushMessage.getCollapseKey(),
 						                                                                       pushMessage.getChannelId(),

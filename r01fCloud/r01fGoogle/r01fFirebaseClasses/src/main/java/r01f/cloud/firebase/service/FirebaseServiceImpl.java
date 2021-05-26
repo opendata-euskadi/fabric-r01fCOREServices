@@ -149,18 +149,40 @@ public class FirebaseServiceImpl
 															  .setChannelId(pushMessageRequest.hasChannelId() ? pushMessageRequest.getChannelId() : null)
 															  .setDefaultVibrateTimings(true)															  
 															  //.setClickAction("MAINACTIVITY")
+															  .setImage(pushMessageRequest.getImage()!=null?pushMessageRequest.getImage().asString():null)
 															  .build())
 						  
 						  .build();
 	}
+	/**
+	 * Builds custom core Notification of the Message.
+	 * @param pushMessageRequest
+	 * @return
+	 */
+	private static Notification _buidMessageNotification(final FirebasePushMessageRequest pushMessageRequest) {
+		
+		Notification.Builder  notificationBuilder = 
+				 Notification.builder();
+		if ( pushMessageRequest.getTitle() != null ) {
+			notificationBuilder.setTitle(pushMessageRequest.getTitle() );
+		}
+		if ( pushMessageRequest.getBody() != null ) {
+			notificationBuilder.setBody(pushMessageRequest.getBody() );
+		}
+		if ( pushMessageRequest.hasImage()  ) {
+			notificationBuilder.setImage(pushMessageRequest.getImage().asString());
+		}	
+	
+		
+		return notificationBuilder.build();
+	}
+	
   	private static Message _buidMessage(final FirebasePushMessageRequest pushMessageRequest) {
   		Builder baseMessage  = Message.builder()
 							  		  .setApnsConfig(_buildApnsConfig())
 							  		  .setAndroidConfig(_buildAndroidConfig(pushMessageRequest))
-							  		  .setNotification(Notification.builder()
-							  				 					 		.setBody(pushMessageRequest.getBody())
-								  				 						.setTitle(pushMessageRequest.getTitle())								  				 						
-																	.build());
+							  		  .setNotification(_buidMessageNotification(pushMessageRequest));
+  		
 		if (pushMessageRequest.hasToken()) {
 			baseMessage.setToken(pushMessageRequest.getToken().asString());
 		} else {
@@ -171,7 +193,7 @@ public class FirebaseServiceImpl
 						   	  .forEach(i-> {
 							   				baseMessage.putData(i.getId().asString(), i.getValue());
 						   			  });
-  		}
+  		}		
   		return baseMessage.build();
   	}
 }

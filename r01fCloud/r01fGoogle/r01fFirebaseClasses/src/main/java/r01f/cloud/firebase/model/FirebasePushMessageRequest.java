@@ -10,12 +10,15 @@ import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDeviceToken;
 import r01f.cloud.firebase.model.FirebaseIds.FirebaseRegisteredDevicesTopic;
 import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.debug.Debuggable;
+import r01f.types.url.Url;
 import r01f.util.types.collections.CollectionUtils;
 
 @Accessors(prefix="_")
 public class FirebasePushMessageRequest
      extends NotifierPushMessage
   implements Debuggable {
+
+	private static final long serialVersionUID = 1546350024120784015L;	
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -23,8 +26,9 @@ public class FirebasePushMessageRequest
 	@Getter private final FirebaseRegisteredDeviceToken _token;
 	@Getter private final String _title;
 	@Getter private final String _body;
+	@Getter private final Url _image;	
 	@Getter private final boolean _asyncRequest;
-	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;	
+	@Getter private final Collection<FirebasePushMessageDataItem> _dataItems;
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTORS
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -32,12 +36,14 @@ public class FirebasePushMessageRequest
 									  final FirebaseRegisteredDeviceToken token,
 									  final String title,
 									  final String body,
+									  final Url image,
 									  final String notificationSound,
 									  final String collapseKey,
 									  final String channelId,
 									  final Collection<FirebasePushMessageDataItem> dataItems) {
 		_topic = topic;
 		_token = token;
+		_image = image;
 		_title = title;
 		_body = body;
 		_notificationSound = notificationSound;
@@ -55,7 +61,7 @@ public class FirebasePushMessageRequest
 									  final FirebasePushMessageDataItem... dataItems) {
 		this(topic,
 			 null,			// token
-			 title, body,
+			 title, body,null,
 			 notificationSound, collapseKey, channelId,
 			 Lists.newArrayList(dataItems));
 		_notificationSound = notificationSound;
@@ -72,7 +78,7 @@ public class FirebasePushMessageRequest
 							  		  final FirebasePushMessageDataItem... dataItems) {
 		this(null,			// topic
 			 token,
-			 title, body,
+			 title, body,null,
 			 notificationSound, collapseKey, channelId,
 			 Lists.newArrayList(dataItems));
 	}
@@ -81,22 +87,23 @@ public class FirebasePushMessageRequest
 	  		  final String body,
 	  		  final FirebasePushMessageDataItem... dataItems) {
 		this(topic,			// topic
-		null,
-		title, body,
-		null, null, null,
-		Lists.newArrayList(dataItems));
+		     null,
+		     title, body,null,
+		     null, null, null,
+		     Lists.newArrayList(dataItems));
 	}
 	public FirebasePushMessageRequest(final FirebaseRegisteredDeviceToken token,
 							  		  final String title,
-							  		  final String body,
+							  		  final String body,final  Url image,
 							  		  final FirebasePushMessageDataItem... dataItems) {
 		this(null,			// topic
 		     token,
-		     title, body,
+		     title, body,image,
 		     null, null, null,
 		Lists.newArrayList(dataItems));
 	}
-/////////////////////////////////////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	public boolean hasToken() {
@@ -118,6 +125,10 @@ public class FirebasePushMessageRequest
 		if (_body != null) {
 			dbg.append("\n body: ")
 			   .append(_body);
+		}
+		if (_image != null) {
+			dbg.append("\n image: ")
+			   .append(_image);
 		}
 		if (_token != null) {
 			dbg.append("\n token: ")
