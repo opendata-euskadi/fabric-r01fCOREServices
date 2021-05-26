@@ -149,7 +149,7 @@ public class FirebaseServiceImpl
 															  .setChannelId(pushMessageRequest.hasChannelId() ? pushMessageRequest.getChannelId() : null)
 															  .setDefaultVibrateTimings(true)															  
 															  //.setClickAction("MAINACTIVITY")
-															  .setImage(pushMessageRequest.getImage().asString())
+															  .setImage(pushMessageRequest.getImage()!=null?pushMessageRequest.getImage().asString():null)
 															  .build())
 						  
 						  .build();
