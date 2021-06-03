@@ -70,7 +70,7 @@
 		<dependency>
 		    <groupId>com.nexmo</groupId>
 		    <artifactId>client</artifactId>
-		    <version>5.2.1</version>
+		    <version>5.6.0</version>
 		</dependency>		
 		<!-- ///////////////////////////////////////// -->
 		<!-- R01f: r01fBusinessRESTServicesClientClasses ( Used for some rest utilities.     -->
