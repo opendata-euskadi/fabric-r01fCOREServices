@@ -25,7 +25,7 @@
 	<dependencyManagement>
 		<!-- Reference to the parent project where the AWS POM is defined -->
 		<dependencies>
-			<dependency>
+			<dependency> 
 				<groupId>r01.r01f.coreservices.cloud.aws</groupId>
 				<artifactId>r01fAWS</artifactId>
 				<version>${revision}</version>
