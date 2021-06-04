@@ -20,7 +20,7 @@
 		<revision>R01F-VERSION</revision>
 
 		<!-- Dependencies versions -->
-		<guice.version>4.2.1</guice.version>	<!-- TODO 4.2.2 version exists BUT somehow it cannot be loaded! -->
+		<quartz.version>2.3.2</quartz.version>	<!-- TODO 4.2.2 version exists BUT somehow it cannot be loaded! -->
 	</properties>
 
 <!-- ====================================================================== -->
