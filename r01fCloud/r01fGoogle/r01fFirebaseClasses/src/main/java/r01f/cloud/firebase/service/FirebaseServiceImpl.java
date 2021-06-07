@@ -32,10 +32,12 @@ public class FirebaseServiceImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 //	FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
-	private final FirebaseAPIData _apiData;
+	private final FirebaseAPIData    _apiData;
+	private final FirebaseMessaging  _firebaseMessagingInstance;
+	private boolean _disabled;
 	@SuppressWarnings("unused")
 	private final HttpClientProxySettings _proxySettings;	// TODO enable api with proxy
-	private boolean _disabled;
+	
 /////////////////////////////////////////////////////////////////////////////////////////
 //	CONSTRUCTOR
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +49,8 @@ public class FirebaseServiceImpl
 		this(apiData,
 			 null);		// proxy settings
 	}
+	
+
 	public FirebaseServiceImpl(final FirebaseAPIData apiData,
 							   final HttpClientProxySettings proxySettings) {
 		_apiData = apiData;
@@ -57,6 +61,8 @@ public class FirebaseServiceImpl
 		if (FirebaseApp.getApps().isEmpty()) {
 			FirebaseApp.initializeApp(options);
 		}
+		
+		_firebaseMessagingInstance = FirebaseMessaging.getInstance();
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 //ServiceCanBeDisabled
@@ -90,7 +96,7 @@ public class FirebaseServiceImpl
 /////////////////////////////////////////////////////////////////////////////
 	@Override
 	public FirebasePushMessageResponse push(final FirebasePushMessageRequest pushMessageRequest) {
-		log.warn(".. push {}",
+		log.warn(".. FirebaseServiceImpl.push {}",
 							pushMessageRequest.debugInfo());
 		Message message = _buidMessage(pushMessageRequest);
 		FirebasePushMessageResponse response  = null;
@@ -104,18 +110,26 @@ public class FirebaseServiceImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	private static FirebasePushMessageResponse _pushMessage(final Message message) {
+	private  FirebasePushMessageResponse _pushMessage(final Message message) {
 	   try {
+		   log.warn(".. push.sync ");
 		   return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().send(message));
 	   } catch (final  FirebaseMessagingException e) {
 		   e.printStackTrace();
 		   throw new RuntimeException(e.getLocalizedMessage());
-	   }
+	   }  catch (final  Throwable e) {
+		   e.printStackTrace();
+		   throw new RuntimeException(e.getLocalizedMessage());
+	   } 
 	}
-	private static FirebasePushMessageResponse _pushMessageAsync(final Message message) {
+	private  FirebasePushMessageResponse _pushMessageAsync(final Message message) {
 	   try {
-		   return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().sendAsync(message).get());
+		   log.warn(".. push.async ");
+		   return new FirebasePushMessageResponse(_firebaseMessagingInstance.sendAsync(message).get());
 	   } catch (final  InterruptedException | ExecutionException e) {
+		   e.printStackTrace();
+		   throw new RuntimeException(e.getLocalizedMessage());
+	   }  catch (final  Throwable e) {
 		   e.printStackTrace();
 		   throw new RuntimeException(e.getLocalizedMessage());
 	   } 
@@ -149,7 +163,8 @@ public class FirebaseServiceImpl
 															  .setChannelId(pushMessageRequest.hasChannelId() ? pushMessageRequest.getChannelId() : null)
 															  .setDefaultVibrateTimings(true)															  
 															  //.setClickAction("MAINACTIVITY")
-															  .setImage(pushMessageRequest.getImage()!=null?pushMessageRequest.getImage().asString():null)
+															  .setImage(pushMessageRequest.getImage() == null ? null :
+																	                                            pushMessageRequest.getImage().asString())
 															  .build())
 						  
 						  .build();
