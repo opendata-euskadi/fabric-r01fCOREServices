@@ -56,8 +56,9 @@ public class SchedulerConfig
 		SchedulerID schedulerId = xmlProps.propertyAt(Strings.customized("{}/scheduler/@id",rootXPath))
 										  .asOID(SchedulerID.class,
 												 SchedulerID.forId("unknown"));
-		Properties schProps = _propertiesFrom(xmlProps, 
-											 Strings.customized("{}/scheduler[@id='{}']/quartz/",rootXPath, schedulerId.getId()));
+		Properties schProps = _propertiesFrom(schedulerId,
+											  xmlProps, 
+											  Strings.customized("{}/scheduler[@id='{}']/quartz/",rootXPath, schedulerId.getId()));
 		return new SchedulerConfig(schedulerId,
 								   enabled,
 								   schProps);
@@ -65,7 +66,9 @@ public class SchedulerConfig
 /////////////////////////////////////////////////////////////////////////////////////////
 //  
 /////////////////////////////////////////////////////////////////////////////////////////	
-	private static Properties _propertiesFrom(final XMLPropertiesForAppComponent props, final String rootXPath) {
+	private static Properties _propertiesFrom(final SchedulerID schId,
+											  final XMLPropertiesForAppComponent props, 
+											  final String rootXPath) {
         
 		
 		// QUARTZ CONFIG
@@ -75,7 +78,7 @@ public class SchedulerConfig
         // Name & id used to distinguish between scheduler instances
         outProps.setProperty("org.quartz.scheduler.instanceName",
         					 props.propertyAt(Strings.customized("{}org.quartz.scheduler.instanceName",rootXPath))
-        						   .asString("AB72QuartzScheduler"));
+        						   .asString(schId.asString()));
 		outProps.setProperty("org.quartz.scheduler.instanceId",
 							 props.propertyAt(Strings.customized("{}org.quartz.scheduler.instanceId",rootXPath))
 							 	.asString("AUTO"));
@@ -147,17 +150,17 @@ public class SchedulerConfig
 		if (className.equals("org.quartz.impl.jdbcjobstore.JobStoreTX")) {
 			outProps.setProperty("org.quartz.jobStore.driverDelegateClass",
 								 props.propertyAt(Strings.customized("{}org.quartz.jobStore.driverDelegateClass",rootXPath))
-										  			  .asString("org.quartz.impl.jdbcjobstore.StdJDBCDelegate"));
+										  			  	 .asString("org.quartz.impl.jdbcjobstore.StdJDBCDelegate"));
 			outProps.setProperty("org.quartz.jobStore.tablePrefix",
 								 props.propertyAt(Strings.customized("{}org.quartz.jobStore.tablePrefix",rootXPath))
-										  			 .asString(""));
+										  			 	 .asString(""));
 			outProps.setProperty("org.quartz.jobStore.driverDelegateClass",
 								 props.propertyAt(Strings.customized("{}org.quartz.jobStore.driverDelegateClass",rootXPath))
-										  			  .asString("org.quartz.impl.jdbcjobstore.StdJDBCDelegate"));
+										  			  	 .asString("org.quartz.impl.jdbcjobstore.StdJDBCDelegate"));
 			// true if you have multiple instances of Quartz that use the same set of database tables
 			outProps.setProperty("org.quartz.jobStore.isClustered",
 							 Boolean.toString(props.propertyAt(Strings.customized("{}org.quartz.jobStore.isClustered",rootXPath))
-								  		  			.asBoolean(false)));
+								  		  		   .asBoolean(false)));
 			//the frequency (in milliseconds) at which this instance "checks-in"* with the other instances of the cluster. 
 			//Affects the quickness of detecting failed instances
 			outProps.setProperty("org.quartz.jobStore.clusterCheckinInterval",
@@ -165,10 +168,10 @@ public class SchedulerConfig
 									  			 .asLong(15000)));	
 			//Datasource conection (driver+user+pass+url or jndi) 
 			String dataSource = props.propertyAt(Strings.customized("{}org.quartz.jobStore.dataSource",rootXPath))
-										  			 .asString("myDS");
+														.asString("myDS");
 			outProps.setProperty("org.quartz.jobStore.dataSource",
 								 props.propertyAt(Strings.customized("{}org.quartz.jobStore.dataSource",rootXPath))
-										  			 .asString("myDS"));
+										  			 	 .asString());
 			
 			if (props.propertyAt(Strings.customized("{}org.quartz.dataSource.{}.driver",rootXPath, dataSource)).exist()) {
 				outProps.setProperty(Strings.customized("org.quartz.dataSource.{}.driver", dataSource),
@@ -210,8 +213,8 @@ public class SchedulerConfig
 			}
 		
 		}
-		//Terracota jobstore
-		//See http://www.quartz-scheduler.org/documentation/quartz-2.x/configuration/ConfigTerracottaJobStore.html
+		// Terracota jobstore
+		// See http://www.quartz-scheduler.org/documentation/quartz-2.x/configuration/ConfigTerracottaJobStore.html
 		else if (className.equals("org.terracotta.quartz.TerracottaJobStore")) {
 			outProps.setProperty("org.quartz.jobStore.tcConfigUrl",
 								 props.propertyAt(Strings.customized("{}org.quartz.jobStore.tcConfigUrl",rootXPath))
