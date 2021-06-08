@@ -10,21 +10,31 @@ import com.google.inject.Module;
 import com.google.inject.PrivateBinder;
 import com.google.inject.name.Names;
 
-import lombok.RequiredArgsConstructor;
 import r01f.scheduler.QuartzSchedulerJobFactory;
 import r01f.scheduler.QuartzSchedulerProvider;
 import r01f.scheduler.QuartzSchedulerServiceHandler;
 import r01f.scheduler.SchedulerConfig;
 import r01f.service.ServiceHandler;
 
-@RequiredArgsConstructor
 public class QuartzSchedulerGuiceModule 
   implements Module {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////
 	private final SchedulerConfig _schedulerCfg;
-	
+	private final boolean _insidePrivateBinder;
+/////////////////////////////////////////////////////////////////////////////////////////
+//	CONSTRUCTOR
+/////////////////////////////////////////////////////////////////////////////////////////
+	public QuartzSchedulerGuiceModule(final SchedulerConfig schCfg) {
+		this(schCfg,
+			 true);	// inside a private binder by default
+	}
+	public QuartzSchedulerGuiceModule(final SchedulerConfig schCfg,
+									  final boolean insidePrivateBinder) {
+		_schedulerCfg = schCfg;
+		_insidePrivateBinder = insidePrivateBinder;
+	}
 /////////////////////////////////////////////////////////////////////////////////////////
 //  
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -47,8 +57,8 @@ public class QuartzSchedulerGuiceModule
 		_bindServiceHandler(binder,
 							QuartzSchedulerServiceHandler.class,
 							_schedulerCfg.getSchedulerId().asString());
-		// this is IMPORTANT (and cannot be moved to ServicesBootstrapUtil.bindServiceHandler)		
-		if (binder instanceof PrivateBinder) {
+		// this is IMPORTANT (and cannot be moved to ServicesBootstrapUtil.bindServiceHandler)
+		if (_insidePrivateBinder) {
 			PrivateBinder privateBinder = (PrivateBinder)binder;
 			privateBinder.expose(Key.get(ServiceHandler.class,
 										 Names.named(_schedulerCfg.getSchedulerId().asString())));	// expose the binding
