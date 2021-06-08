@@ -19,7 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.mail.model.EMailRFC822Address;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierResponse;
+import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierResponseErrorType;
+import r01f.core.services.notifier.NotifierResponseErrorTypes;
+import r01f.core.services.notifier.NotifierResponseOK;
 import r01f.core.services.notifier.NotifierServiceForEMail;
+import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.patterns.Factory;
 import r01f.util.types.collections.CollectionUtils;
 import r01f.util.types.collections.Lists;
@@ -77,30 +82,46 @@ public class JavaMailSenderNotifierService
 	        _springJavaMailSender.send(mimeMsg);
 
 	        // [3] - Build the response
-	        response = _buildResponse(taskOid,
-	        						  to,
-	        						  true);	// success
-		} catch (Throwable th) {
+	        response = _buildResponseOK(taskOid,
+	        						    to);	// success
+		} catch (final Throwable th) {
 			log.error("Error while notifying using email: {}",
 					  th.getMessage(),th);
-			response = _buildResponse(taskOid,
-									  to,
-									  false);	// failed
+			response = _buildResponseError(taskOid,
+									        to,
+									        NotifierResponseErrorTypes.UNKNOWN,
+									        th.getLocalizedMessage())	;// failed, if want some more specific error catch exceptions..
 		}
 		return response;
 	}
-	private static Collection<NotifierResponse<EMailRFC822Address>> _buildResponse(final NotifierTaskOID taskOid,
-																				   final Collection<EMailRFC822Address> to,
-																				   final boolean success) {
+	
+/////////////////////////////////////////////////////////////////////////////////////////
+//  BUILD RESULTS
+/////////////////////////////////////////////////////////////////////////////////////////
+	private static Collection<NotifierResponse<EMailRFC822Address>> _buildResponseOK(final NotifierTaskOID taskOid,
+																				     final Collection<EMailRFC822Address> to) {
 		return FluentIterable.from(to)
 					.transform(new Function<EMailRFC822Address,NotifierResponse<EMailRFC822Address>>() {
 										@Override
 										public NotifierResponse<EMailRFC822Address> apply(final EMailRFC822Address addr) {
-											return new NotifierResponseImpl<EMailRFC822Address>(taskOid,
-																								addr,
-																								success);
+											return new NotifierResponseOK<EMailRFC822Address>(taskOid,
+																							  addr,
+																							  NotifierType.EMAIL);
 										}
 							   })
 					.toList();
+	}
+	private static Collection<NotifierResponse<EMailRFC822Address>> _buildResponseError(final NotifierTaskOID taskOid,
+		     																		    final Collection<EMailRFC822Address> to, final NotifierResponseErrorType errorType, final String errorDetail) {
+		return FluentIterable.from(to)
+			.transform(new Function<EMailRFC822Address,NotifierResponse<EMailRFC822Address>>() {
+								@Override
+								public NotifierResponse<EMailRFC822Address> apply(final EMailRFC822Address addr) {
+										return new NotifierResponseError<EMailRFC822Address>(taskOid,
+															                                 addr,
+															                                  NotifierType.EMAIL,errorType,errorDetail);
+										}
+								})
+				.toList();
 	}
 }

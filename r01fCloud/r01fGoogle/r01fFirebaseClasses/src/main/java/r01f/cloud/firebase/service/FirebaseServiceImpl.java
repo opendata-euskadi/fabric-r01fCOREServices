@@ -95,7 +95,7 @@ public class FirebaseServiceImpl
 //
 /////////////////////////////////////////////////////////////////////////////
 	@Override
-	public FirebasePushMessageResponse push(final FirebasePushMessageRequest pushMessageRequest) {
+	public FirebasePushMessageResponse push(final FirebasePushMessageRequest pushMessageRequest) throws FirebaseMessagingException {
 		log.warn(".. FirebaseServiceImpl.push {}",
 							pushMessageRequest.debugInfo());
 		Message message = _buidMessage(pushMessageRequest);
@@ -110,24 +110,26 @@ public class FirebaseServiceImpl
 /////////////////////////////////////////////////////////////////////////////////////////
 //
 /////////////////////////////////////////////////////////////////////////////////////////
-	private  FirebasePushMessageResponse _pushMessage(final Message message) {
+	private  FirebasePushMessageResponse _pushMessage(final Message message) throws FirebaseMessagingException {
 	   try {
 		   log.warn(".. push.sync ");
-		   return new FirebasePushMessageResponse(FirebaseMessaging.getInstance().send(message));
-	   } catch (final  FirebaseMessagingException e) {
-		   e.printStackTrace();
-		   throw new RuntimeException(e.getLocalizedMessage());
+		   return new FirebasePushMessageResponse(_firebaseMessagingInstance.send(message));
+	   } catch (final  FirebaseMessagingException e) {		
+		   throw e;	 // Throw :: This will be catch FirebaseNotifierService and handled as known notifier error type	  
 	   }  catch (final  Throwable e) {
 		   e.printStackTrace();
 		   throw new RuntimeException(e.getLocalizedMessage());
 	   } 
 	}
-	private  FirebasePushMessageResponse _pushMessageAsync(final Message message) {
+	private  FirebasePushMessageResponse _pushMessageAsync(final Message message) throws FirebaseMessagingException {
 	   try {
 		   log.warn(".. push.async ");
 		   return new FirebasePushMessageResponse(_firebaseMessagingInstance.sendAsync(message).get());
-	   } catch (final  InterruptedException | ExecutionException e) {
-		   e.printStackTrace();
+	   } catch (final ExecutionException e) {		  
+		   Throwable executionException = e.getCause ();
+		   if ( executionException instanceof FirebaseMessagingException  ) {
+			  throw (FirebaseMessagingException) executionException; // Throw :: This will be catch FirebaseNotifierService and handled as known notifier error type	  
+		   }
 		   throw new RuntimeException(e.getLocalizedMessage());
 	   }  catch (final  Throwable e) {
 		   e.printStackTrace();

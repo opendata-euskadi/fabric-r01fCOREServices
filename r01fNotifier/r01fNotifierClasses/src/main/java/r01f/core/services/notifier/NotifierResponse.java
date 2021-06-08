@@ -9,6 +9,8 @@ import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 public interface NotifierResponse<T> {
 	public NotifierTaskOID getTaskOid();
 	public T getTo();
-	public boolean wasSuccessful();
+	public boolean wasSuccessful();	
+	public NotifierResponseError<T> asResponseError();
+	public NotifierResponseOK<T> asResponseOK();
 
 }

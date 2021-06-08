@@ -7,6 +7,8 @@ import javax.inject.Singleton;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.MessagingErrorCode;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +23,11 @@ import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.core.services.notifier.NotifierPushMessageSubscriber;
 import r01f.core.services.notifier.NotifierResponse;
+import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierResponseErrorTypes;
+import r01f.core.services.notifier.NotifierResponseOK;
 import r01f.core.services.notifier.NotifierServiceForPushMessage;
+import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.guids.CommonOIDs.AppCode;
 import r01f.patterns.Factory;
 import r01f.util.types.collections.CollectionUtils;
@@ -98,17 +104,40 @@ public class FirebaseNotifierService
 				log.warn(" response : {}",
 						                 response.getMessage());
 
-				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+				responses.add(new NotifierResponseOK<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
 																					  subscriber,
-																				      true));	// success
+																					  NotifierType.PUSH));	// success
+				
+			} catch (final FirebaseMessagingException firex) {
+				MessagingErrorCode errorCode = firex.getMessagingErrorCode();
+				  /**
+				   * App instance was unregistered from FCM. This usually means that the token used is no longer
+				   * valid and a new one must be used.
+				   */
+				if (errorCode ==  MessagingErrorCode.UNREGISTERED) {
+					responses.add(new NotifierResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+                                                                                           subscriber,
+                                                                                           NotifierType.PUSH,NotifierResponseErrorTypes.SUBSCRIBER_NOT_FOUND,
+                                                                                           firex.getMessage()));	// failed
+				} else {
+					responses.add(new NotifierResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+																                           subscriber,
+																                           NotifierType.PUSH,NotifierResponseErrorTypes.UNKNOWN,
+																                           firex.getMessage()));	// failed
+				}
+				
+			 
+			
 			} catch (final Throwable nitex) {
-
-				responses.add(new NotifierResponseImpl<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
-					                                                                  subscriber,
-														  	                          false));	// failed
+				responses.add(new NotifierResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+					                                                                   subscriber,
+					                                                                   NotifierType.PUSH,NotifierResponseErrorTypes.UNKNOWN,
+					                                                                   nitex.getMessage()));	// failed
 			}
 		}
 	    // [3] - Build the response
 		return responses;
 	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 }

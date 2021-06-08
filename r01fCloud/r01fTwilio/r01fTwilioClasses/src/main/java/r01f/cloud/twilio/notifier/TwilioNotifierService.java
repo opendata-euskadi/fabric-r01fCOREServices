@@ -15,7 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.twilio.TwilioService;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierResponse;
+import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierResponseErrorTypes;
+import r01f.core.services.notifier.NotifierResponseOK;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
+import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.patterns.Factory;
 import r01f.types.contact.OwnedContactMean;
 import r01f.types.contact.Phone;
@@ -66,16 +70,18 @@ public class TwilioNotifierService
 				Url twmlUrl = Url.from("https://dl.dropboxusercontent.com/u/1264561/testTwilioTWML.xml");
 				Call twCall = _twilioService.makeCall(intPhone,
 													  twmlUrl);
-				responses.add(new NotifierResponseImpl<Phone>(NotifierTaskOID.supply(),
-														  	  phone,
-														  	  true));	// success
-			} catch (TwilioRestException restEx) {
+				responses.add(new NotifierResponseOK<Phone>(NotifierTaskOID.supply(),
+														    phone,
+														    NotifierType.VOICE));	// success
+			} catch (final TwilioRestException restEx) {
 				log.error("Error while making a voice call to {} using twilio: {}",
 						  phone,
 						  restEx.getMessage(),restEx);
-				responses.add(new NotifierResponseImpl<Phone>(NotifierTaskOID.supply(),
-														  	  phone,
-														  	  false));	// failed
+				responses.add(new NotifierResponseError<Phone>(NotifierTaskOID.supply(),
+														  	   phone,
+														  	   NotifierType.VOICE,
+														       NotifierResponseErrorTypes.UNKNOWN,														      
+														       restEx.getErrorMessage()));	// failed, if want some more specific error try to catch another exceps.
 			}
 		}
 	    // [3] - Build the response

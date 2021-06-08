@@ -16,7 +16,11 @@ import r01f.cloud.aws.sns.model.AWSSNSSmsSenderID;
 import r01f.cloud.aws.sns.model.AWSSNSSmsType;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierResponse;
+import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierResponseErrorTypes;
+import r01f.core.services.notifier.NotifierResponseOK;
 import r01f.core.services.notifier.NotifierServiceForSMS;
+import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.patterns.Factory;
 import r01f.types.contact.OwnedContactMean;
 import r01f.types.contact.Phone;
@@ -86,16 +90,18 @@ public class AWSSNSNotifierService
 															 								 .usingSmsOfType(AWSSNSSmsType.TRANSACTIONAL_CRITICAL)
 															 								 .build());
 
-				responses.add(new NotifierResponseImpl<Phone>(NotifierTaskOID.forId(res.messageId()),
-													   		  phone,
-													   		  true));	// success
-			} catch (Throwable th) {
+				responses.add(new NotifierResponseOK<Phone>(NotifierTaskOID.forId(res.messageId()),
+													   		phone,
+													   	    NotifierType.SMS));	// success
+			} catch (final Throwable th) {
 				log.error("Error while notifying using [aws sns] to send an sms to {}: {}",
 						  phone,
 						  th.getMessage(),th);
-				responses.add(new NotifierResponseImpl<Phone>(null,		// no task id
-													   		  phone,
-													   		  true));	// success
+				responses.add(new NotifierResponseError<Phone>(null,		// no task id
+													   		   phone,
+													   		   NotifierType.SMS,
+													   		   NotifierResponseErrorTypes.UNKNOWN,
+													   		   th.getLocalizedMessage()));	// error...if want some more specific error try to catch more detailed exception.
 			}
 		}
 	    // [3] - Build the response

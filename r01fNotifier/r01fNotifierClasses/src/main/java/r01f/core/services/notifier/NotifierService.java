@@ -2,10 +2,6 @@ package r01f.core.services.notifier;
 
 import java.util.Collection;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
-import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.patterns.Factory;
 
 public interface NotifierService<F,T,	// FROM & TO
@@ -21,7 +17,7 @@ public interface NotifierService<F,T,	// FROM & TO
 /////////////////////////////////////////////////////////////////////////////////////////
 //  Request & Response
 /////////////////////////////////////////////////////////////////////////////////////////
-	@Accessors(prefix="_")
+	/*@Accessors(prefix="_")
 	@RequiredArgsConstructor
 	public class NotifierResponseImpl<T>
 	  implements NotifierResponse<T> {
@@ -33,5 +29,5 @@ public interface NotifierService<F,T,	// FROM & TO
 		public boolean wasSuccessful() {
 			return _success;
 		}
-	}
+	}*/
 }
