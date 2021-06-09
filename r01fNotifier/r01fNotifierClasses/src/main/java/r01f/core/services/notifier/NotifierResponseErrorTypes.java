@@ -16,7 +16,7 @@ public abstract class NotifierResponseErrorTypes   {
 																			  .coded(100,1)
 																			  .severity(ExceptionSeverity.FATAL)
 																			  .build();
-	// the subscribert was not found ( for example a token representated subscriber at push)
+	// the subscribertwas not found ( for example a token representated subscriber at push)
 	public static NotifierResponseErrorType SUBSCRIBER_NOT_FOUND = NotifierResponseErrorType.originatedAt(NotiferServiceErrorOrigin.CLIENT)
 																			  .withName("SUBSCRIBER_NOT_FOUND")
 																			  .coded(100,2)
