@@ -18,11 +18,11 @@ import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import r01f.core.services.mail.model.EMailRFC822Address;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
-import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierServiceResponse;
+import r01f.core.services.notifier.NotifierServiceResponseError;
 import r01f.core.services.notifier.NotifierResponseErrorType;
 import r01f.core.services.notifier.NotifierResponseErrorTypes;
-import r01f.core.services.notifier.NotifierResponseOK;
+import r01f.core.services.notifier.NotifierServiceResponseOK;
 import r01f.core.services.notifier.NotifierServiceForEMail;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.patterns.Factory;
@@ -49,18 +49,18 @@ public class JavaMailSenderNotifierService
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public NotifierResponse<EMailRFC822Address> notify(final EMailRFC822Address from, final EMailRFC822Address to,
+	public NotifierServiceResponse<EMailRFC822Address> notify(final EMailRFC822Address from, final EMailRFC822Address to,
 													   final Factory<MimeMessage> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<EMailRFC822Address>> res = this.notifyAll(from,Lists.newArrayList(to),
+		Collection<NotifierServiceResponse<EMailRFC822Address>> res = this.notifyAll(from,Lists.newArrayList(to),
 																			  messageToBeDeliveredFactory);
 		return Iterables.getFirst(res,
 								  null);
 	}
 	@Override
-	public Collection<NotifierResponse<EMailRFC822Address>> notifyAll(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,
+	public Collection<NotifierServiceResponse<EMailRFC822Address>> notifyAll(final EMailRFC822Address from,final Collection<EMailRFC822Address> to,
 																	  final Factory<MimeMessage> messageToBeDeliveredFactory) {
 		NotifierTaskOID taskOid = NotifierTaskOID.supply();
-		Collection<NotifierResponse<EMailRFC822Address>> response = null;
+		Collection<NotifierServiceResponse<EMailRFC822Address>> response = null;
 		try {
 			// [1] - Create the message
 			MimeMessage mimeMsg = messageToBeDeliveredFactory.create();
@@ -98,26 +98,26 @@ public class JavaMailSenderNotifierService
 /////////////////////////////////////////////////////////////////////////////////////////
 //  BUILD RESULTS
 /////////////////////////////////////////////////////////////////////////////////////////
-	private static Collection<NotifierResponse<EMailRFC822Address>> _buildResponseOK(final NotifierTaskOID taskOid,
+	private static Collection<NotifierServiceResponse<EMailRFC822Address>> _buildResponseOK(final NotifierTaskOID taskOid,
 																				     final Collection<EMailRFC822Address> to) {
 		return FluentIterable.from(to)
-					.transform(new Function<EMailRFC822Address,NotifierResponse<EMailRFC822Address>>() {
+					.transform(new Function<EMailRFC822Address,NotifierServiceResponse<EMailRFC822Address>>() {
 										@Override
-										public NotifierResponse<EMailRFC822Address> apply(final EMailRFC822Address addr) {
-											return new NotifierResponseOK<EMailRFC822Address>(taskOid,
+										public NotifierServiceResponse<EMailRFC822Address> apply(final EMailRFC822Address addr) {
+											return new NotifierServiceResponseOK<EMailRFC822Address>(taskOid,
 																							  addr,
 																							  NotifierType.EMAIL);
 										}
 							   })
 					.toList();
 	}
-	private static Collection<NotifierResponse<EMailRFC822Address>> _buildResponseError(final NotifierTaskOID taskOid,
+	private static Collection<NotifierServiceResponse<EMailRFC822Address>> _buildResponseError(final NotifierTaskOID taskOid,
 		     																		    final Collection<EMailRFC822Address> to, final NotifierResponseErrorType errorType, final String errorDetail) {
 		return FluentIterable.from(to)
-			.transform(new Function<EMailRFC822Address,NotifierResponse<EMailRFC822Address>>() {
+			.transform(new Function<EMailRFC822Address,NotifierServiceResponse<EMailRFC822Address>>() {
 								@Override
-								public NotifierResponse<EMailRFC822Address> apply(final EMailRFC822Address addr) {
-										return new NotifierResponseError<EMailRFC822Address>(taskOid,
+								public NotifierServiceResponse<EMailRFC822Address> apply(final EMailRFC822Address addr) {
+										return new NotifierServiceResponseError<EMailRFC822Address>(taskOid,
 															                                 addr,
 															                                  NotifierType.EMAIL,errorType,errorDetail);
 										}

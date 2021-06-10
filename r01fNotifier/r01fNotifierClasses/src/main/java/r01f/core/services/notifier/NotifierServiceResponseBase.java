@@ -8,8 +8,8 @@ import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 
 @RequiredArgsConstructor
 @Accessors(prefix="_")
-public abstract class NotifierResponseBase<T>
-  implements NotifierResponse<T> {
+public abstract class NotifierServiceResponseBase<T>
+  implements NotifierServiceResponse<T> {
 	@Getter protected final NotifierTaskOID _taskOid;	
 	@Getter protected final T _to;
 	@Getter protected final boolean _success;
@@ -20,15 +20,15 @@ public abstract class NotifierResponseBase<T>
 		return _success;
 	}
 	@Override
-	public NotifierResponseError<T> asResponseError() {
-		if ( this instanceof NotifierResponseError )
-			return (NotifierResponseError<T> ) this;
+	public NotifierServiceResponseError<T> asResponseError() {
+		if ( this instanceof NotifierServiceResponseError )
+			return (NotifierServiceResponseError<T> ) this;
 		throw  new IllegalStateException("Cannot cast a NotifierResponseOK to NotifierResponseError");
 	}
 	@Override
-	public NotifierResponseOK<T> asResponseOK() {
-		if ( this instanceof NotifierResponseOK )
-			return (NotifierResponseOK<T> ) this;
+	public NotifierServiceResponseOK<T> asResponseOK() {
+		if ( this instanceof NotifierServiceResponseOK )
+			return (NotifierServiceResponseOK<T> ) this;
 		throw  new IllegalStateException("Cannot cast a NotifierResponseError to NotifierResponseOK");
 	}	
 }

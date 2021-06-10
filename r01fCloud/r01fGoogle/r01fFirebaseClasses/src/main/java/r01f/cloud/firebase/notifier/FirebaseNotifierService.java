@@ -22,10 +22,10 @@ import r01f.cloud.firebase.service.FirebaseServiceImpl;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.NotifierPushMessage;
 import r01f.core.services.notifier.NotifierPushMessageSubscriber;
-import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierServiceResponse;
+import r01f.core.services.notifier.NotifierServiceResponseError;
 import r01f.core.services.notifier.NotifierResponseErrorTypes;
-import r01f.core.services.notifier.NotifierResponseOK;
+import r01f.core.services.notifier.NotifierServiceResponseOK;
 import r01f.core.services.notifier.NotifierServiceForPushMessage;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.guids.CommonOIDs.AppCode;
@@ -51,21 +51,21 @@ public class FirebaseNotifierService
 // [to do ] OwnedContactMean... cannot be expose a Phone, so
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public NotifierResponse<NotifierPushMessageSubscriber> notify(final AppCode from,
+	public NotifierServiceResponse<NotifierPushMessageSubscriber> notify(final AppCode from,
 																  final NotifierPushMessageSubscriber to,
 														          final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
 
-		Collection<NotifierResponse<NotifierPushMessageSubscriber>> res = this.notifyAll(from,
+		Collection<NotifierServiceResponse<NotifierPushMessageSubscriber>> res = this.notifyAll(from,
 																						 Lists.newArrayList(to),
 				 																	     messageToBeDeliveredFactory);
 		return Iterables.getFirst(res,null);
 	}
 
 	@Override
-	public Collection<NotifierResponse<NotifierPushMessageSubscriber>> notifyAll(final AppCode from,
+	public Collection<NotifierServiceResponse<NotifierPushMessageSubscriber>> notifyAll(final AppCode from,
 			                                                                     final Collection<NotifierPushMessageSubscriber> to,
 			                                                                     final Factory<NotifierPushMessage> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<NotifierPushMessageSubscriber>> responses
+		Collection<NotifierServiceResponse<NotifierPushMessageSubscriber>> responses
 						= Lists.newArrayListWithExpectedSize(to.size());
 
 		// [1] - Create the push message
@@ -104,7 +104,7 @@ public class FirebaseNotifierService
 				log.warn(" response : {}",
 						                 response.getMessage());
 
-				responses.add(new NotifierResponseOK<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+				responses.add(new NotifierServiceResponseOK<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
 																					  subscriber,
 																					  NotifierType.PUSH));	// success
 				
@@ -115,12 +115,12 @@ public class FirebaseNotifierService
 				   * valid and a new one must be used.
 				   */
 				if (errorCode ==  MessagingErrorCode.UNREGISTERED) {
-					responses.add(new NotifierResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+					responses.add(new NotifierServiceResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
                                                                                            subscriber,
                                                                                            NotifierType.PUSH,NotifierResponseErrorTypes.SUBSCRIBER_NOT_FOUND,
                                                                                            firex.getMessage()));	// failed
 				} else {
-					responses.add(new NotifierResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+					responses.add(new NotifierServiceResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
 																                           subscriber,
 																                           NotifierType.PUSH,NotifierResponseErrorTypes.UNKNOWN,
 																                           firex.getMessage()));	// failed
@@ -129,7 +129,7 @@ public class FirebaseNotifierService
 			 
 			
 			} catch (final Throwable nitex) {
-				responses.add(new NotifierResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
+				responses.add(new NotifierServiceResponseError<NotifierPushMessageSubscriber>(NotifierTaskOID.supply(),
 					                                                                   subscriber,
 					                                                                   NotifierType.PUSH,NotifierResponseErrorTypes.UNKNOWN,
 					                                                                   nitex.getMessage()));	// failed

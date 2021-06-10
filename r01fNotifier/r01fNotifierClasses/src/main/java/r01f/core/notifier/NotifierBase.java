@@ -11,9 +11,9 @@ import r01f.service.ServiceCanBeDisabled;
  */
 @Accessors(prefix="_")
 public abstract class NotifierBase<C extends NotifierConfig,
-								   M,   // the message
-								   T>	// the subscriber
-    	   implements Notifier<M,T> {
+								   M   // the message
+								   >	// the subscriber
+    	   implements Notifier<M> {
 /////////////////////////////////////////////////////////////////////////////////////////
 //  FIELDS
 /////////////////////////////////////////////////////////////////////////////////////////

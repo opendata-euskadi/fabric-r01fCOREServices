@@ -5,13 +5,13 @@ import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 
 @Accessors(prefix="_")
-public  class NotifierResponseOK<T>
-	extends NotifierResponseBase<T>
-  implements NotifierResponse<T> {
+public  class NotifierServiceResponseOK<T>
+	extends NotifierServiceResponseBase<T>
+  implements NotifierServiceResponse<T> {
 ///////////////////////////////////////////////////
 //CONSTRUCTOR
 //////////////////////////////////////////////////	
-	public NotifierResponseOK(final NotifierTaskOID taskOid, final T to, final  NotifierType notifierType) {
+	public NotifierServiceResponseOK(final NotifierTaskOID taskOid, final T to, final  NotifierType notifierType) {
 		super(taskOid, to, true, notifierType);		
 	}	
 }

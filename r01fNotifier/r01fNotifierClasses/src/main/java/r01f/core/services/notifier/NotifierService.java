@@ -9,25 +9,10 @@ public interface NotifierService<F,T,	// FROM & TO
 /////////////////////////////////////////////////////////////////////////////////////////
 //	METHODS
 /////////////////////////////////////////////////////////////////////////////////////////
-	public abstract NotifierResponse<T> notify(F from,T to,
-							   				   Factory<M> messageToBeDeliveredFactory);
+	public abstract NotifierServiceResponse<T> notify(final F from, final T to,
+							   				          final Factory<M> messageToBeDeliveredFactory);
 
-	public abstract Collection<NotifierResponse<T>> notifyAll(F from,Collection<T> to,
-											  				  Factory<M> messageToBeDeliveredFactory);
-/////////////////////////////////////////////////////////////////////////////////////////
-//  Request & Response
-/////////////////////////////////////////////////////////////////////////////////////////
-	/*@Accessors(prefix="_")
-	@RequiredArgsConstructor
-	public class NotifierResponseImpl<T>
-	  implements NotifierResponse<T> {
-		@Getter private final NotifierTaskOID _taskOid;
-		@Getter private final T _to;
-		@Getter private final boolean _success;
+	public abstract Collection<NotifierServiceResponse<T>> notifyAll(final F from,final Collection<T> to,
+											  				         final Factory<M> messageToBeDeliveredFactory);
 
-		@Override
-		public boolean wasSuccessful() {
-			return _success;
-		}
-	}*/
 }

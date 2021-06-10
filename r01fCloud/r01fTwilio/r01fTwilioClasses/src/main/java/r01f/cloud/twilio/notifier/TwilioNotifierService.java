@@ -14,10 +14,10 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import r01f.cloud.twilio.TwilioService;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
-import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierServiceResponse;
+import r01f.core.services.notifier.NotifierServiceResponseError;
 import r01f.core.services.notifier.NotifierResponseErrorTypes;
-import r01f.core.services.notifier.NotifierResponseOK;
+import r01f.core.services.notifier.NotifierServiceResponseOK;
 import r01f.core.services.notifier.NotifierServiceForVoicePhoneCall;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.patterns.Factory;
@@ -44,17 +44,17 @@ public class TwilioNotifierService
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public NotifierResponse<Phone> notify(final OwnedContactMean<Phone> from, final Phone to,
+	public NotifierServiceResponse<Phone> notify(final OwnedContactMean<Phone> from, final Phone to,
 										  final Factory<String> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<Phone>> res = this.notifyAll(from,Lists.newArrayList(to),
+		Collection<NotifierServiceResponse<Phone>> res = this.notifyAll(from,Lists.newArrayList(to),
 																 messageToBeDeliveredFactory);
 		return Iterables.getFirst(res,
 								  null);
 	}
 	@Override
-	public Collection<NotifierResponse<Phone>> notifyAll(final OwnedContactMean<Phone> from,final Collection<Phone> to,
+	public Collection<NotifierServiceResponse<Phone>> notifyAll(final OwnedContactMean<Phone> from,final Collection<Phone> to,
 														 final Factory<String> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<Phone>> responses = Lists.newArrayListWithExpectedSize(to.size());
+		Collection<NotifierServiceResponse<Phone>> responses = Lists.newArrayListWithExpectedSize(to.size());
 
 		// [1] - Create the message
 		String voiceMsg = messageToBeDeliveredFactory.create();
@@ -70,14 +70,14 @@ public class TwilioNotifierService
 				Url twmlUrl = Url.from("https://dl.dropboxusercontent.com/u/1264561/testTwilioTWML.xml");
 				Call twCall = _twilioService.makeCall(intPhone,
 													  twmlUrl);
-				responses.add(new NotifierResponseOK<Phone>(NotifierTaskOID.supply(),
+				responses.add(new NotifierServiceResponseOK<Phone>(NotifierTaskOID.supply(),
 														    phone,
 														    NotifierType.VOICE));	// success
 			} catch (final TwilioRestException restEx) {
 				log.error("Error while making a voice call to {} using twilio: {}",
 						  phone,
 						  restEx.getMessage(),restEx);
-				responses.add(new NotifierResponseError<Phone>(NotifierTaskOID.supply(),
+				responses.add(new NotifierServiceResponseError<Phone>(NotifierTaskOID.supply(),
 														  	   phone,
 														  	   NotifierType.VOICE,
 														       NotifierResponseErrorTypes.UNKNOWN,														      

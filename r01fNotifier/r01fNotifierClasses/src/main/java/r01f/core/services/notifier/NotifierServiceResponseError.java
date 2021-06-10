@@ -6,21 +6,21 @@ import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 
 @Accessors(prefix="_")
-public class NotifierResponseError<T>
-	extends NotifierResponseBase<T>
-  implements NotifierResponse<T> {	
+public class NotifierServiceResponseError<T>
+	extends NotifierServiceResponseBase<T>
+  implements NotifierServiceResponse<T> {	
 	
 	@Getter protected final NotifierResponseErrorType _errorType;
 	@Getter protected final String  _errorDetail;
 ///////////////////////////////////////////////////
 //CONSTRUCTOR
 //////////////////////////////////////////////////		
-	public NotifierResponseError(final NotifierTaskOID taskOid, final T to,
+	public NotifierServiceResponseError(final NotifierTaskOID taskOid, final T to,
                                  final NotifierType notifierType, final  NotifierResponseErrorType errorType) {
 		this(taskOid, to,notifierType, errorType, null);	
 
 	}
-	public NotifierResponseError(final NotifierTaskOID taskOid,   final T to,
+	public NotifierServiceResponseError(final NotifierTaskOID taskOid,   final T to,
 			                     final NotifierType notifierType, final NotifierResponseErrorType errorType, final String errorDetail) {
 		super(taskOid, to, false,notifierType);	
 		_errorType = errorType;

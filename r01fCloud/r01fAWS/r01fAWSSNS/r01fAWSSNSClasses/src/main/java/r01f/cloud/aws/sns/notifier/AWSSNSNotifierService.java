@@ -15,10 +15,10 @@ import r01f.cloud.aws.sns.model.AWSSNSSmsMessageAttributesBuilder;
 import r01f.cloud.aws.sns.model.AWSSNSSmsSenderID;
 import r01f.cloud.aws.sns.model.AWSSNSSmsType;
 import r01f.core.services.notifier.NotifierOIDs.NotifierTaskOID;
-import r01f.core.services.notifier.NotifierResponse;
-import r01f.core.services.notifier.NotifierResponseError;
+import r01f.core.services.notifier.NotifierServiceResponse;
+import r01f.core.services.notifier.NotifierServiceResponseError;
 import r01f.core.services.notifier.NotifierResponseErrorTypes;
-import r01f.core.services.notifier.NotifierResponseOK;
+import r01f.core.services.notifier.NotifierServiceResponseOK;
 import r01f.core.services.notifier.NotifierServiceForSMS;
 import r01f.core.services.notifier.config.NotifierEnums.NotifierType;
 import r01f.patterns.Factory;
@@ -58,17 +58,17 @@ public class AWSSNSNotifierService
 //
 /////////////////////////////////////////////////////////////////////////////////////////
 	@Override
-	public NotifierResponse<Phone> notify(final OwnedContactMean<Phone> from, final Phone to,
+	public NotifierServiceResponse<Phone> notify(final OwnedContactMean<Phone> from, final Phone to,
 										  final Factory<String> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<Phone>> res = this.notifyAll(from,Lists.newArrayList(to),
+		Collection<NotifierServiceResponse<Phone>> res = this.notifyAll(from,Lists.newArrayList(to),
 																 messageToBeDeliveredFactory);
 		return Iterables.getFirst(res,
 								  null);
 	}
 	@Override
-	public Collection<NotifierResponse<Phone>> notifyAll(final OwnedContactMean<Phone> from,final Collection<Phone> to,
+	public Collection<NotifierServiceResponse<Phone>> notifyAll(final OwnedContactMean<Phone> from,final Collection<Phone> to,
 														 final Factory<String> messageToBeDeliveredFactory) {
-		Collection<NotifierResponse<Phone>> responses = Lists.newArrayListWithExpectedSize(to.size());
+		Collection<NotifierServiceResponse<Phone>> responses = Lists.newArrayListWithExpectedSize(to.size());
 
 		AWSSNSSmsSenderID senderId = AWSSNSSmsSenderID.forId(from.getOwner() != null ? from.getOwner()
 																					 : "R01");
@@ -90,14 +90,14 @@ public class AWSSNSNotifierService
 															 								 .usingSmsOfType(AWSSNSSmsType.TRANSACTIONAL_CRITICAL)
 															 								 .build());
 
-				responses.add(new NotifierResponseOK<Phone>(NotifierTaskOID.forId(res.messageId()),
+				responses.add(new NotifierServiceResponseOK<Phone>(NotifierTaskOID.forId(res.messageId()),
 													   		phone,
 													   	    NotifierType.SMS));	// success
 			} catch (final Throwable th) {
 				log.error("Error while notifying using [aws sns] to send an sms to {}: {}",
 						  phone,
 						  th.getMessage(),th);
-				responses.add(new NotifierResponseError<Phone>(null,		// no task id
+				responses.add(new NotifierServiceResponseError<Phone>(null,		// no task id
 													   		   phone,
 													   		   NotifierType.SMS,
 													   		   NotifierResponseErrorTypes.UNKNOWN,
