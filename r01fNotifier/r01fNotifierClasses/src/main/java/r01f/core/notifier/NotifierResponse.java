@@ -3,10 +3,10 @@ package r01f.core.notifier;
 import r01f.core.services.notifier.NotifierServiceResponse;
 
 /**
- * Just an interface to return a reponse about the nofifier:
+ * Just an interface to return a response about the nofifier:
  *
- *  1. Just to know if notification was sucessfull.
- *  2. Get the underlaying services response ( smms latinia,  push-firebase...)
+ *  1. Just to know if notification was successful.
+ *  2. Get the underlying services response ( sms latinia,  push-firebase...)
  *  
  *  If there is some custom or extended implementation of Notifier just return :
  *  		   return new  NotifierResponse() {
