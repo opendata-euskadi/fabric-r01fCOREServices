@@ -142,9 +142,10 @@ public class FirebaseServiceImpl
 	 * @param topic
 	 * @return
 	 */
-	private static ApnsConfig _buildApnsConfig() {
+	private static ApnsConfig _buildApnsConfig(final FirebasePushMessageRequest pushMessageRequest) {
 		return ApnsConfig.builder()
   						  .setAps(Aps.builder()
+  								  	.setSound(pushMessageRequest.getNotificationSound())
   									 // .setCategory(topic.asString())
   									 // .setThreadId(topic.asString()
   								   .build())
@@ -196,7 +197,7 @@ public class FirebaseServiceImpl
 	
   	private static Message _buidMessage(final FirebasePushMessageRequest pushMessageRequest) {
   		Builder baseMessage  = Message.builder()
-							  		  .setApnsConfig(_buildApnsConfig())
+							  		  .setApnsConfig(_buildApnsConfig(pushMessageRequest))
 							  		  .setAndroidConfig(_buildAndroidConfig(pushMessageRequest))
 							  		  .setNotification(_buidMessageNotification(pushMessageRequest));
   		
